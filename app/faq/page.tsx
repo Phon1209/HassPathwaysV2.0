@@ -4,13 +4,16 @@ import Footer from "../components/navigation/Footer";
 import { IFAQ } from "@/public/data/dataInterface";
 
 async function getFAQ() {
+  console.log("hello");
   const res = await fetch("http://localhost:3000/api/faq");
+  console.log("hello");
   const faq = res.json();
   return faq;
 }
 
 const FAQ = async () => {
   const faqQuestions: Array<IFAQ> = await getFAQ();
+  console.log("await");
 
   return (
     <div className="flex flex-col min-h-screen">

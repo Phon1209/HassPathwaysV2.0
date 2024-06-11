@@ -29,7 +29,7 @@ async function fetchXML(url) {
         var response = await fetch(url);
         var xml = await response.text();
         resolve(parserN.parse(xml));
-    })
+    });
 }
 
 // Recursively gets all children of an object that are strings

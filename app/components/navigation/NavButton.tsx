@@ -17,6 +17,7 @@ const NavButton = ({
 }) => {
   const pathname = usePathname();
   const selected = pathname.match(new RegExp(`${keyword}$`, "gm"));
+  // const selected = pathname === keyword;
 
   return (
     <Link href={link}>

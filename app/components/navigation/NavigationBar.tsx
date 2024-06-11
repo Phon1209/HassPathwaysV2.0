@@ -45,7 +45,7 @@ const NavigationBar = ({ className }: { className?: string }) => {
             link="/courses/search"
             text="Search Courses"
             Icon={<SearchIcon />}
-            keyword="courses"
+            keyword="courses/search"
           />
 
           <NavButton

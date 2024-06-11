@@ -2,13 +2,14 @@ import * as Icon from "../components/utils/Icon";
 import NavigationBar from "../components/navigation/NavigationBar";
 import Footer from "../components/navigation/Footer";
 import { IFAQ } from "@/public/data/dataInterface";
+import jsonile from "../api/faq/faq.json";
 
 async function getFAQ() {
-  console.log("hello");
-  const res = await fetch("http://localhost:3000/api/faq");
-  console.log("hello");
-  const faq = res.json();
-  return faq;
+  // console.log("hello");
+  // const res = await fetch("http://localhost:3000/api/faq");
+  // console.log("hello");
+  // const faq = res.json();
+  return jsonile;
 }
 
 const FAQ = async () => {

@@ -15,7 +15,7 @@ async function getFAQ() {
 const FAQ = async () => {
   const faqQuestions: Array<IFAQ> = await getFAQ();
   console.log("await");
-
+  
   return (
     <div className="flex flex-col min-h-screen">
       <NavigationBar className="flex" />

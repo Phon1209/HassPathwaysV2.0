@@ -17,6 +17,7 @@ const FAQ = () => {
         }
         const data = await res.json();
         setFaqQuestions(data);
+        console.log(data)
       } catch (error) {
         console.error("Error fetching FAQ:", error);
       }

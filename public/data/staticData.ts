@@ -14,8 +14,6 @@ export const pathwaysCategories: Array<IpathwayData> = [
   { display: "Econ", value: "Economics" },
   { display: "STS", value: "STS" },
   { display: "Inter", value: "Interdisciplinary" },
-  // {display: "Lang", value: ""}
-  // { display: "Major Restricted", value: "Major Restricted" },
 ];
 
 export const courseState: Array<IcourseStatus> = [

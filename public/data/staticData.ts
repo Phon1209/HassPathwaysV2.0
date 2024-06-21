@@ -155,19 +155,19 @@ export const noMatchedText: string =
 
 export const catalogList: ICatalogList = [
   {
-    text: "2022 - 2023 Catalog",
+    text: "2022-2023",
     value: 2023,
   },
   {
-    text: "2021 - 2022 Catalog",
+    text: "2021-2022",
     value: 2022,
   },
   {
-    text: "2020 - 2021 Catalog",
+    text: "2020-2021",
     value: 2021,
   },
   {
-    text: "2019 - 2020 Catalog",
+    text: "2019-2020",
     value: 2020,
   },
 ];

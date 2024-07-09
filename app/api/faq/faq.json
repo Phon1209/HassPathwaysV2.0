@@ -1,17 +1,17 @@
 [
   {
     "question": "Is HASS pathway a requirement?",
-    "answer": "Yes, Yes Yes",
+    "answer": "Yes. All undergraduate students must have an area of focus in their HASS studies that is accomplished by completing an approved 12-credit depth concentration, known as an Integrative Pathway.  This is an element of the HASS Core.",
     "icon": "Certificate"
   },
   {
     "question": "Can I change my pathway later?",
-    "answer": "Yes, Changed",
+    "answer": "Yes. Students may switch pathways as long as it is feasible to complete the requirements of the new pathway before graduation. You may only switch to a Pathway that is included in your Cohort's Catalog Year. \nStudents should work with their advisors to ensure timely completion of the Pathway requirement.",
     "icon": "SwitchHorizontal"
   },
   {
     "question": "Is IHSS course a requirement?",
-    "answer": "No, but a HASSInquiry course must be completed within your first two semesters, it could be an IHSS course.",
+    "answer": "No, but a HASS Inquiry course must be completed within your first two semesters, it could be an IHSS course.",
     "icon": "BookOpen"
   },
   {

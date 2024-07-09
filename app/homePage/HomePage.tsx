@@ -34,7 +34,7 @@ function HomeContent() {
       </section>
       <div className="block grow basis-0 max-w-lg">
         <Image
-          src="/../public/assets/png/home.png"
+          src="/assets/png/home.png"
           alt="home"
           width={480}
           height={412}

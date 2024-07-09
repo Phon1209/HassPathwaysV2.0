@@ -1,0 +1,105 @@
+Accordion Items:
+new item:
+1. Improve student curriculum and academic development
+          
+      
+      
+        
+          An Integrative Pathway provides consistency to what could otherwise be an unfocused array of courses in the HASS Core.An Integrative Pathway augments intellectual coherence to course selection in the form of disciplinary or interdisciplinary themes.An Integrative Pathway can enhance or enrich a major. For example, a Computer Science major following the Artificial Intelligence pathway or a Biomedical Engineering major following the Public Health pathway.
+
+new item:
+2. Simplify the lives of students in terms of satisfying HASS requirements
+          
+      
+      
+        
+          Integrative Pathways guide students toward a specific selection of courses, aiding students in deciding between wide ranges of course options.Integrative Pathways can be selected to meet several HASS requirements concurrently.  For example, a course that is required in the selected pathway may be both a HASS Inquiry course and Communication Intensive, thus satisfying multiple requirements simultaneously.
+
+new item:
+3. Leads to Minor, or even Major!
+          
+      
+      
+        
+          If courses are chosen wisely, many Integrative Pathways can be transformed into minors with just one additional course.Integrative Pathways may lead students to discover an area of interest and courses for the Integrative Pathways can be a significant part of a major.
+
+new item:
+4. Quick Guidelines and Policies
+          
+      
+      
+        
+          The first course in your Pathway may be a HASS Inquiry course, but it does not have to be.You will declare your HASS Pathway in SIS, and the requirements will populate in DegreeWorks.No course within the Pathway sequence may be taken as Pass/No Credit.Some Pathways have the option of becoming a HASS Minor with one additional course.Students may switch pathways if it is feasible to complete the new pathway's requirements before graduation.
+
+new item:
+5. How do I declare my Pathway?
+          
+      
+      
+        
+          As part of this graduation requirement, you must declare your Pathway in SIS.
+
+new item:
+6. When should I complete my Pathway?
+          
+      
+      
+        
+          The pathway requirement must be completed before graduation.  It is recommended that students aim to complete their pathway by the end of their fifth semester, although the target completion date will vary across programs.  Students should work with their advisors to ensure timely completion of the pathway requirement.
+
+new item:
+7. Can I create my own Pathway?
+          
+      
+      
+        
+          No.  Students may not create their own Pathway.  Independent Studies cannot be applied to any Pathway.  Students wishing to add breadth beyond an existing pathway to their HASS studies are advised to use their additional HASS courses or Free Electives for this purpose.
+
+new item:
+8. Do I need to choose a HASS Inquiry (HI) course as part of my Pathway?
+          
+      
+      
+        
+          The first course in your Pathway may be a HASS Inquiry course, but it does not have to be. First-year students must take a HASS Inquiry (HI) course as part of the HASS Core, but they have the option of satisfying this requirement within or outside of the Pathway. Most pathways contain one or more HI courses, but others do not.  For the latter, students must take an HI course outside of their Pathway.  Transfer students should consult with their Academic Advisor for questions related to the HI requirement.
+
+new item:
+9. Do I need to choose a Communication Intensive (CI) or 4000-level HASS course as part of their Pathway?
+          
+      
+      
+        
+          Students must take a CI course and a 4000-level HASS course as part of the HASS Core, but have the option of satisfying these requirements within or outside of the Pathway.  Most Pathways contain one or more CI courses, but a few do not.  For the latter, students must take a CI course outside of their pathway.  The same holds true for 4000-level courses.
+
+new item:
+10. Can I apply courses/credits from a Pathway toward a HASS minor?
+          
+      
+      
+        
+          Yes.  For most pathways, students can complete a HASS minor with one additional course.  Please see the list of Pathways listed in your Cohort's Catalog for additional information about compatible minors for each Pathway.
+
+new item:
+11. Can courses that are applied toward the Pathway requirement be designated Pass/No Credit?
+          
+      
+      
+        
+          No.
+
+new item:
+12. Can I switch to another Pathway?
+          
+      
+      
+        
+          Students may switch pathways as long as it is feasible to complete the requirements of the new pathway before graduation. You may only switch to a Pathway that is included in your Cohort's Catalog Year. Students should work with their advisors to ensure timely completion of the Pathway requirement.
+
+new item:
+13. Can I transfer Pathway courses? (First-Year Students) 
+          
+      
+      
+        
+          Note: These guidelines apply to first-year students* only.  Courses that transfer in as named courses that are part of a Pathway will be counted toward the Pathway requirement.  Courses that transfer in as HASS electives may be eligible to count toward a Pathway depending on the curriculum requirements.  Requests for approval will be reviewed by the Associate Dean of HASS. For first-year students, a maximum of 8 credits from AP courses and transfer courses combined can be applied toward a Pathway.Students who wish to apply transfer credits toward a Pathway should keep in mind that the Pathway requirement is specified in terms of the number of credits (12), not the number of courses.  If a 3-credit transfer course is applied toward a pathway, the 1-credit gap must still be fulfilled to complete the graduation requirement.  *First-year students who enter with sophomore status based on AP and/or transfer credits must follow the HASS Core as outlined in the Catalog.
+

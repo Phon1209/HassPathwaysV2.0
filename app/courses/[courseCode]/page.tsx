@@ -1,5 +1,6 @@
 "use client";
 
+import { SemesterTable } from "@/app/components/course/OfferTable";
 import BreadCrumb from "@/app/components/navigation/Breadcrumb";
 import {
   ICourseDescriptionSchema,

@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import NavButton from "./NavButton";
 import CatalogDropdown from "./CatalogDropdown";
-import { BarChart, HomeLine } from "../utils/Icon";
+import { BarChart, HomeLine, SearchIcon } from "../utils/Icon";
 import MenuBurger from "@/public/assets/svg/menu-04.svg?svgr";
 import CloseButton from "@/public/assets/svg/x-close.svg?svgr";
 
@@ -41,6 +41,13 @@ const NavigationBar = ({ className }: { className?: string }) => {
             menuOpen ? "mb-5 md:mb-0" : ""
           }`}
         >
+          <NavButton
+            link="/courses/search"
+            text="Search Courses"
+            Icon={<SearchIcon />}
+            keyword="courses/search"
+          />
+
           <NavButton
             link="/courses"
             text="My Courses"

@@ -10,12 +10,18 @@ const CatalogDropdown = () => {
   const { catalog_year, setCatalog } = useAppContext();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [newCatalogText, setCatalogText] = useState("");
 
   // Find the displaying text for catalog
   const catalogText: string =
     catalogList.filter((cat) => cat.value === catalog_year)[0]?.text ?? "";
 
-  useEffect(() => {
+  useEffect(()=> {
+    const temp = catalogList.filter((cat) => cat.value === catalog_year)[0]?.text ?? "";
+    setCatalogText(temp);
+  });
+
+  useEffect(() => {    
     if (!dropdownOpen) return;
 
     const outsideDropdown = (e: MouseEvent) => {
@@ -38,7 +44,7 @@ const CatalogDropdown = () => {
         setDropdownOpen((open) => !open);
       }}
     >
-      <div className="grow">{catalogText}</div>
+      <div className="grow">{newCatalogText}</div>
       <div>
         {!dropdownOpen && <ChevronDown />}
         {dropdownOpen && <ChevronUp />}

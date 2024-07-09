@@ -82,7 +82,7 @@ const SearchCourse = () => {
           searchString: deferSearchString,
           department: getFilterList(pathwaysCategories, deferFilterState),
           // this is a temporary fix, maybe use a spinner instead when waiting for catalog_year (default value is -1, invalid in API)
-          catalogYear: catalog_year == -1 ? "2023" : catalog_year.toString(),
+          catalogYear: catalog_year == "-1" ? "2022-2023" : catalog_year,
         })}`,
         {
           signal: apiController.signal,
@@ -137,7 +137,7 @@ const SearchCourse = () => {
     )
       .then((data) => data.json())
       .then((data) => {
-        setResultPathway(data);
+        setResultPathways(data);
       })
       .catch((err) => {
         if (err.name === "AbortError") return;

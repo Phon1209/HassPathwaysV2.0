@@ -1,29 +1,37 @@
-import { MongoClient, MongoError } from 'mongodb';
-import { NextResponse } from 'next/server';
+import { MongoClient } from 'mongodb';
 
-export async function GET() {
+async function handler(req, res) {
+    const { method } = req;
+
     const client = new MongoClient(process.env.MONGODB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
     });
 
     try {
-        console.log('a');
-        await client.connect();
-        const database = client.db('pathways');
-        const collection = database.collection('2020');
-        const newDocument = {
-            name: 'New Pathway',
-            description: 'Description of the new pathway',
-            createdAt: new Date(),
-        };
-        await collection.insertOne(newDocument);
-
-        return NextResponse.json({status: "ok"});
-    } catch (error) {
-        return NextResponse.json({ message: 'Something went wrong!' });
+        if (method === 'GET') {
+            await client.connect();
+            const database = client.db();
+            const collection = database.collection('pathways');
+            const pathways = await collection.find({}).toArray();
+            res.status(200).json(pathways);
+        } else if (method === 'POST') {
+            await client.connect();
+            const database = client.db();
+            const collection = database.collection('pathways');
+            const { name, year } = req.body;
+            const result = await collection.insertOne({ name, year });
+            res.status(201).json(result.ops[0]);
+        } else {
+            res.setHeader('Allow', ['GET', 'POST']);
+            res.status(405).end(`Method ${method} Not Allowed`);
+        }
+    } catch (err) {
+        console.error('Error handling request:', err);
+        res.status(500).json({ error: 'Internal server error' });
     } finally {
         await client.close();
     }
 }
 
+export default handler;

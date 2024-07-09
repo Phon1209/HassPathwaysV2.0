@@ -19,7 +19,7 @@ import { ApplicationContext } from "@/app/model/AppContextInterface";
 const constantApplicationValue = { courseState, pathwaysCategories };
 
 const defaultInitialState: ApplicationContext = {
-  catalog_year: -1, // this value is to keep the dropdown text empty while fetching localStorage
+  catalog_year: "-1", // this value is to keep the dropdown text empty while fetching localStorage
   // TODO: all course with status
   setCatalog: () => {},
   ...constantApplicationValue,
@@ -37,7 +37,7 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     const localStorageString = localStorage.getItem(APPLICATION_STATE_KEY);
     const stateWithoutLocalStorage = {
       ...defaultInitialState,
-      catalog_year: 2023,
+      catalog_year: "2022-2023",
     };
 
     dispatch({
@@ -55,7 +55,7 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
 
   // Declare any state function here
   // and pass through value props in AppContext.Provider
-  const setCatalog = (catalog_year: number) => {
+  const setCatalog = (catalog_year: string) => {
     dispatch({ type: SET_CATALOG, payload: catalog_year });
   };
 

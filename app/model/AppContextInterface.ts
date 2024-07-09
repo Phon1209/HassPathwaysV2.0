@@ -1,7 +1,7 @@
 import { IcourseStatus, IpathwayData } from "@/public/data/staticInterface";
 
 type ApplicationContextTemplate = {
-  catalog_year: number;
+  catalog_year: string;
 
   // Methods
   setCatalog: (...arg: any) => any;

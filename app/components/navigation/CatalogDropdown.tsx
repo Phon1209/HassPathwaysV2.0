@@ -14,7 +14,7 @@ const CatalogDropdown = () => {
 
   // Find the displaying text for catalog
   const catalogText: string =
-    catalogList.filter((cat) => cat.value === catalog_year)[0]?.text ?? "";
+    catalogList.filter((cat) => cat.text === catalog_year)[0]?.text ?? "";
 
   useEffect(()=> {
     const temp = catalogList.filter((cat) => cat.value === catalog_year)[0]?.text ?? "";
@@ -56,10 +56,10 @@ const CatalogDropdown = () => {
             return (
               <div
                 className="dropdown-choice"
-                key={choice.value}
-                data-value={choice.value}
+                key={choice.text}
+                data-value={choice.text}
                 onClick={() => {
-                  setCatalog(choice.value);
+                  setCatalog(choice.text);
                 }}
               >
                 {choice.text}

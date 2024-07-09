@@ -21,5 +21,5 @@ export interface IcourseFilter {
 
 export type ICatalogList = Array<{
   text: string;
-  value: number;
+  //value: number;
 }>;

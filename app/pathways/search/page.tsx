@@ -6,7 +6,6 @@ import React, {
   useDeferredValue,
   useEffect,
   Suspense,
-  useCallback,
 } from "react";
 import PathwayCard from "@/app/components/pathway/PathwayCard";
 import { useAppContext } from "@/app/contexts/appContext/AppProvider";
@@ -18,17 +17,13 @@ import { IpathwayData } from "@/public/data/staticInterface";
 import { IPathwaySchema } from "@/public/data/dataInterface";
 import dynamic from "next/dynamic";
 import { debounce } from "lodash";
+import { validCatalogYear } from "@/public/data/staticData";
 
 const Spinner = dynamic(() => import("@/app/components/utils/Spinner"));
 
-const getFilterList: (
-  pathwayCategory: IpathwayData[],
-  filterMask: number
-) => string = (pathwayCategory, filterMask) => {
+const getFilterList = (pathwayCategory, filterMask) => {
   const filterList = pathwayCategory
-    .filter((_, i) => {
-      return (1 << i) & filterMask;
-    })
+    .filter((_, i) => (1 << i) & filterMask)
     .reduce((acc, pathwayCategory) => {
       if (acc === "") return pathwayCategory.value;
       return acc + "," + pathwayCategory.value;
@@ -38,94 +33,44 @@ const getFilterList: (
 
 const SearchCourse = () => {
   const { pathwaysCategories, catalog_year } = useAppContext();
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const MAX_FILTER = (1 << pathwaysCategories.length) - 1;
-  // Determine the filter
   const [filterState, dispatchFilter] = useReducer(
-    (
-      state: number,
-      action: {
-        payload: number;
-      }
-    ) => {
+    (state: number, action: { payload: number }) => {
       const rep = 1 << action.payload;
       if (action.payload === MAX_FILTER) {
-        if (state === action.payload) return 0;
-        else return MAX_FILTER;
+        return state === action.payload ? 0 : MAX_FILTER;
       }
-      if (state & rep) state -= rep;
-      else state += rep;
-      return state;
+      return state & rep ? state - rep : state + rep;
     },
     0
   );
-  const activeFilter: (state: number, index: number) => boolean = (
-    state,
-    index
-  ) => (state & (1 << index)) !== 0;
+
+  const activeFilter = (state: number, index: number) =>
+    (state & (1 << index)) !== 0;
 
   const [searchString, setSearchString] = useState("");
   const [resultPathways, setResultPathways] = useState<IPathwaySchema[]>([]);
 
   const deferSearchString = useDeferredValue(searchString);
-  // const deferResultPathways = useDeferredValue(resultPathways);
   const deferFilterState = useDeferredValue(filterState);
 
-  const debouncedFetchPathways = useCallback(
-    debounce(() => {
-      const apiController = new AbortController();
-
-      setIsLoading(true);
-      fetch(
-        `http://localhost:3000/api/pathway/search?${new URLSearchParams({
-          searchString: deferSearchString,
-          department: getFilterList(pathwaysCategories, deferFilterState),
-          // this is a temporary fix, maybe use a spinner instead when waiting for catalog_year (default value is -1, invalid in API)
-          catalogYear: catalog_year == "-1" ? "2022-2023" : catalog_year,
-        })}`,
-        {
-          signal: apiController.signal,
-          cache: "no-store",
-          next: {
-            revalidate: false,
-          },
-        }
-      )
-        .then((data) => data.json())
-        .then((data) => {
-          setResultPathways(data);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          if (err.name === "AbortError") return;
-          console.error("Fetching Error: ", err);
-        });
-
-      return () => apiController.abort("Cancelled");
-    }, 500), // delay 500ms
-
-    [deferFilterState, deferSearchString, setIsLoading, setResultPathways]
-  );
-
   useEffect(() => {
-
     const apiController = new AbortController();
+    const validYear = validCatalogYear.includes(catalog_year);
+    const searchStr = deferSearchString;
+    const searchDepart = getFilterList(pathwaysCategories, deferFilterState);
+    const searchYear = validYear ? "2022-2023" : catalog_year;
 
-    // console.log(getFilterList(pathwaysCategories, deferFilterState));
-    // console.log(
-    //   `http://localhost:3000/api/pathway/search?${new URLSearchParams({
-    //     searchString: deferSearchString,
-    //     department: getFilterList(pathwaysCategories, deferFilterState),
-    //   })}`
-    // );
-
-    // fetch (`http://localhost:3000/api/pathway/search?searchString=${deferrvalue}&)
+    setIsLoading(true);
 
     fetch(
       `http://localhost:3000/api/pathway/search?${new URLSearchParams({
-        searchString: deferSearchString,
-        department: getFilterList(pathwaysCategories, deferFilterState),
+        searchString: searchStr,
+        department: searchDepart,
+        catalogYear: searchYear,
       })}`,
       {
         signal: apiController.signal,
@@ -138,14 +83,22 @@ const SearchCourse = () => {
       .then((data) => data.json())
       .then((data) => {
         setResultPathways(data);
+        console.log("Fetched data:", data);
       })
       .catch((err) => {
         if (err.name === "AbortError") return;
         console.error("Fetching Error: ", err);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
 
     return () => apiController.abort("Cancelled");
-  }, [deferFilterState, deferSearchString]);
+  }, [deferFilterState, deferSearchString, catalog_year]);
+
+  useEffect(() => {
+    console.log("Updated resultPathways:", resultPathways);
+  }, [resultPathways]);
 
   return (
     <>
@@ -169,16 +122,14 @@ const SearchCourse = () => {
               label="All"
               checked={filterState === MAX_FILTER}
             />
-            {pathwaysCategories.map((pathway, i) => {
-              return (
-                <FilterCheckBox
-                  checked={activeFilter(filterState, i)}
-                  key={pathway.value}
-                  label={pathway.display}
-                  clickCallback={() => dispatchFilter({ payload: i })}
-                />
-              );
-            })}
+            {pathwaysCategories.map((pathway, i) => (
+              <FilterCheckBox
+                checked={activeFilter(filterState, i)}
+                key={pathway.value}
+                label={pathway.display}
+                clickCallback={() => dispatchFilter({ payload: i })}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -187,9 +138,9 @@ const SearchCourse = () => {
         <Spinner />
       ) : (
         <section className="py-8 flex flex-wrap gap-x-10 gap-y-4 justify-around md:justify-start">
-          {resultPathways.map((pathway, i) => {
-            return <PathwayCard {...pathway} key={i} />;
-          })}
+          {resultPathways.map((pathway, i) => (
+            <PathwayCard {...pathway} key={i} />
+          ))}
         </section>
       )}
     </>

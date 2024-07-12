@@ -6,8 +6,8 @@ export interface ICourseSchema {
 
 export interface IPathwaySchema {
   title: string;
+  courses: string[];
   department: string;
-  courses: Array<ICourseSchema>;
 }
 
 interface IPrereqSchema {

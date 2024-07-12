@@ -10,16 +10,11 @@ const CatalogDropdown = () => {
   const { catalog_year, setCatalog } = useAppContext();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const [newCatalogText, setCatalogText] = useState("");
-
-  // Find the displaying text for catalog
-  const catalogText: string =
-    catalogList.filter((cat) => cat.text === catalog_year)[0]?.text ?? "";
+  const [newCatalogText, setCatalogText] = useState("2022-2023");
 
   useEffect(()=> {
-    const temp = catalogList.filter((cat) => cat.value === catalog_year)[0]?.text ?? "";
-    setCatalogText(temp);
-  });
+    setCatalogText(catalog_year)
+  }, [catalog_year]);
 
   useEffect(() => {    
     if (!dropdownOpen) return;

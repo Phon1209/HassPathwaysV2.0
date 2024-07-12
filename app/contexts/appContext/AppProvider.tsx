@@ -19,7 +19,7 @@ import { ApplicationContext } from "@/app/model/AppContextInterface";
 const constantApplicationValue = { courseState, pathwaysCategories };
 
 const defaultInitialState: ApplicationContext = {
-  catalog_year: "-1", // this value is to keep the dropdown text empty while fetching localStorage
+  catalog_year: "2022-2023", // this value is to keep the dropdown text empty while fetching localStorage
   // TODO: all course with status
   setCatalog: () => {},
   ...constantApplicationValue,

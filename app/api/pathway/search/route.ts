@@ -8,6 +8,10 @@ export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
 
   const catalogYear = params.get("catalogYear");
+  console.log(catalogYear);
+
+  return NextResponse.json({ok : catalogYear})
+  
   const pathways = JSON.parse(
     fs.readFileSync(
       path.join(process.cwd(), "json") + `/${catalogYear}` + "/pathways.json",

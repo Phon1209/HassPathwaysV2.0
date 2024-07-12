@@ -38,6 +38,9 @@ const getFilterList: (
 
 const SearchCourse = () => {
   const { pathwaysCategories, catalog_year } = useAppContext();
+
+  
+  console.log(catalog_year)
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const MAX_FILTER = (1 << pathwaysCategories.length) - 1;

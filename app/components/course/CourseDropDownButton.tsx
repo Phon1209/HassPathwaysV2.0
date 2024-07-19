@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const CourseCardDropDown = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropDownText, setDropDownText] = useState("No Selection");
+
+  useEffect(() => {
+    const div = document.getElementById('fixed-size-div');
+    const initialWidth = div.offsetWidth;
+    div.style.width = `${initialWidth}px`;
+  }, []);
 
   const handleMouseEnter = () => {
     setIsOpen(true);
@@ -27,8 +33,8 @@ const CourseCardDropDown = () => {
 
   return (
     <div className="relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-      <div className="text-sm font-semibold text-gray-25 bg-primary-700 px-2 py-2.5 border border-solid border-gray-300 rounded-lg cursor-pointer w-24 text-center">
-      {dropDownText}
+      <div id="fixed-size-div" className="text-sm font-semibold text-gray-25 bg-primary-700 px-2 py-2.5 border border-solid border-gray-300 rounded-lg cursor-pointer text-center">
+        {dropDownText}
       </div>
       {isOpen && (
         <div className="absolute w-48 bg-white shadow-lg rounded-lg border border-solid border-gray-300 z-10">

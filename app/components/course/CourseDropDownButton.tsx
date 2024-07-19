@@ -6,8 +6,7 @@ const CourseCardDropDown = () => {
 
   useEffect(() => {
     const div = document.getElementById('fixed-size-div');
-    const initialWidth = div.offsetWidth;
-    div.style.width = `${initialWidth}px`;
+    div.style.width = `${div.offsetWidth}px`;
   }, []);
 
   const handleMouseEnter = () => {

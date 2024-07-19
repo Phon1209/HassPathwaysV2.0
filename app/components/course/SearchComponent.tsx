@@ -284,7 +284,7 @@ const CourseList = ({
   }, [debouncedFetchCourses]);
 
   return (
-    <section className="flex flex-col gap-3">
+    <section className="my-4 grid grid-cols-1 lg:grid-cols-2 gap-3">
       {isLoading ? (
         <Spinner />
       ) : (

@@ -89,19 +89,13 @@ const MyPathways = () => {
     (state & (1 << index)) !== 0;
 
   useEffect(() => {
-    console.log("Filter State: " + filterState)
-    console.log("Max Filter: " + MAX_FILTER)
-    console.log("Marked: " + marked)
-    console.log("Bookmarked State: " + bookmarkedState)
     var bmks = localStorage.getItem("bookmarks")
-    console.log("bmks: " + bmks)
     if (bmks == null) {
       localStorage.setItem("bookmarks", "[]");
     }
     else {
       //TODO: investigate how to edit bookmarks
       setMarked(JSON.parse(bmks));
-      console.log("Marked (2): " + JSON.parse(bmks))
     }
     
   }, [])

@@ -94,8 +94,10 @@ const MyPathways = () => {
       localStorage.setItem("bookmarks", "[]");
     }
     else {
+      //TODO: investigate how to edit bookmarks
       setMarked(JSON.parse(bmks));
     }
+    
   }, [])
 
   return (

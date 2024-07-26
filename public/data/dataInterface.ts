@@ -1,4 +1,12 @@
-export type courseState = "Planned" | "In Progress" | "Interested";
+export type courseState = "Planned" | "In Progress" | "Interested" | "No Selection";
+
+
+export interface ICourseSchemaSaved {
+  title: string;
+  courseCode: string;
+  tag: Array<string>;
+  state: courseState;
+}
 
 export interface ICourseSchema {
   title: string;

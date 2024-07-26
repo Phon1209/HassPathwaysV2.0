@@ -53,7 +53,7 @@ const MyCourses = () => {
         {/* <CourseCard tag={["T"]} courseCode="TEST-3000" title="Test1" /> */}
 
         {
-          courses.filter(course => courseFilter === 0 || course.state === courseFilter)
+          courses
             .map(course => (
               <CourseCard
                 key={course.courseCode}

@@ -1,32 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { CourseCardProps } from "@/app/model/CourseInterface";
-import { ICourseSchema, courseState } from "../../../public/data/dataInterface";
+import { ICourseSchema, courseState, ICourseSchemaSaved } from "../../../public/data/dataInterface";
+import { courseState } from '@/public/data/staticData';
 
-const CourseCardDropDown = ({ title, courseCode, tag, status }: CourseCardProps) => {
+const CourseCardDropDown = ({ title, courseCode, tag, status = "No Selection" }: CourseCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
   // track if the course is saved: planned, in progress, or interested
   const [saved, setSave] = useState(false);
-  const [dropDownText, setDropDownText] = useState ("No Selection");
-  
-  if (status != null) {
-    setDropDownText(status);
-  }
+  const [dropDownText, setDropDownText] = useState<courseState>(status);
 
   function saveCourse(newState: courseState) {
-    const current: ICourseSchema[] = JSON.parse(localStorage.getItem("courses")) || [];
-    if (!saved) {
-      current.push({ title, courseCode, tag, state: newState });
-      localStorage.setItem("courses", JSON.stringify(current));
-      setSave(true);
+    let current: ICourseSchema[] = JSON.parse(localStorage.getItem("courses")) || [];
+    const courseIndex = current.findIndex(course => course.title === title);
+    if (courseIndex !== -1) {
+      current[courseIndex].state = newState;  // Update the state of the existing course
     } else {
-      removeCourse();
-      saveCourse(newState);
+      current.push({ title, courseCode, tag, state: newState });  // Add new course if it doesn't exist
     }
+    localStorage.setItem("courses", JSON.stringify(current));
+    setSave(true);
     setDropDownText(newState);
   }
 
   function removeCourse() {
-    let current: ICourseSchema[] = JSON.parse(localStorage.getItem("courses")) || [];
+    let current: ICourseSchemaSaved[] = JSON.parse(localStorage.getItem("courses")) || [];
     current = current.filter(course => course.title !== title);
     localStorage.setItem("courses", JSON.stringify(current));
     setSave(false);
@@ -37,7 +34,7 @@ const CourseCardDropDown = ({ title, courseCode, tag, status }: CourseCardProps)
     const div = document.getElementById('fixed-size-div');
     const initialWidth = div.offsetWidth;
     div.style.width = `${initialWidth}px`;
-  }, []);
+  });
 
   const handleMouseEnter = () => {
     setIsOpen(true);

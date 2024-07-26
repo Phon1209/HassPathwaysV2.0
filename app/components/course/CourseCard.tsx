@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { CourseCardProps } from "@/app/model/CourseInterface";
 import Link from "next/link";
 import CourseCardDropDown from "./CourseDropDownButton";
 
-const CourseCard = ({ title, courseCode, tag, defaultDropDownText }: CourseCardProps) => {
+const CourseCard = ({ title, courseCode, tag, status = "No Selection"}: CourseCardProps) => {
+  const [state, setState] = useState(status);
+
   return (
     <section className="course-card">
       <div className="flex flex-col fold:flex-row justify-between items-center">
@@ -25,7 +27,7 @@ const CourseCard = ({ title, courseCode, tag, defaultDropDownText }: CourseCardP
             ))}
           </div>
         </div>
-        <CourseCardDropDown title={title} courseCode={courseCode} tag={tag} status={defaultDropDownText}/>
+        <CourseCardDropDown title={title} courseCode={courseCode} tag={tag} status={state}/>
       </div>
     </section>
   );

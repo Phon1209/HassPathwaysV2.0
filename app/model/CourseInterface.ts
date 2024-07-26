@@ -1,10 +1,10 @@
-export type courseState = "Planned" | "In Progress" | "Interested";
+export type courseState = "Planned" | "In Progress" | "Interested" | "No Selection";
 
 export interface CourseCardProps {
   title: string;
   courseCode: string;
   tag: Array<string>;
-  status?: courseState
+  status?: courseState;
 }
 
 export interface IFilterState {

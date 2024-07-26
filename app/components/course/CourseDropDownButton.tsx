@@ -31,10 +31,17 @@ const CourseCardDropDown = ({ title, courseCode, tag, status = "No Selection" }:
   }
 
   useEffect(() => {
+    if (dropDownText != "No Selection") {
+      setSave(true);
+    }
     const div = document.getElementById('fixed-size-div');
     const initialWidth = div.offsetWidth;
     div.style.width = `${initialWidth}px`;
   });
+
+  useEffect(() => {
+    
+  },[saved]);
 
   const handleMouseEnter = () => {
     setIsOpen(true);

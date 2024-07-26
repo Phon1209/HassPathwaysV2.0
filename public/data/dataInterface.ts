@@ -1,4 +1,4 @@
-type courseState = "Planned" | "In Progress" | "Interested";
+export type courseState = "Planned" | "In Progress" | "Interested";
 
 export interface ICourseSchema {
   title: string;

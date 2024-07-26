@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CourseCardProps } from "@/app/model/CourseInterface";
-import {ICourseSchema} from "../../../public/data/dataInterface";
+import {ICourseSchema, courseState} from "../../../public/data/dataInterface";
 
 const CourseCardDropDown = ({ title, courseCode, tag }: CourseCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,17 +8,28 @@ const CourseCardDropDown = ({ title, courseCode, tag }: CourseCardProps) => {
   const [saved, setSave] = useState(false);
   const [dropDownText, setDropDownText] = useState("No Selection");
 
-  function saveCourse() {
+  function saveCourse(newState : courseState) {
       let current: ICourseSchema[] = JSON.parse(localStorage.getItem("courses"));
       if (saved) {
         current = current.filter(i => i.title != title);
       } else if (current.find(x => x.title === title) == undefined) {
-        current.push({ title: title, courseCode: courseCode, tag: tag});
+        current.push({ title: title, courseCode: courseCode, tag: tag, state: newState});
+        localStorage.setItem("courses", JSON.stringify(current));
+        setSave(!saved);
       }
+  }
+  
+  function removeCourse() {
+    let current: ICourseSchema[] = JSON.parse(localStorage.getItem("courses"));
+    if (saved) {
+      current = current.filter(i => i.title != title);
+    } else if (current.find(x => x.title === title) == undefined) {
+      current.push({ title: title, courseCode: courseCode, tag: tag, state: newState});
       localStorage.setItem("courses", JSON.stringify(current));
       setSave(!saved);
+  
+    }
   }
-
   useEffect(() => {
     const div = document.getElementById('fixed-size-div');
     const initialWidth = div.offsetWidth;
@@ -36,23 +47,23 @@ const CourseCardDropDown = ({ title, courseCode, tag }: CourseCardProps) => {
   const handleOption1 = () => {
     setIsOpen(false);
     setDropDownText("Planned");
-    saveCourse();
+    saveCourse("Planned");
   };
   const handleOption2 = () => {
     setIsOpen(false);
     setDropDownText("In Progress");
-    saveCourse();
+    saveCourse("In Progress");
   };
   const handleOption3 = () => {
     setIsOpen(false);
     setDropDownText("Interested");
-    saveCourse();
+    saveCourse("Interested");
   };
 
   const handleOption0 = () => {
     setIsOpen(true);
     setDropDownText("Remove");
-    saveCourse();
+    removeCourse();
   }
 
   return (

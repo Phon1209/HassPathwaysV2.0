@@ -1,7 +1,10 @@
+type courseState = "Planned" | "In Progress" | "Interested";
+
 export interface ICourseSchema {
   title: string;
   courseCode: string;
   tag: Array<string>;
+  state?: courseState;
 }
 
 export interface IPathwaySchema {

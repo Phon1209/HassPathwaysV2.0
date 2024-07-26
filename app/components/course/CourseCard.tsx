@@ -25,7 +25,7 @@ const CourseCard = ({ title, courseCode, tag }: CourseCardProps) => {
             ))}
           </div>
         </div>
-        <CourseCardDropDown />
+        <CourseCardDropDown title={title} courseCode={courseCode} tag={tag} />
       </div>
     </section>
   );

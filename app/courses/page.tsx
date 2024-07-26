@@ -1,13 +1,23 @@
 "use client";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 import CourseCard from "../components/course/CourseCard";
 import ChevronUp from "@/public/assets/svg/chevron-up.svg?svgr";
 import ChevronDown from "@/public/assets/svg/chevron-down.svg?svgr";
 import { useAppContext } from "../contexts/appContext/AppProvider";
+import { ICourseSchema, courseState } from "../../public/data/dataInterface";
 
 const MyCourses = () => {
   const [courseFilter, setCourseFilter] = useState(0);
   const { courseState } = useAppContext();
+
+  const [courses, setCourses] = useState<ICourseSchema[]>([]);
+
+  useEffect(() => {
+    const storedCourses = localStorage.getItem("courses");
+    if (storedCourses) {
+      setCourses(JSON.parse(storedCourses));
+    }
+  }, []);
 
   return (
     <>
@@ -40,7 +50,21 @@ const MyCourses = () => {
         </div>
       </section>
       <section className="my-4 grid grid-flow-row gap-y-3">
-        <CourseCard tag={["T"]} courseCode="TEST-3000" title="Test1" />
+        {/* <CourseCard tag={["T"]} courseCode="TEST-3000" title="Test1" /> */}
+
+        {
+          courses.filter(course => courseFilter === 0 || course.state === courseFilter)
+            .map(course => (
+              <CourseCard
+                key={course.courseCode}
+                tag={course.tag}
+                courseCode={course.courseCode}
+                title={course.title}
+                status={course.state}
+              />
+            ))
+        }
+
       </section>
     </>
   );
@@ -63,9 +87,8 @@ const ModeRadioButton = ({
 
   return (
     <button
-      className={`flex gap-2 items-center !rounded-md hover:!bg-gray-100 ${
-        checked ? " !bg-gray-50" : ""
-      }`}
+      className={`flex gap-2 items-center !rounded-md hover:!bg-gray-100 ${checked ? " !bg-gray-50" : ""
+        }`}
       onClick={clickCallback}
     >
       <span

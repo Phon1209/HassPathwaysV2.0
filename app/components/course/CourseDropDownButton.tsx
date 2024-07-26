@@ -1,35 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import { CourseCardProps } from "@/app/model/CourseInterface";
-import {ICourseSchema, courseState} from "../../../public/data/dataInterface";
+import { ICourseSchema, courseState } from "../../../public/data/dataInterface";
 
-const CourseCardDropDown = ({ title, courseCode, tag }: CourseCardProps) => {
+const CourseCardDropDown = ({ title, courseCode, tag, status }: CourseCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
   // track if the course is saved: planned, in progress, or interested
   const [saved, setSave] = useState(false);
-  const [dropDownText, setDropDownText] = useState("No Selection");
+  const [dropDownText, setDropDownText] = useState ("No Selection");
+  
+  if (status != null) {
+    setDropDownText(status);
+  }
 
-  function saveCourse(newState : courseState) {
-      let current: ICourseSchema[] = JSON.parse(localStorage.getItem("courses"));
-      if (saved) {
-        current = current.filter(i => i.title != title);
-      } else if (current.find(x => x.title === title) == undefined) {
-        current.push({ title: title, courseCode: courseCode, tag: tag, state: newState});
-        localStorage.setItem("courses", JSON.stringify(current));
-        setSave(!saved);
-      }
-  }
-  
-  function removeCourse() {
-    let current: ICourseSchema[] = JSON.parse(localStorage.getItem("courses"));
-    if (saved) {
-      current = current.filter(i => i.title != title);
-    } else if (current.find(x => x.title === title) == undefined) {
-      current.push({ title: title, courseCode: courseCode, tag: tag, state: newState});
+  function saveCourse(newState: courseState) {
+    const current: ICourseSchema[] = JSON.parse(localStorage.getItem("courses")) || [];
+    if (!saved) {
+      current.push({ title, courseCode, tag, state: newState });
       localStorage.setItem("courses", JSON.stringify(current));
-      setSave(!saved);
-  
+      setSave(true);
+    } else {
+      removeCourse();
+      saveCourse(newState);
     }
+    setDropDownText(newState);
   }
+
+  function removeCourse() {
+    let current: ICourseSchema[] = JSON.parse(localStorage.getItem("courses")) || [];
+    current = current.filter(course => course.title !== title);
+    localStorage.setItem("courses", JSON.stringify(current));
+    setSave(false);
+    setDropDownText("No Selection");
+  }
+
   useEffect(() => {
     const div = document.getElementById('fixed-size-div');
     const initialWidth = div.offsetWidth;

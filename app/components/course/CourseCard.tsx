@@ -3,7 +3,7 @@ import { CourseCardProps } from "@/app/model/CourseInterface";
 import Link from "next/link";
 import CourseCardDropDown from "./CourseDropDownButton";
 
-const CourseCard = ({ title, courseCode, tag }: CourseCardProps) => {
+const CourseCard = ({ title, courseCode, tag, defaultDropDownText }: CourseCardProps) => {
   return (
     <section className="course-card">
       <div className="flex flex-col fold:flex-row justify-between items-center">
@@ -25,7 +25,7 @@ const CourseCard = ({ title, courseCode, tag }: CourseCardProps) => {
             ))}
           </div>
         </div>
-        <CourseCardDropDown title={title} courseCode={courseCode} tag={tag} />
+        <CourseCardDropDown title={title} courseCode={courseCode} tag={tag} status={defaultDropDownText}/>
       </div>
     </section>
   );

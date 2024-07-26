@@ -51,6 +51,21 @@ const NavigationBar = ({ className }: { className?: string }) => {
             keyword="courses"
           />
         </DropDownMenu>
+        <DropDownMenu title="Pathways">
+          <NavButton
+            link="/pathways/search"
+            text="Find Pathways"
+            Icon={<SearchIcon />}
+            keyword="courses/search"
+          />
+          <NavButton
+            link="/pathways"
+            text="My Pathways"
+            Icon={<BarChart />}
+            keyword="courses"
+          />
+        </DropDownMenu>
+        {/*
         <ul
           className={`flex flex-col md:flex-row items-start gap-5 md:gap-4 md:px-4 self-stretch ${
             menuOpen ? "mb-5 md:mb-0" : ""
@@ -76,6 +91,7 @@ const NavigationBar = ({ className }: { className?: string }) => {
             keyword="pathways"
           />
         </ul>
+        */}
         <CatalogDropdown />
         
       </div>

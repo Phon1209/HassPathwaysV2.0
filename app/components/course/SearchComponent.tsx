@@ -25,6 +25,7 @@ import { ICourseSchema } from "@/public/data/dataInterface";
 import { flattenFilterParams } from "../utils/url";
 import dynamic from "next/dynamic";
 import { debounce } from "lodash";
+import { useAppContext } from "@/app/contexts/appContext/AppProvider";
 
 const Spinner = dynamic(() => import("@/app/components/utils/Spinner"));
 
@@ -237,61 +238,110 @@ const CourseList = ({
   searchString: string;
   filterState: IFilterState;
 }) => {
-  const [courseData, setCourseData] = useState<Array<ICourseSchema>>([]);
-  const deferSearchString = useDeferredValue(searchString);
-  const deferFilterState = useDeferredValue(filterState);
+  const [courseData, setCourseData] = useState<ICourseSchema[]>([]);
+  const [filteredCourses, setFilteredCourses] = useState<ICourseSchema[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const debouncedFetchCourses = useCallback(
-    debounce(() => {
-      const apiController = new AbortController();
+  const deferredSearchString = useDeferredValue(searchString);
+  const deferredFilterState = useDeferredValue(filterState);
 
-      const fetchUrl: string = `http://localhost:3000/api/course/search?${new URLSearchParams(
-        {
-          searchString: deferSearchString,
-          ...flattenFilterParams(deferFilterState),
-        }
-      )}`;
+  const { pathwaysCategories, catalog_year } = useAppContext();
 
-      setIsLoading(true);
-      fetch(fetchUrl, {
+  const fetchCourses = async () => {
+    const apiController = new AbortController();
+    const fetchUrl = `http://localhost:3000/api/course/search?${new URLSearchParams({
+      searchString: deferredSearchString,
+      ...flattenFilterParams(deferredFilterState),
+    })}`;
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch(fetchUrl, {
         signal: apiController.signal,
         next: {
           revalidate: false,
         },
         cache: "force-cache",
-      })
-        .then((data) => data.json())
-        .then(setCourseData)
-        .then((_) => setIsLoading(false))
-        .catch((err) => {
-          if (err.name === "AbortError") return;
-          console.error("Fetching Error: ", err);
-        });
-
-      return () => apiController.abort("Cancelled");
-    }, 500), // delay 500ms
-
-    [deferFilterState, deferSearchString, setIsLoading, setCourseData]
-  );
+      });
+      if (!response.ok) throw new Error("Network response was not ok");
+      const data = await response.json();
+      setCourseData(data);
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        console.error("Fetching Error: ", error);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    debouncedFetchCourses();
+    fetchCourses();
+  }, [catalog_year]);
 
-    return () => {
-      debouncedFetchCourses.cancel();
+  useEffect(() => {
+    const applyFilters = () => {
+      let filtered = courseData;
+  
+      // Prefix Filtering
+      if (deferredFilterState.prefix.length) {
+        filtered = filtered.filter(course =>
+          deferredFilterState.prefix.some(prefix =>
+            course.courseCode.startsWith(prefix)
+          )
+        );
+      }
+  
+      // Level Filtering
+      if (deferredFilterState.level.length) {
+        filtered = filtered.filter(course =>
+          deferredFilterState.level.some(level =>
+            course.courseCode.substring(5, 6) === level
+          )
+        );
+      }
+  
+      // Tag Filtering
+      if (deferredFilterState.filter.length) {
+        filtered = filtered.filter(course =>
+          deferredFilterState.filter.every(tag =>
+            course.tag.includes(tags_short_to_long[tag])
+          )
+        );
+      }
+  
+      // Transform Data
+      const transformed = filtered.map(course => ({
+        title: course.title,
+        courseCode: course.courseCode,
+        tag: course.tag,
+        description: course.description,
+        prereqs: course.prereqs
+      }));
+  
+      // Search String Filtering
+      if (deferredSearchString) {
+        setFilteredCourses(
+          transformed.filter(course =>
+            course.title.toLowerCase().includes(deferredSearchString.toLowerCase()) ||
+            course.courseCode.toLowerCase().includes(deferredSearchString.toLowerCase())
+          )
+        );
+      } else {
+        setFilteredCourses(transformed);
+      }
     };
-  }, [debouncedFetchCourses]);
-
+  
+    applyFilters();
+  }, [deferredSearchString, deferredFilterState, courseData]);
+    
   return (
     <section className="flex flex-col gap-3">
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        courseData.map((course, i) => {
-          return <CourseCard {...course} key={i} />;
-        })
-      )}
+      {isLoading ? <Spinner /> : filteredCourses.map((course, i) => (
+        <CourseCard {...course} key={i} />
+      ))}
     </section>
   );
 };
+

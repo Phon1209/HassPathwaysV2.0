@@ -27,6 +27,7 @@ const CourseCard = ({ title, courseCode, tag, status = "No Selection"}: CourseCa
             ))}
           </div>
         </div>
+        
         <CourseCardDropDown title={title} courseCode={courseCode} tag={tag} status={state}/>
       </div>
     </section>

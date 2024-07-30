@@ -33,6 +33,23 @@ module.exports = {
         "in-progress": "#fecdc9",
         "in-progress-fill": "#fee4e2",
       },
+      yellow: {
+        '500': '#facc15',
+      },
+      blue: {
+        '500': '#3b82f6',
+      },
+      green: {
+        '500': '#10b981',
+      },
+      red: {
+        '500': '#ef4444',
+      },
+      orange: {
+        500: '#F57F20', // Custom orange color
+      },
+      black: '#000000',
+      white: '#ffffff',
       primary: {
         "25": "#fffbfa",
         "50": "#fef3f2",

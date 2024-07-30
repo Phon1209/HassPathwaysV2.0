@@ -7,6 +7,7 @@ import CatalogDropdown from "./CatalogDropdown";
 import { BarChart, HomeLine, SearchIcon } from "../utils/Icon";
 import MenuBurger from "@/public/assets/svg/menu-04.svg?svgr";
 import CloseButton from "@/public/assets/svg/x-close.svg?svgr";
+import DropDownMenu from "./DropDownMenu";
 
 const NavigationBar = ({ className }: { className?: string }) => {
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -36,11 +37,40 @@ const NavigationBar = ({ className }: { className?: string }) => {
             : "hidden md:flex"
         }`}
       >
+        <DropDownMenu title="Courses">
+          <NavButton
+            link="/courses/search"
+            text="Search Courses"
+            Icon={<SearchIcon />}
+            keyword="courses/search"
+          />
+          <NavButton
+            link="/courses"
+            text="My Courses"
+            Icon={<HomeLine />}
+            keyword="courses"
+          />
+        </DropDownMenu>
+        <DropDownMenu title="Pathways">
+          <NavButton
+            link="/pathways/search"
+            text="Find Pathways"
+            Icon={<SearchIcon />}
+            keyword="courses/search"
+          />
+          <NavButton
+            link="/pathways"
+            text="My Pathways"
+            Icon={<BarChart />}
+            keyword="courses"
+          />
+        </DropDownMenu>
+        {/*
         <ul
           className={`flex flex-col md:flex-row items-start gap-5 md:gap-4 md:px-4 self-stretch ${
             menuOpen ? "mb-5 md:mb-0" : ""
           }`}
-        >
+        >  
           <NavButton
             link="/courses/search"
             text="Search Courses"
@@ -61,7 +91,9 @@ const NavigationBar = ({ className }: { className?: string }) => {
             keyword="pathways"
           />
         </ul>
+        */}
         <CatalogDropdown />
+        
       </div>
     </nav>
   );

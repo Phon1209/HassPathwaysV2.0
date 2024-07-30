@@ -42,23 +42,28 @@ const NavigationBar = ({ className }: { className?: string }) => {
           }`}
         >
           <NavButton
-            link="/courses/search"
-            text="Search Courses"
-            Icon={<SearchIcon />}
-            keyword="courses/search"
-          />
-
-          <NavButton
             link="/courses"
             text="My Courses"
             Icon={<HomeLine />}
             keyword="courses"
           />
           <NavButton
+            link="/courses/search"
+            text="Search Courses"
+            Icon={<SearchIcon />}
+            keyword="courses/search"
+          />
+          <NavButton
             link="/pathways"
             text="My Pathways"
             Icon={<BarChart />}
             keyword="pathways"
+          />
+          <NavButton
+            link="/pathways/search"
+            text="Explore Pathways"
+            Icon={<SearchIcon />}
+            keyword="pathways/search"
           />
         </ul>
         <CatalogDropdown />

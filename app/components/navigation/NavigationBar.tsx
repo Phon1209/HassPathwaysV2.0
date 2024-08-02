@@ -56,13 +56,13 @@ const NavigationBar = ({ className }: { className?: string }) => {
             link="/pathways/search"
             text="Find Pathways"
             Icon={<SearchIcon />}
-            keyword="courses/search"
+            keyword="pathways/search"
           />
           <NavButton
             link="/pathways"
             text="My Pathways"
             Icon={<BarChart />}
-            keyword="courses"
+            keyword="pathways"
           />
         </DropDownMenu>
         {/*

@@ -5,6 +5,7 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  darkMode: "class",
   theme: {
     extend: {
       screens: {
@@ -28,9 +29,9 @@ module.exports = {
       white: "#ffffff",
       black: "#000000",
       "status-bar": {
-        active: "#c50606",
+        active: "#50C878",
         inactive: "#a9a9a9",
-        "in-progress": "#fecdc9",
+        "in-progress": "#FFBF00",
         "in-progress-fill": "#fee4e2",
       },
       primary: {

@@ -30,7 +30,7 @@ const NavButton = ({
           {...Icon.props}
           className={`${selected && "nav-button--selected"} hidden md:block`}
         />
-        {/**/}
+        
         <span
           className={`text-sm lg:text-md font-semibold ${
             !selected && "text-gray-700"

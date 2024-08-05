@@ -3,7 +3,7 @@ import { CourseCardProps } from "@/app/model/CourseInterface";
 import Link from "next/link";
 import CourseCardDropDown from "./CourseDropDownButton";
 
-const CourseCard = ({ title, courseCode, tag, status = "No Selection"}: CourseCardProps) => {
+const CourseCard = ({ title, courseCode, tag, status = "No Selection" }: CourseCardProps) => {
   const [state, setState] = useState(status);
 
   return (
@@ -27,8 +27,7 @@ const CourseCard = ({ title, courseCode, tag, status = "No Selection"}: CourseCa
             ))}
           </div>
         </div>
-        
-        <CourseCardDropDown title={title} courseCode={courseCode} tag={tag} status={state}/>
+        <CourseCardDropDown title={title} courseCode={courseCode} tag={tag} status={state} />
       </div>
     </section>
   );

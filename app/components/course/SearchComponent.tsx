@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 
 import {
   SearchIcon,
@@ -24,7 +24,6 @@ import {
 import { ICourseSchema } from "@/public/data/dataInterface";
 import { flattenFilterParams } from "../utils/url";
 import dynamic from "next/dynamic";
-import { debounce } from "lodash";
 import { useAppContext } from "@/app/contexts/appContext/AppProvider";
 
 const Spinner = dynamic(() => import("@/app/components/utils/Spinner"));
@@ -106,124 +105,91 @@ const SearchInput = ({ searchString, setSearchString }: SearchInputProps) => {
 const DesktopFilter = ({ filterState, filterDispatch }: FilterProps) => {
   return (
     <div className="rounded-lg shadow-lg p-6 min-w-[290px] max-w-xs grid grid-flow-row gap-2 border border-solid border-gray-100">
-      {courseFilters.map((section) => {
-        return (
-          <section key={section.apiName}>
-            <header className="text-md font-medium text-gray-900">
-              {section.displayName}
-            </header>
-            <div className="flex flex-wrap">
-              {section.options.map((choice) => {
-                const selected = filterState[section.apiName].includes(
-                  choice.value
-                );
-                const actionType = selected
-                  ? FilterAction.REM
-                  : FilterAction.ADD;
-                return (
+      {courseFilters.map((section) => (
+        <section key={section.apiName}>
+          <header className="text-md font-medium text-gray-900">
+            {section.displayName}
+          </header>
+          <div className="flex flex-wrap">
+            {section.options.map((choice) => {
+              const selected = filterState[section.apiName].includes(choice.value);
+              const actionType = selected ? FilterAction.REM : FilterAction.ADD;
+              return (
+                <div className="px-3 py-2 basis-auto shrink-0" key={choice.value}>
                   <div
-                    className="px-3 py-2 basis-auto shrink-0"
-                    key={choice.value}
+                    className="cursor-pointer flex gap-2 items-center"
+                    onClick={() => {
+                      filterDispatch({
+                        type: actionType,
+                        payload: {
+                          group: section.apiName,
+                          value: choice.value,
+                        },
+                      });
+                    }}
                   >
-                    <div
-                      className="cursor-pointer flex gap-2 items-center"
-                      onClick={() => {
-                        filterDispatch({
-                          type: actionType,
-                          payload: {
-                            group: section.apiName,
-                            value: choice.value,
-                          },
-                        });
-                      }}
-                    >
-                      {selected ? <CheckBoxChecked /> : <CheckBoxUnChecked />}
-                      <label
-                        className={`text-sm shrink-0 cursor-pointer ${
-                          selected && "font-medium"
-                        }`}
-                      >
-                        {choice.displayName}
-                      </label>
-                    </div>
+                    {selected ? <CheckBoxChecked /> : <CheckBoxUnChecked />}
+                    <label className={`text-sm shrink-0 cursor-pointer ${selected && "font-medium"}`}>
+                      {choice.displayName}
+                    </label>
                   </div>
-                );
-              })}
-            </div>
-          </section>
-        );
-      })}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      ))}
     </div>
   );
 };
 
 const FilterDropdown = ({ filterState, filterDispatch }: FilterProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
   return (
     <Fragment>
       <div className="dropdown">
         <div
-          className={`w-11 h-11 flex justify-center items-center gap-2 cursor-pointer border-gray-300 border border-solid rounded-lg ${
-            dropdownOpen && "bg-gray-100"
-          }`}
+          className={`w-11 h-11 flex justify-center items-center gap-2 cursor-pointer border-gray-300 border border-solid rounded-lg ${dropdownOpen && "bg-gray-100"}`}
           onClick={() => setDropdownOpen((open) => !open)}
         >
           <Filter className={dropdownOpen ? "path-gray-700" : undefined} />
         </div>
         {dropdownOpen && (
           <div className="rounded-lg shadow-lg p-6 dropdown-choices w-screen translate-x-4 fold:translate-x-0 fold:w-max max-w-xs sm:max-w-sm md:max-w-md grid grid-flow-row gap-2">
-            {courseFilters.map((section) => {
-              return (
-                <section key={section.apiName}>
-                  <header className="text-md font-medium text-gray-900">
-                    {section.displayName}
-                  </header>
-                  <div className="flex flex-wrap">
-                    {section.options.map((choice) => {
-                      const selected = filterState[section.apiName].includes(
-                        choice.value
-                      );
-                      const actionType = selected
-                        ? FilterAction.REM
-                        : FilterAction.ADD;
-                      return (
+            {courseFilters.map((section) => (
+              <section key={section.apiName}>
+                <header className="text-md font-medium text-gray-900">
+                  {section.displayName}
+                </header>
+                <div className="flex flex-wrap">
+                  {section.options.map((choice) => {
+                    const selected = filterState[section.apiName].includes(choice.value);
+                    const actionType = selected ? FilterAction.REM : FilterAction.ADD;
+                    return (
+                      <div className="px-3 py-2 basis-auto shrink-0" key={choice.value}>
                         <div
-                          className="px-3 py-2 basis-auto shrink-0"
-                          key={choice.value}
+                          className="cursor-pointer flex gap-2 items-center"
+                          onClick={() => {
+                            filterDispatch({
+                              type: actionType,
+                              payload: {
+                                group: section.apiName,
+                                value: choice.value,
+                              },
+                            });
+                          }}
                         >
-                          <div
-                            className="cursor-pointer flex gap-2 items-center"
-                            onClick={() => {
-                              filterDispatch({
-                                type: actionType,
-                                payload: {
-                                  group: section.apiName,
-                                  value: choice.value,
-                                },
-                              });
-                            }}
-                          >
-                            {selected ? (
-                              <CheckBoxChecked />
-                            ) : (
-                              <CheckBoxUnChecked />
-                            )}
-                            <label
-                              className={`text-sm shrink-0 cursor-pointer ${
-                                selected && "font-medium"
-                              }`}
-                            >
-                              {choice.displayName}
-                            </label>
-                          </div>
+                          {selected ? <CheckBoxChecked /> : <CheckBoxUnChecked />}
+                          <label className={`text-sm shrink-0 cursor-pointer ${selected && "font-medium"}`}>
+                            {choice.displayName}
+                          </label>
                         </div>
-                      );
-                    })}
-                  </div>
-                </section>
-              );
-            })}
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            ))}
           </div>
         )}
       </div>
@@ -244,10 +210,9 @@ const CourseList = ({
 
   const deferredSearchString = useDeferredValue(searchString);
   const deferredFilterState = useDeferredValue(filterState);
+  const { catalog_year } = useAppContext(); // Make sure this is used if necessary
 
-  const { pathwaysCategories, catalog_year } = useAppContext();
-
-  const fetchCourses = async () => {
+  const fetchCourses = useCallback(async () => {
     const apiController = new AbortController();
     const fetchUrl = `http://localhost:3000/api/course/search?${new URLSearchParams({
       searchString: deferredSearchString,
@@ -259,9 +224,6 @@ const CourseList = ({
     try {
       const response = await fetch(fetchUrl, {
         signal: apiController.signal,
-        next: {
-          revalidate: false,
-        },
         cache: "force-cache",
       });
       if (!response.ok) throw new Error("Network response was not ok");
@@ -274,16 +236,25 @@ const CourseList = ({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [catalog_year]); // Use the actual dependencies
 
   useEffect(() => {
     fetchCourses();
-  }, [catalog_year]);
+  }, [fetchCourses]);
 
   useEffect(() => {
+    const tags_short_to_long = courseFilters.reduce((acc, section) => {
+      section.options.forEach(option => {
+        if (option.value && option.displayName) {
+          acc[option.value] = option.displayName;
+        }
+      });
+      return acc;
+    }, {} as Record<string, string>);
+
     const applyFilters = () => {
       let filtered = courseData;
-  
+
       // Prefix Filtering
       if (deferredFilterState.prefix.length) {
         filtered = filtered.filter(course =>
@@ -292,7 +263,7 @@ const CourseList = ({
           )
         );
       }
-  
+
       // Level Filtering
       if (deferredFilterState.level.length) {
         filtered = filtered.filter(course =>
@@ -301,41 +272,31 @@ const CourseList = ({
           )
         );
       }
-  
-      // Tag Filtering
-      if (deferredFilterState.filter.length) {
-        filtered = filtered.filter(course =>
-          deferredFilterState.filter.every(tag =>
-            course.tag.includes(tags_short_to_long[tag])
-          )
-        );
+
+      if (deferredFilterState.filter.length && tags_short_to_long) {
+        filtered = filtered.filter(course => {
+          const courseTags = course.tag; // Assuming course.tag is an array of tags
+          const desiredTags = deferredFilterState.filter.map(tag => tags_short_to_long[tag]);
+    
+          // Check if any desired tag is included in courseTags
+          return desiredTags.some(desiredTag => courseTags.includes(desiredTag));
+        });
       }
-  
-      // Transform Data
-      const transformed = filtered.map(course => ({
-        title: course.title,
-        courseCode: course.courseCode,
-        tag: course.tag,
-        description: course.description,
-        prereqs: course.prereqs
-      }));
-  
+
       // Search String Filtering
       if (deferredSearchString) {
-        setFilteredCourses(
-          transformed.filter(course =>
-            course.title.toLowerCase().includes(deferredSearchString.toLowerCase()) ||
-            course.courseCode.toLowerCase().includes(deferredSearchString.toLowerCase())
-          )
+        filtered = filtered.filter(course =>
+          course.title.toLowerCase().includes(deferredSearchString.toLowerCase()) ||
+          course.courseCode.toLowerCase().includes(deferredSearchString.toLowerCase())
         );
-      } else {
-        setFilteredCourses(transformed);
       }
+
+      setFilteredCourses(filtered);
     };
-  
+
     applyFilters();
   }, [deferredSearchString, deferredFilterState, courseData]);
-    
+
   return (
     <section className="flex flex-col gap-3">
       {isLoading ? <Spinner /> : filteredCourses.map((course, i) => (
@@ -345,3 +306,4 @@ const CourseList = ({
   );
 };
 
+export default CourseList;

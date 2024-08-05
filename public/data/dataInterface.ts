@@ -11,6 +11,9 @@ export interface ICourseSchemaSaved {
 export interface ICourseSchema {
   title: string;
   courseCode: string;
+  filter: string;
+  description: string;
+  prereqs: any;
   tag: Array<string>;
   state?: courseState;
 }

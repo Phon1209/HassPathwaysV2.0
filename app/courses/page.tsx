@@ -78,11 +78,11 @@ const ModeRadioButton = ({
       onClick={clickCallback}
     >
       <span
-        className={`text-xs md:text-sm lg:text-lg font-semibold ${fontStyle}`}
+        className={`text-xs md:text-sm lg:text-lg font-semibold ${fontStyle} z-20`}
       >
         {label}
       </span>
-      <p className={`tag ${tagStyle}`}>{tag}</p>
+      <p className={`tag ${tagStyle} z-20`}>{tag}</p>
     </button>
   );
 };

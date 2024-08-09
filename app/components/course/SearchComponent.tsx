@@ -24,7 +24,7 @@ import {
 import { ICourseSchema } from "@/public/data/dataInterface";
 import { flattenFilterParams } from "../utils/url";
 import dynamic from "next/dynamic";
-import { useAppContext } from "@/app/contexts/appContext/AppProvider";
+import { useAppContext, fetchCourses } from '@/app/contexts/appContext/AppProvider';
 
 const Spinner = dynamic(() => import("@/app/components/utils/Spinner"));
 
@@ -204,51 +204,22 @@ const CourseList = ({
   searchString: string;
   filterState: IFilterState;
 }) => {
-  const [courseData, setCourseData] = useState<ICourseSchema[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<ICourseSchema[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const deferredSearchString = useDeferredValue(searchString);
   const deferredFilterState = useDeferredValue(filterState);
-  const { catalog_year } = useAppContext();
+  const { catalog_year, courses, fetchCourses} = useAppContext();
 
-  const fetchCourses = useCallback(async () => {
-    const apiController = new AbortController();
-    const fetchUrl = `http://localhost:3000/api/course/search?${new URLSearchParams({
-      searchString: deferredSearchString,
-      ...flattenFilterParams(deferredFilterState),
-    })}`;
-
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(fetchUrl, {
-        signal: apiController.signal,
-        cache: "force-cache",
-      });
-      if (!response.ok) throw new Error("Network response was not ok");
-      const data = await response.json();
-
-      const transformedData = Object.keys(data).map(courseName => ({
-        ...data[courseName],
-        name: courseName,
-      }));
-
-      setCourseData(transformedData);
-      setFilteredCourses(transformedData);
-      console.log(filteredCourses);
-    } catch (error) {
-      if (error.name !== "AbortError") {
-        console.error("Fetching Error: ", error);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  }, [catalog_year]);
 
   useEffect(() => {
-    fetchCourses();
-  }, [fetchCourses]);
+    const fetchData = async () => {
+      setIsLoading(true);
+      await fetchCourses();
+      setIsLoading(false);
+    };
+    fetchData();
+  }, [catalog_year]);
 
   useEffect(() => {
     const tags_short_to_long = courseFilters.reduce((acc, section) => {
@@ -261,9 +232,9 @@ const CourseList = ({
     }, {} as Record<string, string>);
 
     const applyFilters = () => {
-      let filtered = courseData;
+      let filtered = courses;
 
-      // Prefix Filtering, ie ARTS
+      // Prefix Filtering
       if (deferredFilterState.prefix.length) {
         filtered = filtered.filter(course =>
           deferredFilterState.prefix.some(prefix =>
@@ -320,27 +291,28 @@ const CourseList = ({
 
       setFilteredCourses(filtered);
     };
-    console.log(courseData);
+
     applyFilters();
-  }, [deferredSearchString, deferredFilterState, courseData]);
+  }, [deferredSearchString, deferredFilterState, courses]);
 
   return (
     <section className="flex flex-col gap-3">
       {isLoading ? <Spinner /> : filteredCourses.map((course, i) => (
+        
         <CourseCard 
           title={course.name}
-          courseCode={course.subj + course.ID}
+          courseCode={course.subj + '-' + course.ID}
           properties={course.properties}
           prerequsits={course.prerequisites}
           offered={course.offered}
-         key={i} />
+          status={course.status}
+          key={i} />
       ))}
     </section>
   );
 };
 
 /*
-t
 
 ID: "4070"
 

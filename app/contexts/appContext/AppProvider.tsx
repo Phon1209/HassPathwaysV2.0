@@ -8,31 +8,30 @@ import {
   ReactNode,
 } from "react";
 import { appReducer } from "./AppReducer";
-import { INITIAL_LOAD_DATA, SET_CATALOG } from "../actions";
+import { INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES } from "../actions";
 import {
   courseState,
   pathwaysCategories,
   APPLICATION_STATE_KEY,
 } from "@/public/data/staticData";
 import { ApplicationContext } from "@/app/model/AppContextInterface";
+import { ICourseSchema } from "@/app/model/CourseInterface";
 
 const constantApplicationValue = { courseState, pathwaysCategories };
 
 const defaultInitialState: ApplicationContext = {
-  catalog_year: "2022-2023", // this value is to keep the dropdown text empty while fetching localStorage
-  // TODO: all course with status
+  catalog_year: "2022-2023",
+  courses: [],
+  setCourses: () => {},
   setCatalog: () => {},
   ...constantApplicationValue,
 };
 
-const getInitialState: () => ApplicationContext = () => defaultInitialState;
-
-const AppContext = createContext<ApplicationContext>(getInitialState());
+const AppContext = createContext<ApplicationContext>(defaultInitialState);
 
 const AppContextProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(appReducer, getInitialState());
+  const [state, dispatch] = useReducer(appReducer, defaultInitialState);
 
-  // Get data from localStorage
   useEffect(() => {
     const localStorageString = localStorage.getItem(APPLICATION_STATE_KEY);
     const stateWithoutLocalStorage = {
@@ -40,27 +39,70 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
       catalog_year: "2022-2023",
     };
 
+    const initialState = localStorageString
+      ? JSON.parse(localStorageString)
+      : stateWithoutLocalStorage;
+
     dispatch({
       type: INITIAL_LOAD_DATA,
-      payload: localStorageString
-        ? JSON.parse(localStorageString)
-        : stateWithoutLocalStorage,
+      payload: initialState,
     });
   }, []);
 
-  // Update localStorage
   useEffect(() => {
     localStorage.setItem(APPLICATION_STATE_KEY, JSON.stringify(state));
   }, [state]);
 
-  // Declare any state function here
-  // and pass through value props in AppContext.Provider
   const setCatalog = (catalog_year: string) => {
     dispatch({ type: SET_CATALOG, payload: catalog_year });
   };
 
+  const setCourses = (courses: ICourseSchema[]) => {
+    console.log("SETTING COURSES");
+    dispatch({ type: SET_COURSES, payload: courses });
+  };
+
+  const fetchCourses = async () => {
+    const localStorageCourses = localStorage.getItem("courses");
+    if (localStorageCourses) {
+      console.log("Courses already fetched, returning existing courses...");
+      console.log("Courses fetched from local storage...");
+      const courses = JSON.parse(localStorageCourses);
+
+      dispatch({ type: SET_COURSES, payload: courses });
+      return courses;
+
+    } else {
+      console.log("Courses not fetched yet, fetching now...");
+      const apiController = new AbortController();
+      const fetchUrl = `http://localhost:3000/api/course/search?`;
+      try {
+        const response = await fetch(fetchUrl, {
+          signal: apiController.signal,
+          cache: "force-cache",
+        });
+        if (!response.ok) throw new Error("Network response was not ok");
+        const data = await response.json();
+
+        const transformedData = Object.keys(data).map((courseName) => ({
+          ...data[courseName],
+          name: courseName,
+          status: "No Selection",
+        }));
+
+        setCourses(transformedData);
+
+        localStorage.setItem("courses", JSON.stringify(transformedData));
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          console.error("Fetching Error: ", error);
+        }
+      }
+    } 
+  };
+
   return (
-    <AppContext.Provider value={{ ...state, setCatalog }}>
+    <AppContext.Provider value={{ ...state, setCatalog, setCourses, fetchCourses }}>
       {children}
     </AppContext.Provider>
   );

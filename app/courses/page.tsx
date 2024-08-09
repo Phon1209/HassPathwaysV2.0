@@ -1,22 +1,31 @@
 "use client";
+
 import { MouseEventHandler, useEffect, useState } from "react";
 import CourseCard from "../components/course/CourseCard";
-import ChevronUp from "@/public/assets/svg/chevron-up.svg?svgr";
-import ChevronDown from "@/public/assets/svg/chevron-down.svg?svgr";
+import Spinner from "../../app/components/utils/Spinner"; // Import Spinner component
 import { useAppContext } from "../contexts/appContext/AppProvider";
-import { ICourseSchema, courseState } from "../../public/data/dataInterface";
+import { ICourseSchema } from "../../public/data/dataInterface";
+import { CourseCardProps } from "@/app/model/CourseInterface";
 
 const MyCourses = () => {
   const [courseFilter, setCourseFilter] = useState(0);
-  const { courseState } = useAppContext();
-
-  const [courses, setCourses] = useState<ICourseSchema[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { courses, fetchCourses, courseState } = useAppContext();
+  const [filteredCourses, setFilteredCourses] = useState();
 
   useEffect(() => {
-    const storedCourses = localStorage.getItem("courses");
-    if (storedCourses) {
-      setCourses(JSON.parse(storedCourses));
-    }
+    const newFilteredCourses = courses.filter(course =>
+      course.status !== "No Selection"
+    );
+    
+    setFilteredCourses(newFilteredCourses);
+    setIsLoading(false);
+  }, [courses]);
+
+  useEffect(() => {
+    
+    console.log(courses);
+
   }, []);
 
   return (
@@ -27,44 +36,37 @@ const MyCourses = () => {
       <section>
         <div className="course-button-group sm:flex flex-wrap gap-x-2 hidden">
           <ModeRadioButton
-            checked={0 === courseFilter}
+            checked={courseFilter === 0}
             label={"All"}
             tag={0}
             clickCallback={() => {
               setCourseFilter(0);
             }}
           />
-          {courseState.map((state) => {
-            return (
-              <ModeRadioButton
-                checked={state.value === courseFilter}
-                label={state.display}
-                tag={0}
-                key={state.display}
-                clickCallback={() => {
-                  setCourseFilter(state.value);
-                }}
-              />
-            );
-          })}
+          {courseState.map((state) => (
+            <ModeRadioButton
+              checked={state.value === courseFilter}
+              label={state.display}
+              tag={0}
+              key={state.display}
+              clickCallback={() => {
+                setCourseFilter(state.value);
+              }}
+            />
+          ))}
         </div>
       </section>
-      <section className="my-4 grid grid-flow-row gap-y-3">
-        {/* <CourseCard tag={["T"]} courseCode="TEST-3000" title="Test1" /> */}
-
-        {
-          courses
-            .map(course => (
-              <CourseCard
-                key={course.courseCode}
-                tag={course.tag}
-                courseCode={course.courseCode}
-                title={course.title}
-                status={course.state}
-              />
-            ))
-        }
-
+      <section className="flex flex-col gap-3">
+        {isLoading ? <Spinner /> : filteredCourses.map((course, i) => (
+        <CourseCard 
+          title={course.name}
+          courseCode={course.subj + '-' + course.ID}
+          properties={course.properties}
+          prerequsits={course.prerequisites}
+          offered={course.offered}
+          status={course.status}
+          key={i} />
+        ))}
       </section>
     </>
   );
@@ -82,18 +84,14 @@ const ModeRadioButton = ({
   clickCallback: MouseEventHandler;
 }) => {
   const tagStyle = checked ? "tag-primary" : "tag-gray";
-
   const fontStyle = checked ? "text-primary-700" : "text-gray-500";
 
   return (
     <button
-      className={`flex gap-2 items-center !rounded-md hover:!bg-gray-100 ${checked ? " !bg-gray-50" : ""
-        }`}
+      className={`flex gap-2 items-center !rounded-md hover:!bg-gray-100 ${checked ? " !bg-gray-50" : ""}`}
       onClick={clickCallback}
     >
-      <span
-        className={`text-xs md:text-sm lg:text-lg font-semibold ${fontStyle}`}
-      >
+      <span className={`text-xs md:text-sm lg:text-lg font-semibold ${fontStyle}`}>
         {label}
       </span>
       <p className={`tag ${tagStyle}`}>{tag}</p>

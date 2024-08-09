@@ -8,10 +8,10 @@ export interface CourseCardProps {
 }
 
 export interface IFilterState {
-  title: string;
-  courseCode: string;
-  tag: Array<string>;
-  status?: string; 
+  title: string;           
+  courseCode: string;      
+  tag: Array<string>;      
+  status?: string;         
 }
 
 export type filterType = "filter" | "level" | "prefix" | "semester" | "prereq";

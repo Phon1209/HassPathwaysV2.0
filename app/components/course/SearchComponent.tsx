@@ -210,7 +210,7 @@ const CourseList = ({
 
   const deferredSearchString = useDeferredValue(searchString);
   const deferredFilterState = useDeferredValue(filterState);
-  const { catalog_year } = useAppContext(); // Make sure this is used if necessary
+  const { catalog_year } = useAppContext();
 
   const fetchCourses = useCallback(async () => {
     const apiController = new AbortController();
@@ -228,7 +228,15 @@ const CourseList = ({
       });
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
-      setCourseData(data);
+
+      const transformedData = Object.keys(data).map(courseName => ({
+        ...data[courseName],
+        name: courseName,
+      }));
+
+      setCourseData(transformedData);
+      setFilteredCourses(transformedData);
+      console.log(filteredCourses);
     } catch (error) {
       if (error.name !== "AbortError") {
         console.error("Fetching Error: ", error);
@@ -236,7 +244,7 @@ const CourseList = ({
     } finally {
       setIsLoading(false);
     }
-  }, [catalog_year]); // Use the actual dependencies
+  }, [catalog_year]);
 
   useEffect(() => {
     fetchCourses();
@@ -255,55 +263,95 @@ const CourseList = ({
     const applyFilters = () => {
       let filtered = courseData;
 
-      // Prefix Filtering
+      // Prefix Filtering, ie ARTS
       if (deferredFilterState.prefix.length) {
         filtered = filtered.filter(course =>
           deferredFilterState.prefix.some(prefix =>
-            course.courseCode.startsWith(prefix)
+            course.subj.startsWith(prefix)
           )
         );
       }
-
+      
       // Level Filtering
       if (deferredFilterState.level.length) {
         filtered = filtered.filter(course =>
           deferredFilterState.level.some(level =>
-            course.courseCode.substring(5, 6) === level
+            course.ID.substring(0, 1) === level
           )
         );
       }
-
-      if (deferredFilterState.filter.length && tags_short_to_long) {
+      // Semester Filtering
+      if (deferredFilterState.semester.length) {
         filtered = filtered.filter(course => {
-          const courseTags = course.tag; // Assuming course.tag is an array of tags
-          const desiredTags = deferredFilterState.filter.map(tag => tags_short_to_long[tag]);
-    
-          // Check if any desired tag is included in courseTags
-          return desiredTags.some(desiredTag => courseTags.includes(desiredTag));
+          const offeredSemesters = [];
+          if (course.offered.fall) offeredSemesters.push("F");
+          if (course.offered.spring) offeredSemesters.push("S");
+          if (course.offered.summer) offeredSemesters.push("U");
+          return deferredFilterState.semester.some(sem => offeredSemesters.includes(sem));
         });
       }
 
+      // CI and HI Filtering
+      if (deferredFilterState.filter.length && tags_short_to_long) {
+        filtered = filtered.filter(course => {
+          const courseTags = course.properties;
+          
+          return deferredFilterState.filter.some(tag => {
+            const tagDisplayName = tags_short_to_long[tag];
+            return courseTags[tag] && tagDisplayName;
+          });
+        });
+      }
+      
       // Search String Filtering
       if (deferredSearchString) {
         filtered = filtered.filter(course =>
-          course.title.toLowerCase().includes(deferredSearchString.toLowerCase()) ||
-          course.courseCode.toLowerCase().includes(deferredSearchString.toLowerCase())
+          course.name.toLowerCase().includes(deferredSearchString.toLowerCase()) ||
+          course.ID.toLowerCase().includes(deferredSearchString.toLowerCase())
         );
       }
 
       setFilteredCourses(filtered);
     };
-
+    console.log(courseData);
     applyFilters();
   }, [deferredSearchString, deferredFilterState, courseData]);
 
   return (
     <section className="flex flex-col gap-3">
       {isLoading ? <Spinner /> : filteredCourses.map((course, i) => (
-        <CourseCard {...course} key={i} />
+        <CourseCard 
+          title={course.name}
+          courseCode={course.subj + course.ID}
+          properties={course.properties}
+          prerequsits={course.prerequisites}
+          offered={course.offered}
+         key={i} />
       ))}
     </section>
   );
 };
 
-export default CourseList;
+/*
+t
+
+ID: "4070"
+
+cross listed: [] (0)
+
+description: "An intermediate hands-on studio course in 3D computer animation, acting, dialog, cinematography, and story building."
+
+name: "3D Animation"
+
+offered: {even: false, fall: true, odd: false, spring: false, summer: false, …}
+
+prerequisites: ["ARTS-2230"] (1)
+
+professors: ["Silvia Ruzanka"] (1)
+
+properties: {CI: false, HI: false, major_restricted: false}
+
+sections: {1: Object}
+
+subj: "ARTS"
+*/

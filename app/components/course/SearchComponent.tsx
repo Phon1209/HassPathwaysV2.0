@@ -302,6 +302,13 @@ const CourseList = ({
           });
         });
       }
+
+      // Prerequisite Filtering
+      if (deferredFilterState.prereq.includes("Noreq")) {
+        filtered = filtered.filter(course =>
+          course.prerequisites.length === 0
+        );
+      }
       
       // Search String Filtering
       if (deferredSearchString) {

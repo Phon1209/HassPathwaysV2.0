@@ -41,20 +41,8 @@ const NavigationBar = ({ className }: { className?: string }) => {
             menuOpen ? "mb-5 md:mb-0" : ""
           }`}
         >
-          <NavButton
-            link="/pathways/search"
-            text="Search Pathways"
-            Icon={<SearchIcon />}
-            keyword="pathways/search"
-          />
 
-          <NavButton
-            link="/courses/search"
-            text="Search Courses"
-            Icon={<SearchIcon />}
-            keyword="courses/search"
-          />
-
+        <div className="bg-gray-100 rounded-md flex gap-2" style={{ padding: '3px' }}>
           <NavButton
             link="/courses"
             text="My Courses"
@@ -62,11 +50,26 @@ const NavigationBar = ({ className }: { className?: string }) => {
             keyword="courses"
           />
           <NavButton
+            link="/courses/search"
+            text="Search Courses"
+            Icon={<SearchIcon />}
+            keyword="courses/search"
+          />
+          </div>
+          <div className="bg-gray-100 rounded-md flex gap-2" style={{ padding: '3px' }}>
+          <NavButton
             link="/pathways"
             text="My Pathways"
             Icon={<BarChart />}
             keyword="pathways"
           />
+          <NavButton
+            link="/pathways/search"
+            text="Explore Pathways"
+            Icon={<SearchIcon />}
+            keyword="pathways/search"
+          />
+          </div>
         </ul>
         <CatalogDropdown />
       </div>

@@ -1,34 +1,27 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# HASS Pathways
+
+#### Project Details
+This project was developed to help students navigate through Rensselaer Polytechnic Institute's newly designed HASS (humanities, arts, and social sciences) curriculum--effective for the class of 2023 and beyond--which requires students to take part in an integrated pathway. The HASS Integrative Pathways were created to enhance students' HASS Core curriculum by bringing intentionality and depth to the requirements. The themes of the pathways vary in their intentionality; some are interdisciplinary, while others focus on a single discipline, providing students with significant options for their coursework. In addition to providing a more in-depth focus to the HASS Core, many Integrative Pathways can be transformed into minors with relative ease.
+#### Information in regards to the **[goals of the pathways](https://hass.rpi.edu/advising/hass-integrative-pathways "source")** include:
+- Improve student curriculum and academic development.
+- Simplify the lives of students in terms of satisfying HASS requirements.
+- Lead to minor, or even major.
+
 
 ## Getting Started
 
-First, run the development server:
+First clone the repository from GitHub. Then navigate to the location of the repository on your local machine. Make
+sure you have [NPM](https://www.npmjs.com/) installed for your terminal of choice. Then run:
+```bash
+npm i
+```
+
+After it has successfully installed then run:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
 ```
+
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

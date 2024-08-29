@@ -17,7 +17,7 @@ const NavigationBar = ({ className }: { className?: string }) => {
     >
       <Link href="/">
         <header className="text-md lg:text-xl font-semibold">
-          <span className="text-primary-900">Hass</span> Pathways
+          <span className="text-primary-900">HASS</span> Pathways
         </header>
       </Link>
 

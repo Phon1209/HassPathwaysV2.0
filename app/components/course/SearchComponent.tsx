@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 
 import {
   SearchIcon,
@@ -24,7 +24,7 @@ import {
 import { ICourseSchema } from "@/public/data/dataInterface";
 import { flattenFilterParams } from "../utils/url";
 import dynamic from "next/dynamic";
-import { debounce } from "lodash";
+import { useAppContext, fetchCourses } from '@/app/contexts/appContext/AppProvider';
 
 const Spinner = dynamic(() => import("@/app/components/utils/Spinner"));
 
@@ -105,124 +105,91 @@ const SearchInput = ({ searchString, setSearchString }: SearchInputProps) => {
 const DesktopFilter = ({ filterState, filterDispatch }: FilterProps) => {
   return (
     <div className="rounded-lg shadow-lg p-6 min-w-[290px] max-w-xs grid grid-flow-row gap-2 border border-solid border-gray-100">
-      {courseFilters.map((section) => {
-        return (
-          <section key={section.apiName}>
-            <header className="text-md font-medium text-gray-900">
-              {section.displayName}
-            </header>
-            <div className="flex flex-wrap">
-              {section.options.map((choice) => {
-                const selected = filterState[section.apiName].includes(
-                  choice.value
-                );
-                const actionType = selected
-                  ? FilterAction.REM
-                  : FilterAction.ADD;
-                return (
+      {courseFilters.map((section) => (
+        <section key={section.apiName}>
+          <header className="text-md font-medium text-gray-900">
+            {section.displayName}
+          </header>
+          <div className="flex flex-wrap">
+            {section.options.map((choice) => {
+              const selected = filterState[section.apiName].includes(choice.value);
+              const actionType = selected ? FilterAction.REM : FilterAction.ADD;
+              return (
+                <div className="px-3 py-2 basis-auto shrink-0" key={choice.value}>
                   <div
-                    className="px-3 py-2 basis-auto shrink-0"
-                    key={choice.value}
+                    className="cursor-pointer flex gap-2 items-center"
+                    onClick={() => {
+                      filterDispatch({
+                        type: actionType,
+                        payload: {
+                          group: section.apiName,
+                          value: choice.value,
+                        },
+                      });
+                    }}
                   >
-                    <div
-                      className="cursor-pointer flex gap-2 items-center"
-                      onClick={() => {
-                        filterDispatch({
-                          type: actionType,
-                          payload: {
-                            group: section.apiName,
-                            value: choice.value,
-                          },
-                        });
-                      }}
-                    >
-                      {selected ? <CheckBoxChecked /> : <CheckBoxUnChecked />}
-                      <label
-                        className={`text-sm shrink-0 cursor-pointer ${
-                          selected && "font-medium"
-                        }`}
-                      >
-                        {choice.displayName}
-                      </label>
-                    </div>
+                    {selected ? <CheckBoxChecked /> : <CheckBoxUnChecked />}
+                    <label className={`text-sm shrink-0 cursor-pointer ${selected && "font-medium"}`}>
+                      {choice.displayName}
+                    </label>
                   </div>
-                );
-              })}
-            </div>
-          </section>
-        );
-      })}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      ))}
     </div>
   );
 };
 
 const FilterDropdown = ({ filterState, filterDispatch }: FilterProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
   return (
     <Fragment>
       <div className="dropdown z-20">
         <div
-          className={`w-11 h-11 flex justify-center items-center gap-2 cursor-pointer border-gray-300 border border-solid rounded-lg ${
-            dropdownOpen && "bg-gray-100"
-          }`}
+          className={`w-11 h-11 flex justify-center items-center gap-2 cursor-pointer border-gray-300 border border-solid rounded-lg ${dropdownOpen && "bg-gray-100"}`}
           onClick={() => setDropdownOpen((open) => !open)}
         >
           <Filter className={dropdownOpen ? "path-gray-700" : undefined} />
         </div>
         {dropdownOpen && (
           <div className="rounded-lg shadow-lg p-6 dropdown-choices w-screen translate-x-4 fold:translate-x-0 fold:w-max max-w-xs sm:max-w-sm md:max-w-md grid grid-flow-row gap-2">
-            {courseFilters.map((section) => {
-              return (
-                <section key={section.apiName}>
-                  <header className="text-md font-medium text-gray-900">
-                    {section.displayName}
-                  </header>
-                  <div className="flex flex-wrap">
-                    {section.options.map((choice) => {
-                      const selected = filterState[section.apiName].includes(
-                        choice.value
-                      );
-                      const actionType = selected
-                        ? FilterAction.REM
-                        : FilterAction.ADD;
-                      return (
+            {courseFilters.map((section) => (
+              <section key={section.apiName}>
+                <header className="text-md font-medium text-gray-900">
+                  {section.displayName}
+                </header>
+                <div className="flex flex-wrap">
+                  {section.options.map((choice) => {
+                    const selected = filterState[section.apiName].includes(choice.value);
+                    const actionType = selected ? FilterAction.REM : FilterAction.ADD;
+                    return (
+                      <div className="px-3 py-2 basis-auto shrink-0" key={choice.value}>
                         <div
-                          className="px-3 py-2 basis-auto shrink-0"
-                          key={choice.value}
+                          className="cursor-pointer flex gap-2 items-center"
+                          onClick={() => {
+                            filterDispatch({
+                              type: actionType,
+                              payload: {
+                                group: section.apiName,
+                                value: choice.value,
+                              },
+                            });
+                          }}
                         >
-                          <div
-                            className="cursor-pointer flex gap-2 items-center"
-                            onClick={() => {
-                              filterDispatch({
-                                type: actionType,
-                                payload: {
-                                  group: section.apiName,
-                                  value: choice.value,
-                                },
-                              });
-                            }}
-                          >
-                            {selected ? (
-                              <CheckBoxChecked />
-                            ) : (
-                              <CheckBoxUnChecked />
-                            )}
-                            <label
-                              className={`text-sm shrink-0 cursor-pointer ${
-                                selected && "font-medium"
-                              }`}
-                            >
-                              {choice.displayName}
-                            </label>
-                          </div>
+                          {selected ? <CheckBoxChecked /> : <CheckBoxUnChecked />}
+                          <label className={`text-sm shrink-0 cursor-pointer ${selected && "font-medium"}`}>
+                            {choice.displayName}
+                          </label>
                         </div>
-                      );
-                    })}
-                  </div>
-                </section>
-              );
-            })}
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            ))}
           </div>
         )}
       </div>
@@ -237,61 +204,133 @@ const CourseList = ({
   searchString: string;
   filterState: IFilterState;
 }) => {
-  const [courseData, setCourseData] = useState<Array<ICourseSchema>>([]);
-  const deferSearchString = useDeferredValue(searchString);
-  const deferFilterState = useDeferredValue(filterState);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [filteredCourses, setFilteredCourses] = useState<ICourseSchema[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const debouncedFetchCourses = useCallback(
-    debounce(() => {
-      const apiController = new AbortController();
+  const deferredSearchString = useDeferredValue(searchString);
+  const deferredFilterState = useDeferredValue(filterState);
+  const { catalog_year, courses, fetchCourses} = useAppContext();
 
-      const fetchUrl: string = `http://localhost:3000/api/course/search?${new URLSearchParams(
-        {
-          searchString: deferSearchString,
-          ...flattenFilterParams(deferFilterState),
-        }
-      )}`;
-
-      setIsLoading(true);
-      fetch(fetchUrl, {
-        signal: apiController.signal,
-        next: {
-          revalidate: false,
-        },
-        cache: "force-cache",
-      })
-        .then((data) => data.json())
-        .then(setCourseData)
-        .then((_) => setIsLoading(false))
-        .catch((err) => {
-          if (err.name === "AbortError") return;
-          console.error("Fetching Error: ", err);
-        });
-
-      return () => apiController.abort("Cancelled");
-    }, 500), // delay 500ms
-
-    [deferFilterState, deferSearchString, setIsLoading, setCourseData]
-  );
 
   useEffect(() => {
-    debouncedFetchCourses();
-
-    return () => {
-      debouncedFetchCourses.cancel();
+    const fetchData = async () => {
+      setIsLoading(true);
+      await fetchCourses();
+      setIsLoading(false);
     };
-  }, [debouncedFetchCourses]);
+    fetchData();
+  }, [catalog_year]);
+
+  useEffect(() => {
+    const tags_short_to_long = courseFilters.reduce((acc, section) => {
+      section.options.forEach(option => {
+        if (option.value && option.displayName) {
+          acc[option.value] = option.displayName;
+        }
+      });
+      return acc;
+    }, {} as Record<string, string>);
+
+    const applyFilters = () => {
+      let filtered = courses;
+
+      // Prefix Filtering
+      if (deferredFilterState.prefix.length) {
+        filtered = filtered.filter(course =>
+          deferredFilterState.prefix.some(prefix =>
+            course.subj.startsWith(prefix)
+          )
+        );
+      }
+      
+      // Level Filtering
+      if (deferredFilterState.level.length) {
+        filtered = filtered.filter(course =>
+          deferredFilterState.level.some(level =>
+            course.ID.substring(0, 1) === level
+          )
+        );
+      }
+      // Semester Filtering
+      if (deferredFilterState.semester.length) {
+        filtered = filtered.filter(course => {
+          const offeredSemesters = [];
+          if (course.offered.fall) offeredSemesters.push("F");
+          if (course.offered.spring) offeredSemesters.push("S");
+          if (course.offered.summer) offeredSemesters.push("U");
+          return deferredFilterState.semester.some(sem => offeredSemesters.includes(sem));
+        });
+      }
+
+      // CI and HI Filtering
+      if (deferredFilterState.filter.length && tags_short_to_long) {
+        filtered = filtered.filter(course => {
+          const courseTags = course.properties;
+          
+          return deferredFilterState.filter.some(tag => {
+            const tagDisplayName = tags_short_to_long[tag];
+            return courseTags[tag] && tagDisplayName;
+          });
+        });
+      }
+
+      // Prerequisite Filtering
+      if (deferredFilterState.prereq.includes("Noreq")) {
+        filtered = filtered.filter(course =>
+          course.prerequisites.length === 0
+        );
+      }
+      
+      // Search String Filtering
+      if (deferredSearchString) {
+        filtered = filtered.filter(course =>
+          course.name.toLowerCase().includes(deferredSearchString.toLowerCase()) ||
+          course.ID.toLowerCase().includes(deferredSearchString.toLowerCase())
+        );
+      }
+
+      setFilteredCourses(filtered);
+    };
+
+    applyFilters();
+  }, [deferredSearchString, deferredFilterState, courses]);
 
   return (
-    <section className="my-4 grid grid-cols-1 lg:grid-cols-2 gap-3">
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        courseData.map((course, i) => {
-          return <CourseCard {...course} key={i} />;
-        })
-      )}
+    <section className="flex flex-col gap-3">
+      {isLoading ? <Spinner /> : filteredCourses.map((course, i) => (
+        
+        <CourseCard 
+          title={course.name}
+          courseCode={course.subj + '-' + course.ID}
+          properties={course.properties}
+          prerequsits={course.prerequisites}
+          offered={course.offered}
+          status={course.status}
+          key={i} />
+      ))}
     </section>
   );
 };
+
+/*
+
+ID: "4070"
+
+cross listed: [] (0)
+
+description: "An intermediate hands-on studio course in 3D computer animation, acting, dialog, cinematography, and story building."
+
+name: "3D Animation"
+
+offered: {even: false, fall: true, odd: false, spring: false, summer: false, …}
+
+prerequisites: ["ARTS-2230"] (1)
+
+professors: ["Silvia Ruzanka"] (1)
+
+properties: {CI: false, HI: false, major_restricted: false}
+
+sections: {1: Object}
+
+subj: "ARTS"
+*/

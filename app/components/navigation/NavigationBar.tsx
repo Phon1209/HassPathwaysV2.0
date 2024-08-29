@@ -41,7 +41,8 @@ const NavigationBar = ({ className }: { className?: string }) => {
             menuOpen ? "mb-5 md:mb-0" : ""
           }`}
         >
-          <div className="bg-gray-100 rounded-md flex gap-2" style={{ padding: '3px' }}>
+
+        <div className="bg-gray-100 rounded-md flex gap-2" style={{ padding: '3px' }}>
           <NavButton
             link="/courses"
             text="My Courses"

@@ -7,7 +7,6 @@ import CatalogDropdown from "./CatalogDropdown";
 import { BarChart, HomeLine, SearchIcon } from "../utils/Icon";
 import MenuBurger from "@/public/assets/svg/menu-04.svg?svgr";
 import CloseButton from "@/public/assets/svg/x-close.svg?svgr";
-import DropDownMenu from "./DropDownMenu";
 
 const NavigationBar = ({ className }: { className?: string }) => {
   const [menuOpen, setMenuOpen] = React.useState(false);
@@ -37,47 +36,12 @@ const NavigationBar = ({ className }: { className?: string }) => {
             : "hidden md:flex"
         }`}
       >
-        <DropDownMenu title="Courses">
-          <NavButton
-            link="/courses/search"
-            text="Search Courses"
-            Icon={<SearchIcon />}
-            keyword="courses/search"
-          />
-          <NavButton
-            link="/courses"
-            text="My Courses"
-            Icon={<HomeLine />}
-            keyword="courses"
-          />
-        </DropDownMenu>
-        <DropDownMenu title="Pathways">
-          <NavButton
-            link="/pathways/search"
-            text="Find Pathways"
-            Icon={<SearchIcon />}
-            keyword="pathways/search"
-          />
-          <NavButton
-            link="/pathways"
-            text="My Pathways"
-            Icon={<BarChart />}
-            keyword="pathways"
-          />
-        </DropDownMenu>
-        {/*
         <ul
           className={`flex flex-col md:flex-row items-start gap-5 md:gap-4 md:px-4 self-stretch ${
             menuOpen ? "mb-5 md:mb-0" : ""
           }`}
-        >  
-          <NavButton
-            link="/courses/search"
-            text="Search Courses"
-            Icon={<SearchIcon />}
-            keyword="courses/search"
-          />
-
+        >
+          <div className="bg-gray-100 rounded-md flex gap-2" style={{ padding: '3px' }}>
           <NavButton
             link="/courses"
             text="My Courses"
@@ -85,15 +49,28 @@ const NavigationBar = ({ className }: { className?: string }) => {
             keyword="courses"
           />
           <NavButton
+            link="/courses/search"
+            text="Search Courses"
+            Icon={<SearchIcon />}
+            keyword="courses/search"
+          />
+          </div>
+          <div className="bg-gray-100 rounded-md flex gap-2" style={{ padding: '3px' }}>
+          <NavButton
             link="/pathways"
             text="My Pathways"
             Icon={<BarChart />}
             keyword="pathways"
           />
+          <NavButton
+            link="/pathways/search"
+            text="Explore Pathways"
+            Icon={<SearchIcon />}
+            keyword="pathways/search"
+          />
+          </div>
         </ul>
-        */}
         <CatalogDropdown />
-        
       </div>
     </nav>
   );

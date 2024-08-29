@@ -17,8 +17,9 @@ const Footer = () => {
                 className="flex justify-center space-x-12 mx-auto text-md ">
                 <Link href="/faq">FAQ</Link>
                 <Link href="/courses">My Courses</Link>
-                <Link href="/pathways">My Pathways</Link>
                 <Link href="/courses/search">Search Courses</Link>
+                <Link href="/pathways">My Pathways</Link>
+                <Link href="/pathways/search">Search Pathways</Link>
             </div>
         </footer>
     );

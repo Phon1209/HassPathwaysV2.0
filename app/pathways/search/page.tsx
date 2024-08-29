@@ -18,6 +18,8 @@ import { IPathwaySchema } from "@/public/data/dataInterface";
 import dynamic from "next/dynamic";
 import { debounce } from "lodash";
 import { validCatalogYear } from "@/public/data/staticData";
+import Link from "next/link";
+import ChevronRight from "@/public/assets/svg/chevron-right.svg?svgr";
 
 const Spinner = dynamic(() => import("@/app/components/utils/Spinner"));
 
@@ -102,37 +104,44 @@ const SearchCourse = () => {
 
   return (
     <>
-      <header>
-        <h1 className="title mb-3">Find Pathways</h1>
-      </header>
-      <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
-        <div className="w-full fold:w-[320px]">
-          <Suspense>
-            <SearchInput
-              setSearchString={setSearchString}
-              searchString={searchString}
-            />
-          </Suspense>
+      <header className="flex flex-col gap-5">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-8">
+          <h1 className="title mb-3">Find Pathways</h1>
+          <Link href={"/pathways"}>
+            <span className="flex text-primary-700 gap-2 text-sm font-semibold">
+              My Pathways <ChevronRight />
+            </span>
+          </Link>
         </div>
-        <div className="flex flex-col gap-2">
-          <h3 className="text-lg font-semibold lg:hidden">Department</h3>
-          <div className="flex button-group flex-wrap">
-            <FilterCheckBox
-              clickCallback={() => dispatchFilter({ payload: MAX_FILTER })}
-              label="All"
-              checked={filterState === MAX_FILTER}
-            />
-            {pathwaysCategories.map((pathway, i) => (
-              <FilterCheckBox
-                checked={activeFilter(filterState, i)}
-                key={pathway.value}
-                label={pathway.display}
-                clickCallback={() => dispatchFilter({ payload: i })}
+        <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
+          <div className="w-full fold:w-[320px]">
+            <Suspense>
+              <SearchInput
+                setSearchString={setSearchString}
+                searchString={searchString}
               />
-            ))}
+            </Suspense>
+          </div>
+          <div className="flex flex-col gap-2">
+            <h3 className="text-lg font-semibold lg:hidden">Department</h3>
+            <div className="flex button-group flex-wrap">
+              <FilterCheckBox
+                clickCallback={() => dispatchFilter({ payload: MAX_FILTER })}
+                label="All"
+                checked={filterState === MAX_FILTER}
+              />
+              {pathwaysCategories.map((pathway, i) => (
+                <FilterCheckBox
+                  checked={activeFilter(filterState, i)}
+                  key={pathway.value}
+                  label={pathway.display}
+                  clickCallback={() => dispatchFilter({ payload: i })}
+                />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      </header>
 
       {isLoading ? (
         <Spinner />

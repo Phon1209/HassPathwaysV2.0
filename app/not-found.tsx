@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import React from "react";
-import NavigationBar from "@/app/components/navigation/NavigationBar"; NavigationBar;
+import NavigationBar from "@/app/components/navigation/NavigationBar";
+import Footer from './components/navigation/Footer';
 
 export default function NotFound() {
     return (
@@ -17,6 +18,7 @@ export default function NotFound() {
             </span>
                 </Link>
             </div>
+            <Footer />
         </div>
     );
 }

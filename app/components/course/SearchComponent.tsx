@@ -161,7 +161,7 @@ const FilterDropdown = ({ filterState, filterDispatch }: FilterProps) => {
 
   return (
     <Fragment>
-      <div className="dropdown">
+      <div className="dropdown z-20">
         <div
           className={`w-11 h-11 flex justify-center items-center gap-2 cursor-pointer border-gray-300 border border-solid rounded-lg ${
             dropdownOpen && "bg-gray-100"
@@ -284,7 +284,7 @@ const CourseList = ({
   }, [debouncedFetchCourses]);
 
   return (
-    <section className="flex flex-col gap-3">
+    <section className="my-4 grid grid-cols-1 lg:grid-cols-2 gap-3">
       {isLoading ? (
         <Spinner />
       ) : (

@@ -58,7 +58,7 @@ const CourseCardDropDown = ({
               <>
                 <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("Planned")}>Planned</li>
                 <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("In Progress")}>In Progress</li>
-                <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("Interested")}>Interested</li>
+                <li className="py-2 px-4 hover:bg-gray-100 cursor-pointer" onClick={() => handleOption("Completed")}>Completed</li>
               </>
             )}
             {dropDownText !== "No Selection" && (

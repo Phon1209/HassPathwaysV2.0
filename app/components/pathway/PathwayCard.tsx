@@ -1,14 +1,23 @@
 import { useState, useEffect } from "react";
 import { Bookmark, BookmarkChecked, HelpIcon } from "../utils/Icon";
 import { IPathwaySchema } from "@/public/data/dataInterface";
+import { HelpBox } from "./helpBox";
+
+function onHover() {
+  console.log("Hovered");
+}
+
+function unHover() {
+  console.log("Unhovered");
+}
 
 const PathwayCard = ({ title, department, courses }: IPathwaySchema) => {
   // TODO: use courses to determine the compatibility
   // TODO: change to bookmark state and update React Context
   // TODO: Compute tooltip
-
+  
   const [bookmark, setBookmark] = useState(false);
-
+  const [isShown, setIsShown] = useState(false);
   const getBookmarks = () => {
     var bmks = localStorage.getItem("bookmarks")
     if (bmks == null) {
@@ -34,7 +43,44 @@ const PathwayCard = ({ title, department, courses }: IPathwaySchema) => {
     console.log(title)
     getBookmarks();
   }, [])
-
+  // Statuses: Planned, In Progress, Interested, No Selection
+  const courseSelected = [{
+    courseID: "CSCI 1100",
+    title: "Introduction to Computer Science",
+    status: "In Progress"
+  }, {
+    courseID: "CSCI 1200",
+    title: "Data Structures",
+    status: "Completed"
+  }, {
+    courseID: "CSCI 1300",
+    title: "Algorithms",
+    status: "Planned"
+  }];
+  const completed = courseSelected.filter((course) => course.status === "Completed");
+  const completedItems = completed.map((course) => (
+    <div key={course.courseID} className="flex gap-2 items-center">
+      <p className="text-sm text-green-500">✔</p>
+      <b className="text-sm">{course.courseID}:</b>
+      <p className="text-sm">{course.title}</p>
+    </div>
+  ));
+  const inProgress = courseSelected.filter((course) => course.status === "In Progress");
+  const inProgressItems = inProgress.map((course) => (
+    <div key={course.courseID} className="flex gap-2 items-center">
+      <p className="text-sm text-yellow-500">⏺</p>
+      <b className="text-sm">{course.courseID}:</b>
+      <p className="text-sm">{course.title}</p>
+    </div>
+  ));
+  const planned = courseSelected.filter((course) => course.status === "Planned");
+  const plannedItems = planned.map((course) => (
+    <div key={course.courseID} className="flex gap-2 items-center">
+      <p className="text-sm text-gray-500">⏺</p>
+      <b className="text-sm">{course.courseID}:</b>
+      <p className="text-sm">{course.title}</p>
+    </div>
+  ));
   return (
     <section className="pathway-card">
       <header className="flex justify-between w-full items-start">
@@ -49,7 +95,15 @@ const PathwayCard = ({ title, department, courses }: IPathwaySchema) => {
               <div className="indicator bg-status-bar-in-progress"></div>
               <div className="indicator bg-status-bar-inactive"></div>
             </div>
-            <HelpIcon />
+            <HelpIcon 
+            onMouseEnter={() => setIsShown(true)}
+            onMouseLeave={() => setIsShown(false)}
+            />
+            {isShown && (
+              //<HelpBox/>
+              true
+              )
+            }
           </div>
         </div>
         <div onClick={toggleBookmark} className="p-2">
@@ -57,16 +111,9 @@ const PathwayCard = ({ title, department, courses }: IPathwaySchema) => {
         </div>
       </header>
       <div className="flex gap-3 flex-col">
-        {/* {
-        courses.map((course, i) => {
-          return (
-            <div className="courselist" key={course.courseCode}>
-              <StatusIndicator {...course} />
-              <span>{course.title}</span>
-            </div>
-          );
-        })
-        } */}
+        {completedItems}
+        {inProgressItems}
+        {plannedItems}
       </div>
     </section>
   );

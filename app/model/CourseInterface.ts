@@ -22,6 +22,12 @@ sections: {1: Object}
 subj: "ARTS"
 */
 
+export interface SingleCourse {
+  courseID: string;
+  title: string;
+  status: string;
+}
+
 export interface CourseCardProps {
   ID: string;                   // Course ID
   crosslisted: Array<string>;   // List of cross-listed courses

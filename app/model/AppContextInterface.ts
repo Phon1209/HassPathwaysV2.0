@@ -1,14 +1,16 @@
 import { IcourseStatus, IpathwayData } from "@/public/data/staticInterface";
 
-import { CourseCardProps } from "@/app/model/CourseInterface";
+import { CourseCardProps, SingleCourse } from "@/app/model/CourseInterface";
 import { fetchCourses } from '@/app/contexts/appContext/AppProvider';
 
 export interface ApplicationContext {
   catalog_year: string;
   courseState: any; 
   pathwaysCategories: any; 
-  courses: CourseCardProps[]; 
-  setCourses: (courses: CourseCardProps[]) => void; 
+  courses: CourseCardProps[];
+  setCourses: (courses: CourseCardProps[]) => void;
+  coursesSelected: SingleCourse[]; 
+  setCoursesSelected: (courses: SingleCourse[]) => void; 
   setCatalog: (catalog_year: string) => void;
   fetchCourses: () => JSON;
 }

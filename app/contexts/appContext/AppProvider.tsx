@@ -8,7 +8,7 @@ import {
   ReactNode,
 } from "react";
 import { appReducer } from "./AppReducer";
-import { INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES } from "../actions";
+import { INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES, SET_COURSES_SELECTED } from "../actions";
 import {
   courseState,
   pathwaysCategories,
@@ -16,14 +16,18 @@ import {
 } from "@/public/data/staticData";
 import { ApplicationContext } from "@/app/model/AppContextInterface";
 import { ICourseSchema } from "@/app/model/CourseInterface";
+import { SingleCourse } from "@/app/model/CourseInterface";
 
 const constantApplicationValue = { courseState, pathwaysCategories };
 
 const defaultInitialState: ApplicationContext = {
   catalog_year: "2022-2023",
   courses: [],
+  coursesSelected: [],
   setCourses: () => {},
+  setCoursesSelected: () => {},
   setCatalog: () => {},
+  fetchCourses: () => {},
   ...constantApplicationValue,
 };
 
@@ -61,6 +65,10 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     console.log("SETTING COURSES");
     dispatch({ type: SET_COURSES, payload: courses });
   };
+
+  const setCoursesSelected = (courses: SingleCourse[]) => {
+    dispatch({ type: SET_COURSES_SELECTED, payload: courses });
+  }
 
   const fetchCourses = async () => {
     const localStorageCourses = localStorage.getItem("courses");
@@ -102,7 +110,7 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AppContext.Provider value={{ ...state, setCatalog, setCourses, fetchCourses }}>
+    <AppContext.Provider value={{ ...state, setCatalog, setCourses, setCoursesSelected, fetchCourses }}>
       {children}
     </AppContext.Provider>
   );

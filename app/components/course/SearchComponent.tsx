@@ -51,7 +51,7 @@ export const DesktopFilterSection = ({
             setSearchString={setSearchString}
             searchString={searchString}
           />
-          <div className="max-h-[500px] overflow-y-scroll">
+          <div className="max-h-[100vh] overflow-y-scroll">
             <CourseList searchString={searchString} filterState={filterState} />
           </div>
         </div>
@@ -296,7 +296,7 @@ const CourseList = ({
   }, [deferredSearchString, deferredFilterState, courses]);
 
   return (
-    <section className="flex flex-col gap-3">
+    <section className="grid grid-cols-3 gap-4">
       {isLoading ? <Spinner /> : filteredCourses.map((course, i) => (
         
         <CourseCard 

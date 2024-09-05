@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { CourseCardProps } from "@/app/model/CourseInterface";
 import { useAppContext } from "../../contexts/appContext/AppProvider";
+import { SingleCourse } from "@/app/model/CourseInterface";
 
 const colorMap = {
   "No Selection": "bg-primary-700 text-white",
-  "Planned": "bg-orange-500 text-white",
-  "In Progress": "bg-green-500 text-white",
-  "Interested": "bg-blue-500 text-white", 
+  "In Progress": "bg-orange-500 text-white",
+  "Completed": "bg-green-500 text-white",
+  "Planned": "bg-gray-500 text-white", 
 };
 
 const CourseCardDropDown = ({
@@ -15,16 +16,26 @@ const CourseCardDropDown = ({
   status = "No Selection"
 }: CourseCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { coursesSelected, setCoursesSelected } = useAppContext();
+  status = coursesSelected.find(course => course.courseID === courseCode)?.status || "No Selection";
   const [dropDownText, setDropDownText] = useState<string>(status);
-  const { courses, setCourses } = useAppContext();
+  
+  
 
   const updateCourseInContext = (newState: string) => {
-    const updatedCourses = courses.map(course =>
-      course.ID === courseCode.slice(-4)
+    console.log(coursesSelected);
+    let to_add : SingleCourse = { courseID: courseCode, title: title, status: newState };
+    const updatedCourses = coursesSelected.map(course =>
+      course.courseID === courseCode
         ? { ...course, status: newState }
-        : course
-    );
-    setCourses(updatedCourses);
+        : course);
+    let selectedIDS = updatedCourses.map(course => course.courseID);
+
+    if (!selectedIDS.includes(to_add.courseID)) {
+      updatedCourses.push(to_add);
+    }
+    console.log(updatedCourses);
+    setCoursesSelected(updatedCourses);
   };
   
   const handleOption = (newStatus: string) => {
@@ -32,12 +43,14 @@ const CourseCardDropDown = ({
     updateCourseInContext(newStatus);
     setIsOpen(false);
   };
-
+  /*
   useEffect(() => {
     if (dropDownText !== "No Selection") {
       setIsOpen(true);
     }
   }, [dropDownText]);
+  */
+  
 
   return (
     <div

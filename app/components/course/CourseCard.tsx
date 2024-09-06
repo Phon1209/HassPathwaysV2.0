@@ -34,12 +34,12 @@ const CourseCard = ({
           </header>
           <div className="flex gap-x-1 flex-wrap mt-2">
             {properties.CI && (
-              <p className="tag tag-primary" key="CI">
+              <p className="tag tag-primary">
                 Communication Intensive
               </p>
             )}
             {properties.HI && (
-              <p className="tag tag-primary" key="HI">
+              <p className="tag tag-primary">
                 Hass Inquiry
               </p>
             )}

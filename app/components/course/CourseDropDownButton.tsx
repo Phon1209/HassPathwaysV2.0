@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { CourseCardProps } from "@/app/model/CourseInterface";
 import { useAppContext } from "../../contexts/appContext/AppProvider";
 import { SingleCourse } from "@/app/model/CourseInterface";
+import { clsx } from 'clsx';
 
 const colorMap = {
   "No Selection": "bg-primary-700 text-white",
@@ -19,7 +20,7 @@ const CourseCardDropDown = ({
   const { coursesSelected, updateCourseInContext } = useAppContext(); // TODO: Change to use ICourseProp
   status = coursesSelected.find(course => course.courseID === courseCode)?.status || "No Selection";
   const [dropDownText, setDropDownText] = useState<string>(status);
-  
+  const chipStyle = clsx("text-sm font-semibold px-2 py-2.5 border border-solid border-gray-300 rounded-lg cursor-pointer text-center", colorMap[dropDownText]);
   
   const handleOption = (newStatus: string) => {
     setDropDownText(newStatus);
@@ -44,7 +45,7 @@ const CourseCardDropDown = ({
     >
       <div
         id="fixed-size-div"
-        className={`text-sm font-semibold px-2 py-2.5 border border-solid border-gray-300 rounded-lg cursor-pointer text-center ${colorMap[dropDownText]}`}
+        className={chipStyle}
       >
         {dropDownText}
       </div>

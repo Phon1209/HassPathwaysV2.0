@@ -4,15 +4,6 @@ import { IPathwaySchema } from "@/public/data/dataInterface";
 import { useAppContext } from "@/app/contexts/appContext/AppProvider";
 import { HelpBox } from "./helpBox";
 
-function onHover() {
-  console.log("Hovered");
-}
-
-function unHover() {
-  console.log("Unhovered");
-}
-
-
 const PathwayCard = ({ title, department, courses }: IPathwaySchema) => {
   // TODO: use courses to determine the compatibility
   // TODO: change to bookmark state and update React Context
@@ -43,7 +34,6 @@ const PathwayCard = ({ title, department, courses }: IPathwaySchema) => {
   }
 
   useEffect(() => {
-    console.log(title)
     getBookmarks();
   }, [])
   console.log(courses);
@@ -88,7 +78,7 @@ const PathwayCard = ({ title, department, courses }: IPathwaySchema) => {
               <div className="indicator bg-status-bar-in-progress"></div>
               <div className="indicator bg-status-bar-inactive"></div>
             </div>
-            <HelpIcon 
+            <HelpIcon // TODO: Add tooltip
             onMouseEnter={() => setIsShown(true)}
             onMouseLeave={() => setIsShown(false)}
             />

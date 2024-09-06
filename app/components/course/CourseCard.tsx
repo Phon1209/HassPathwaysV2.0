@@ -21,7 +21,7 @@ const CourseCard = ({
 
   return (
     <section className="course-card">
-      <div className="flex flex-col fold:flex-row justify-between items-center">
+      <div className="flex flex-col fold:flex-row justify-between items-start">
         <div className="flex flex-col">
           <header className="course-title">
             <Link

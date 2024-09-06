@@ -10,6 +10,7 @@ export interface ApplicationContext {
   courses: CourseCardProps[];
   setCourses: (courses: CourseCardProps[]) => void;
   coursesSelected: SingleCourse[]; 
+  updateCourseInContext: (course: SingleCourse) => void;
   setCoursesSelected: (courses: SingleCourse[]) => void; 
   setCatalog: (catalog_year: string) => void;
   fetchCourses: () => JSON;

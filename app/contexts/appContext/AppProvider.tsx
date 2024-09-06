@@ -28,6 +28,7 @@ const defaultInitialState: ApplicationContext = {
   setCoursesSelected: () => {},
   setCatalog: () => {},
   fetchCourses: () => {},
+  updateCourseInContext: () => {},
   ...constantApplicationValue,
 };
 
@@ -64,6 +65,21 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const setCourses = (courses: ICourseSchema[]) => {
     console.log("SETTING COURSES");
     dispatch({ type: SET_COURSES, payload: courses });
+  };
+
+  const updateCourseInContext = (toAdd: SingleCourse) => {
+    const newState = toAdd.status;
+    const coursesSelected = state.coursesSelected;
+    const updatedCourses = coursesSelected.map(course =>
+      course.courseID === toAdd.courseID
+        ? { ...course, status: newState }
+        : course);
+    let selectedIDS = updatedCourses.map(course => course.courseID);
+
+    if (!selectedIDS.includes(toAdd.courseID)) {
+      updatedCourses.push(toAdd);
+    }
+    setCoursesSelected(updatedCourses);
   };
 
   const setCoursesSelected = (courses: SingleCourse[]) => {
@@ -110,7 +126,7 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AppContext.Provider value={{ ...state, setCatalog, setCourses, setCoursesSelected, fetchCourses }}>
+    <AppContext.Provider value={{ ...state, setCatalog, setCourses, setCoursesSelected, updateCourseInContext, fetchCourses }}>
       {children}
     </AppContext.Provider>
   );

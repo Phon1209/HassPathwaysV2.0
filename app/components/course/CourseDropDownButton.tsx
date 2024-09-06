@@ -16,31 +16,15 @@ const CourseCardDropDown = ({
   status = "No Selection"
 }: CourseCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { coursesSelected, setCoursesSelected } = useAppContext();
+  const { coursesSelected, updateCourseInContext } = useAppContext(); // TODO: Change to use ICourseProp
   status = coursesSelected.find(course => course.courseID === courseCode)?.status || "No Selection";
   const [dropDownText, setDropDownText] = useState<string>(status);
   
   
-
-  const updateCourseInContext = (newState: string) => {
-    console.log(coursesSelected);
-    let to_add : SingleCourse = { courseID: courseCode, title: title, status: newState };
-    const updatedCourses = coursesSelected.map(course =>
-      course.courseID === courseCode
-        ? { ...course, status: newState }
-        : course);
-    let selectedIDS = updatedCourses.map(course => course.courseID);
-
-    if (!selectedIDS.includes(to_add.courseID)) {
-      updatedCourses.push(to_add);
-    }
-    console.log(updatedCourses);
-    setCoursesSelected(updatedCourses);
-  };
-  
   const handleOption = (newStatus: string) => {
     setDropDownText(newStatus);
-    updateCourseInContext(newStatus);
+    let toAdd : SingleCourse = { courseID: courseCode, title: title, status: newStatus };
+    updateCourseInContext(toAdd);
     setIsOpen(false);
   };
   /*

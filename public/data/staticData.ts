@@ -24,6 +24,7 @@ export const courseState: Array<IcourseStatus> = [
   { display: "Not Selected", value: 5 },
 ];
 
+
 export const courseFilters: Array<IcourseFilter> = [
   {
     displayName: "Filter",
@@ -34,12 +35,8 @@ export const courseFilters: Array<IcourseFilter> = [
         value: "CI",
       },
       {
-        displayName: "Professional Development II",
-        value: "PDII",
-      },
-      {
         displayName: "Hass Inquiry",
-        value: "HInq",
+        value: "HI",
       },
     ],
   },

@@ -1,7 +1,21 @@
-export interface ICourseSchema {
+export type courseState = "Planned" | "In Progress" | "Interested" | "No Selection";
+
+
+export interface ICourseSchemaSaved {
   title: string;
   courseCode: string;
   tag: Array<string>;
+  state: courseState;
+}
+
+export interface ICourseSchema {
+  title: string;
+  courseCode: string;
+  filter: string;
+  description: string;
+  prereqs: any;
+  tag: Array<string>;
+  state?: courseState;
 }
 
 export interface IPathwaySchema {

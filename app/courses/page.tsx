@@ -1,15 +1,35 @@
 "use client";
-import { MouseEventHandler, useState } from "react";
+
+import { MouseEventHandler, useEffect, useState } from "react";
 import CourseCard from "../components/course/CourseCard";
 import Link from "next/link";
 import ChevronUp from "@/public/assets/svg/chevron-up.svg?svgr";
 import ChevronDown from "@/public/assets/svg/chevron-down.svg?svgr";
 import ChevronRight from "@/public/assets/svg/chevron-right.svg?svgr";
 import { useAppContext } from "../contexts/appContext/AppProvider";
+import { ICourseSchema } from "../../public/data/dataInterface";
+import { CourseCardProps } from "@/app/model/CourseInterface";
 
 const MyCourses = () => {
   const [courseFilter, setCourseFilter] = useState(0);
-  const { courseState } = useAppContext();
+  const [isLoading, setIsLoading] = useState(true);
+  const { courses, fetchCourses, courseState } = useAppContext();
+  const [filteredCourses, setFilteredCourses] = useState();
+
+  useEffect(() => {
+    const newFilteredCourses = courses.filter(course =>
+      course.status !== "No Selection"
+    );
+    
+    setFilteredCourses(newFilteredCourses);
+    setIsLoading(false);
+  }, [courses]);
+
+  useEffect(() => {
+    
+    console.log(courses);
+
+  }, []);
 
   return (
     <>
@@ -67,19 +87,14 @@ const ModeRadioButton = ({
   clickCallback: MouseEventHandler;
 }) => {
   const tagStyle = checked ? "tag-primary" : "tag-gray";
-
   const fontStyle = checked ? "text-primary-700" : "text-gray-500";
 
   return (
     <button
-      className={`flex gap-2 items-center !rounded-md hover:!bg-gray-100 ${
-        checked ? " !bg-gray-50" : ""
-      }`}
+      className={`flex gap-2 items-center !rounded-md hover:!bg-gray-100 ${checked ? " !bg-gray-50" : ""}`}
       onClick={clickCallback}
     >
-      <span
-        className={`text-xs md:text-sm lg:text-lg font-semibold ${fontStyle}`}
-      >
+      <span className={`text-xs md:text-sm lg:text-lg font-semibold ${fontStyle}`}>
         {label}
       </span>
       <p className={`tag ${tagStyle}`}>{tag}</p>

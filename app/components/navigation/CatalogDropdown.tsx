@@ -21,14 +21,12 @@ const CatalogDropdown = () => {
   //Update the pathway data
   useEffect(() => {
     const apiController = new AbortController();
-    const validYear = validCatalogYear.includes(catalog_year);
-    const searchYear = validYear ? "2022-2023" : catalog_year;
 
     fetch(
         `http://localhost:3000/api/pathway/search?${new URLSearchParams({
           searchString: "",
           department: "",
-          catalogYear: searchYear,
+          catalogYear: catalog_year,
         })}`,
         {
           signal: apiController.signal,

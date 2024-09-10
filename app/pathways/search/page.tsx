@@ -130,7 +130,8 @@ const SearchCourse = () => {
                 label="All"
                 checked={filterState === MAX_FILTER}
               />
-              {pathwaysCategories.map((pathway, i) => (
+              {
+              pathwaysCategories.map((pathway, i) => (
                 <FilterCheckBox
                   checked={activeFilter(filterState, i)}
                   key={pathway.value}

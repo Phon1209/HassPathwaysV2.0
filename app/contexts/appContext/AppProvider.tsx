@@ -8,7 +8,7 @@ import {
   ReactNode,
 } from "react";
 import { appReducer } from "./AppReducer";
-import { INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES, SET_COURSES_SELECTED } from "../actions";
+import {INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES, SET_COURSES_SELECTED, SET_PATHWAYS} from "../actions";
 import {
   courseState,
   pathwaysCategories,
@@ -17,6 +17,7 @@ import {
 import { ApplicationContext } from "@/app/model/AppContextInterface";
 import { ICourseSchema } from "@/app/model/CourseInterface";
 import { SingleCourse } from "@/app/model/CourseInterface";
+import {IPathwaySchema} from "@/public/data/dataInterface";
 
 const constantApplicationValue = { courseState, pathwaysCategories };
 
@@ -24,11 +25,13 @@ const defaultInitialState: ApplicationContext = {
   catalog_year: "2022-2023",
   courses: [],
   coursesSelected: [],
+  pathwayData: "",
   setCourses: () => {},
   setCoursesSelected: () => {},
   setCatalog: () => {},
   fetchCourses: () => {},
   updateCourseInContext: () => {},
+  setPathways: () => {},
   ...constantApplicationValue,
 };
 
@@ -125,8 +128,36 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     } 
   };
 
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const response = await     fetch(
+            `http://localhost:3000/api/pathway/search?${new URLSearchParams({
+              searchString: "",
+              department: "",
+              catalogYear: "2022-2023",
+            })}`);
+        const initialData = await response.json();
+        console.log("INIT: " + JSON.stringify(initialData));
+        dispatch({
+          type: SET_PATHWAYS,
+          payload: initialData,
+        });
+        console.log("INIT Pathways")
+      } catch (error) {
+        console.error("Failed to fetch initial data:", error);
+      }
+    };
+
+    fetchInitialData();
+  }, []);
+
+  const setPathways = (pathwayData: IPathwaySchema) => {
+    dispatch({type: SET_PATHWAYS, payload: pathwayData})
+  };
+
   return (
-    <AppContext.Provider value={{ ...state, setCatalog, setCourses, setCoursesSelected, updateCourseInContext, fetchCourses }}>
+    <AppContext.Provider value={{ ...state, setCatalog, setCourses, setCoursesSelected, updateCourseInContext, fetchCourses, setPathways}}>
       {children}
     </AppContext.Provider>
   );

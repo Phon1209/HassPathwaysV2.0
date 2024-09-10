@@ -1,18 +1,54 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+// @ts-ignore
 import ChevronUp from "@/public/assets/svg/chevron-up.svg?svgr";
+// @ts-ignore
 import ChevronDown from "@/public/assets/svg/chevron-down.svg?svgr";
 import { useAppContext } from "@/app/contexts/appContext/AppProvider";
-import { catalogList } from "@/public/data/staticData";
+import {catalogList, validCatalogYear} from "@/public/data/staticData";
+import useFetchPathways from "@/app/contexts/useFetchPathways";
 
 const CatalogDropdown = () => {
-  const { catalog_year, setCatalog } = useAppContext();
+  const { catalog_year, setCatalog, setPathways } = useAppContext();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   //const [newCatalogText, setCatalogText] = useState("");
   const [newCatalogTextFirst, setFirst] = useState("");
   const [newCatalogTextSecond, setSecond] = useState("");
+
+
+  //Update the pathway data
+  useEffect(() => {
+    const apiController = new AbortController();
+    const validYear = validCatalogYear.includes(catalog_year);
+    const searchYear = validYear ? "2022-2023" : catalog_year;
+
+    fetch(
+        `http://localhost:3000/api/pathway/search?${new URLSearchParams({
+          searchString: "",
+          department: "",
+          catalogYear: searchYear,
+        })}`,
+        {
+          signal: apiController.signal,
+          cache: "no-store",
+          next: {
+            revalidate: false,
+          },
+        }
+    )
+        .then((data) => data.json())
+        .then((data) => {
+          setPathways(data);
+        })
+        .catch((err) => {
+          if (err.name === "AbortError") return;
+          console.error("Fetching Error: ", err);
+        });
+
+    return () => apiController.abort();
+  }, [catalog_year]); // Trigger whenever catalog_year changes
 
   // Find the displaying text for catalog
   const catalogText: string =

@@ -26,6 +26,7 @@ import { ICourseSchema } from "@/public/data/dataInterface";
 import { flattenFilterParams } from "../utils/url";
 import dynamic from "next/dynamic";
 import { useAppContext, fetchCourses } from '@/app/contexts/appContext/AppProvider';
+import { filter } from "lodash";
 
 const Spinner = dynamic(() => import("@/app/components/utils/Spinner"));
 
@@ -348,15 +349,12 @@ const CourseList = ({
         });
       }
 
-      //console.log(filtered);
-
       if (deferredFilterState.status.length) {
         filtered = filtered.filter(course =>
-          deferredFilterState.status[0] == course.status
+          deferredFilterState.status.includes(course.status)
         );
         
       }
-      console.log(filtered);
 
       // CI and HI Filtering
       if (deferredFilterState.filter.length && tags_short_to_long) {
@@ -394,7 +392,7 @@ const CourseList = ({
   return (
     <section className="grid grid-cols-3 gap-4">
       {isLoading ? <Spinner /> : filteredCourses.map((course, i) => (
-        
+        console.log(course.status),
         <CourseCard 
           title={course.name}
           courseCode={course.subj + '-' + course.ID}

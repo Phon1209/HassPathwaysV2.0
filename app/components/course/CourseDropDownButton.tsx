@@ -17,13 +17,16 @@ const CourseCardDropDown = ({
 }: CourseCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const {courses, updateCourseState} = useAppContext();
-  status = courses.find(course => course.name === title)?.status || "No Selection";
+  //status = courses.find(course => course.name === title)?.status || "No Selection";
   const [dropDownText, setDropDownText] = useState<string>(status);
   const chipStyle = clsx("text-sm font-semibold px-2 py-2.5 border border-solid border-gray-300 rounded-lg cursor-pointer text-center", colorMap[dropDownText]);
-  
+  useEffect(() => {
+    setDropDownText(status);
+  }, [status]);
+
   const handleOption = (newStatus: string) => {
-    setDropDownText(newStatus);
     updateCourseState(title, newStatus);
+    setDropDownText(newStatus);
     setIsOpen(false);
   };
   /*

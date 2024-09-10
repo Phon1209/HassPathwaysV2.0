@@ -20,8 +20,6 @@ export const courseState: Array<IcourseStatus> = [
   { display: "Completed", value: 1 },
   { display: "In Progress", value: 2 },
   { display: "Planned", value: 3 },
-  { display: "Interested", value: 4 },
-  { display: "Not Selected", value: 5 },
 ];
 
 
@@ -141,6 +139,28 @@ export const courseFilters: Array<IcourseFilter> = [
       {
         displayName: "Summer",
         value: "U",
+      },
+    ],
+  },
+  {
+    displayName: "Status",
+    apiName: "status",
+    options: [
+      {
+        displayName: "Completed",
+        value: "Completed",
+      },
+      {
+        displayName: "In Progress",
+        value: "In Progress",
+      },
+      {
+        displayName: "Planned",
+        value: "Planned",
+      },
+      {
+        displayName: "No Selection",
+        value: "No Selection",
       },
     ],
   },

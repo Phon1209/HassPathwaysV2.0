@@ -28,8 +28,7 @@ const MyCourses = () => {
     console.log(courses);
 
   }, []);
-  console.log(courses);
-  console.log(filterState)
+  let statuses = courseState.map((state) => state.display);
 
   return (
     <>
@@ -45,14 +44,14 @@ const MyCourses = () => {
         <section>
           <div className="course-button-group sm:flex flex-wrap gap-x-2 hidden">
             <ModeRadioButton
-              checked={filterState.status.length === 0}
+              checked={filterState.status.length === statuses.length} 
               label={"All"}
               tag={0}
               clickCallback={() => {
                 if (filterState.status.length === 0) return;
                 let clickPayload = {
                   type: FilterAction.SET,
-                  payload: { group: "status", value: [] },
+                  payload: { group: "status", value: statuses },
                 }
                 filterDispatch(clickPayload);
               }}

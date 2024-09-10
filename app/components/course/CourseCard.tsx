@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { CourseCardProps } from "@/app/model/CourseInterface";
+import { useAppContext } from "../../contexts/appContext/AppProvider";
 import Link from "next/link";
 import CourseCardDropDown from "./CourseDropDownButton";
 
@@ -13,7 +14,9 @@ const CourseCard = ({
   status = "No Selection"
 }: CourseCardProps) => {
   const [state, setState] = useState(status);
-
+  const {courses, updateCourseState} = useAppContext();
+  status = courses.find(course => course.name === title)?.status || "No Selection";
+  console.log(title + " " + status);
   const offeredSemesters = [];
   if (offered.fall) offeredSemesters.push("Fall");
   if (offered.spring) offeredSemesters.push("Spring");
@@ -69,7 +72,7 @@ const CourseCard = ({
             </div>
           )}
         </div>
-        <CourseCardDropDown title={title} courseCode={courseCode} tag={tag} status={state} />
+        <CourseCardDropDown title={title} courseCode={courseCode} tag={tag} status={status} />
       </div>
     </section>
   );

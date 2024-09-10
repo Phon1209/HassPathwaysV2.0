@@ -63,7 +63,7 @@ const MyPathways = () => {
   const { pathwaysCategories } = useAppContext();
   // Determine the mode of pathway card
   const [bookmarkedState, setbookmarkedState] = useState(true);
-  const [marked, setMarked] = useState([]);
+  const [marked, setMarked] = useState<IPathwaySchema[]>([]);
 
   const MAX_FILTER = (1 << pathwaysCategories.length) - 1;
   // Determine the filter

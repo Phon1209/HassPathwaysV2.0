@@ -18,17 +18,19 @@ const MyCourses = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { courses, fetchCourses, courseState } = useAppContext();
   const [filteredCourses, setFilteredCourses] = useState();
-
-  const [filterState, filterDispatch] = useReducer(filterReducer, filterInitializers);
+  const allInitializer = {
+    ...filterInitializers,
+    status: courseState.map((state) => state.display),
+  }
+  const [filterState, filterDispatch] = useReducer(filterReducer, allInitializer);
 
   const [searchString, setSearchString] = useState<string>("");
-
+  let statuses = courseState.map((state) => state.display);
   useEffect(() => {
     
     console.log(courses);
-
   }, []);
-  let statuses = courseState.map((state) => state.display);
+  
 
   return (
     <>
@@ -48,7 +50,7 @@ const MyCourses = () => {
               label={"All"}
               tag={0}
               clickCallback={() => {
-                if (filterState.status.length === 0) return;
+                if (filterState.status.length === 3) return;
                 let clickPayload = {
                   type: FilterAction.SET,
                   payload: { group: "status", value: statuses },

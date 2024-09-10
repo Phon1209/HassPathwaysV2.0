@@ -16,7 +16,7 @@ const pathwayList = [
   {
     name: "Graphic and Interactive Media Design",
     category: "Communication & Media",
-    courses: [
+    coursesIn: [
       {
         title: "abc",
         courseCode: "ARTS-1050",
@@ -37,7 +37,7 @@ const pathwayList = [
   {
     name: "Information Technology and Web Science",
     category: "Inter",
-    courses: [
+    coursesIn: [
       {
         title: "abc",
         courseCode: "ARTS-1050",

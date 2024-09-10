@@ -83,6 +83,36 @@ export const FilterSection = ({
   );
 };
 
+export const MyCourseDesktopFilterSection = ({
+  filterState,
+  filterDispatch,
+  searchString,
+  setSearchString,
+}: FilterSectionProps) => {
+  return (
+    <>
+      <div className="filters flex justify-start items-start gap-8 mb-4 md:mb-8">
+        <div className="grow flex flex-col gap-4">
+          <CourseList searchString={searchString} filterState={filterState} />
+        </div>
+      </div>
+    </>
+  );
+}
+
+export const MyCourseFilterSection = ({
+  filterState,
+  filterDispatch,
+  setSearchString,
+  searchString,
+}: FilterSectionProps) => {
+  return (
+    <>
+      <CourseList searchString={searchString} filterState={filterState} />
+    </>
+  );
+}
+
 const SearchInput = ({ searchString, setSearchString }: SearchInputProps) => {
   return (
     <label htmlFor="course-input" className="basis-0 grow">
@@ -211,7 +241,7 @@ const CourseList = ({
   const deferredFilterState = useDeferredValue(filterState);
   const { catalog_year, courses, fetchCourses} = useAppContext();
 
-
+  
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -220,6 +250,8 @@ const CourseList = ({
     };
     fetchData();
   }, [catalog_year]);
+
+  
 
   useEffect(() => {
     const tags_short_to_long = courseFilters.reduce((acc, section) => {
@@ -261,6 +293,16 @@ const CourseList = ({
           return deferredFilterState.semester.some(sem => offeredSemesters.includes(sem));
         });
       }
+
+      console.log(filtered);
+
+      if (deferredFilterState.status.length) {
+        filtered = filtered.filter(course =>
+          deferredFilterState.status[0] == course.status
+        );
+        
+      }
+      console.log(filtered);
 
       // CI and HI Filtering
       if (deferredFilterState.filter.length && tags_short_to_long) {

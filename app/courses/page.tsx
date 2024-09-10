@@ -1,6 +1,6 @@
 "use client";
 
-import { MouseEventHandler, useEffect, useState } from "react";
+import { MouseEventHandler, useEffect, useState, useReducer } from "react";
 import CourseCard from "../components/course/CourseCard";
 import Link from "next/link";
 import ChevronUp from "@/public/assets/svg/chevron-up.svg?svgr";
@@ -9,6 +9,14 @@ import ChevronRight from "@/public/assets/svg/chevron-right.svg?svgr";
 import { useAppContext } from "../contexts/appContext/AppProvider";
 import { ICourseSchema } from "../../public/data/dataInterface";
 import { CourseCardProps } from "@/app/model/CourseInterface";
+import { MyCourseFilterSection, MyCourseDesktopFilterSection } from "@/app/components/course/SearchComponent";
+import { IFilterDispatch, IFilterState } from "@/app/model/CourseInterface";
+import { filter } from "lodash";
+
+export const FilterAction = {
+  ADD: "add",
+  REM: "remove",
+};
 
 const MyCourses = () => {
   const [courseFilter, setCourseFilter] = useState(0);
@@ -16,20 +24,47 @@ const MyCourses = () => {
   const { courses, fetchCourses, courseState } = useAppContext();
   const [filteredCourses, setFilteredCourses] = useState();
 
-  useEffect(() => {
-    const newFilteredCourses = courses.filter(course =>
-      course.status !== "No Selection"
-    );
-    
-    setFilteredCourses(newFilteredCourses);
-    setIsLoading(false);
-  }, [courses]);
+  const [filterState, filterDispatch] = useReducer(
+    (state: IFilterState, action: IFilterDispatch) => {
+      switch (action.type) {
+        case FilterAction.ADD:
+          return {
+            ...state,
+            [action.payload.group]: [
+              ...state[action.payload.group],
+              action.payload.value,
+            ],
+          };
+        case FilterAction.REM:
+          return {
+            ...state,
+            [action.payload.group]: state[action.payload.group].filter(
+              (e: string) => e !== action.payload.value
+            ),
+          };
+        default:
+          return state;
+      }
+    },
+    {
+      filter: [],
+      level: [],
+      prefix: [],
+      semester: [],
+      prereq: [],
+      status: [],
+    }
+  );
+
+  const [searchString, setSearchString] = useState<string>("");
 
   useEffect(() => {
     
     console.log(courses);
 
   }, []);
+  console.log(courses);
+  console.log(filterState)
 
   return (
     <>
@@ -45,22 +80,36 @@ const MyCourses = () => {
         <section>
           <div className="course-button-group sm:flex flex-wrap gap-x-2 hidden">
             <ModeRadioButton
-              checked={0 === courseFilter}
+              checked={filterState.status.length === 0}
               label={"All"}
               tag={0}
               clickCallback={() => {
-                setCourseFilter(0);
+                if (filterState.status.length === 0) return;
+                let clickPayload = {
+                  type: FilterAction.REM,
+                  payload: { group: "status", value: filterState.status[0]},
+                }
+                filterDispatch(clickPayload);
               }}
             />
             {courseState.map((state) => {
               return (
                 <ModeRadioButton
-                  checked={state.value === courseFilter}
+                  checked={state.display === filterState.status.join("")}
                   label={state.display}
                   tag={0}
                   key={state.display}
                   clickCallback={() => {
-                    setCourseFilter(state.value);
+                    let remPayload = {
+                      type: FilterAction.REM,
+                      payload: { group: "status", value: filterState.status[0] },
+                    }
+                    filterDispatch(remPayload);
+                    let clickPayload = {
+                      type: FilterAction.ADD,
+                      payload: { group: "status", value: [state.display] },
+                    }
+                    filterDispatch(clickPayload);
                   }}
                 />
               );
@@ -68,9 +117,22 @@ const MyCourses = () => {
           </div>
         </section>
       </header>
-      <section className="my-4 grid grid-flow-row gap-y-3">
-        <CourseCard tag={["T"]} courseCode="TEST-3000" title="Test1" />
-      </section>
+      <div className="hidden lg:block">
+        <MyCourseDesktopFilterSection
+          filterState={filterState}
+          filterDispatch={filterDispatch}
+          setSearchString={setSearchString}
+          searchString={searchString}
+        />
+      </div>
+      <div className="block lg:hidden">
+        <MyCourseFilterSection
+          filterState={filterState}
+          filterDispatch={filterDispatch}
+          setSearchString={setSearchString}
+          searchString={searchString}
+        />
+      </div>
     </>
   );
 };

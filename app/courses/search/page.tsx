@@ -39,6 +39,7 @@ const SearchCourse = () => {
       prefix: [],
       semester: [],
       prereq: [],
+      status: [],
     }
   );
 

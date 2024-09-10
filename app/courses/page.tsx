@@ -9,14 +9,9 @@ import ChevronRight from "@/public/assets/svg/chevron-right.svg?svgr";
 import { useAppContext } from "../contexts/appContext/AppProvider";
 import { ICourseSchema } from "../../public/data/dataInterface";
 import { CourseCardProps } from "@/app/model/CourseInterface";
-import { MyCourseFilterSection, MyCourseDesktopFilterSection } from "@/app/components/course/SearchComponent";
+import { MyCourseFilterSection, MyCourseDesktopFilterSection, FilterAction, filterReducer, filterInitializers } from "@/app/components/course/SearchComponent";
 import { IFilterDispatch, IFilterState } from "@/app/model/CourseInterface";
 import { filter } from "lodash";
-
-export const FilterAction = {
-  ADD: "add",
-  REM: "remove",
-};
 
 const MyCourses = () => {
   const [courseFilter, setCourseFilter] = useState(0);
@@ -24,37 +19,7 @@ const MyCourses = () => {
   const { courses, fetchCourses, courseState } = useAppContext();
   const [filteredCourses, setFilteredCourses] = useState();
 
-  const [filterState, filterDispatch] = useReducer(
-    (state: IFilterState, action: IFilterDispatch) => {
-      switch (action.type) {
-        case FilterAction.ADD:
-          return {
-            ...state,
-            [action.payload.group]: [
-              ...state[action.payload.group],
-              action.payload.value,
-            ],
-          };
-        case FilterAction.REM:
-          return {
-            ...state,
-            [action.payload.group]: state[action.payload.group].filter(
-              (e: string) => e !== action.payload.value
-            ),
-          };
-        default:
-          return state;
-      }
-    },
-    {
-      filter: [],
-      level: [],
-      prefix: [],
-      semester: [],
-      prereq: [],
-      status: [],
-    }
-  );
+  const [filterState, filterDispatch] = useReducer(filterReducer, filterInitializers);
 
   const [searchString, setSearchString] = useState<string>("");
 
@@ -86,8 +51,8 @@ const MyCourses = () => {
               clickCallback={() => {
                 if (filterState.status.length === 0) return;
                 let clickPayload = {
-                  type: FilterAction.REM,
-                  payload: { group: "status", value: filterState.status[0]},
+                  type: FilterAction.SET,
+                  payload: { group: "status", value: [] },
                 }
                 filterDispatch(clickPayload);
               }}
@@ -100,13 +65,8 @@ const MyCourses = () => {
                   tag={0}
                   key={state.display}
                   clickCallback={() => {
-                    let remPayload = {
-                      type: FilterAction.REM,
-                      payload: { group: "status", value: filterState.status[0] },
-                    }
-                    filterDispatch(remPayload);
                     let clickPayload = {
-                      type: FilterAction.ADD,
+                      type: FilterAction.SET,
                       payload: { group: "status", value: [state.display] },
                     }
                     filterDispatch(clickPayload);

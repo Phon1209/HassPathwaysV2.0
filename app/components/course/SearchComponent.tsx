@@ -18,6 +18,7 @@ import CourseCard from "./CourseCard";
 import {
   FilterProps,
   FilterSectionProps,
+  IFilterDispatch,
   IFilterState,
   SearchInputProps,
 } from "@/app/model/CourseInterface";
@@ -28,10 +29,63 @@ import { useAppContext, fetchCourses } from '@/app/contexts/appContext/AppProvid
 
 const Spinner = dynamic(() => import("@/app/components/utils/Spinner"));
 
+// Actions for Filter Reducer
+
 export const FilterAction = {
   ADD: "add",
   REM: "remove",
+  RESET: "reset",
+  SET: "set",
 };
+
+// Default Filter Values
+
+export const filterInitializers = {
+  filter: [],
+  level: [],
+  prefix: [],
+  semester: [],
+  prereq: [],
+  status: [],
+};
+
+// Reduces "IFilterState" to a new state based on the action dispatched
+
+export const filterReducer = (state: IFilterState, action: IFilterDispatch) => {
+  switch (action.type) {
+    case FilterAction.ADD:
+      return {
+        ...state,
+        [action.payload.group]: [
+          ...state[action.payload.group],
+          action.payload.value,
+        ],
+      };
+    case FilterAction.REM:
+      return {
+        ...state,
+        [action.payload.group]: state[action.payload.group].filter(
+          (e: string) => e !== action.payload.value
+        ),
+      };
+    case FilterAction.RESET:
+      return {
+        filter: [],
+        level: [],
+        prefix: [],
+        semester: [],
+        prereq: [],
+        status: [],
+      };
+    case FilterAction.SET:
+      return {
+        ...state,
+        [action.payload.group]: action.payload.value,
+      };
+    default:
+      return state;
+  }
+}
 
 export const DesktopFilterSection = ({
   filterState,
@@ -294,7 +348,7 @@ const CourseList = ({
         });
       }
 
-      console.log(filtered);
+      //console.log(filtered);
 
       if (deferredFilterState.status.length) {
         filtered = filtered.filter(course =>

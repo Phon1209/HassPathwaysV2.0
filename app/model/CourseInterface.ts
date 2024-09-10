@@ -47,7 +47,7 @@ export interface IFilterState {
   status?: string;         
 }
 
-export type filterType = "filter" | "level" | "prefix" | "semester" | "prereq";
+export type filterType = "filter" | "level" | "prefix" | "semester" | "prereq" | "status";
 
 export interface IFilterDispatch {
   type: string;

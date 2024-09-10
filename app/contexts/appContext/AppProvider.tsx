@@ -128,6 +128,9 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     } 
   };
 
+  //Associated logic with pathway data
+
+  //Initialization for pathway data.
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
@@ -138,12 +141,10 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
               catalogYear: "2022-2023",
             })}`);
         const initialData = await response.json();
-        console.log("INIT: " + JSON.stringify(initialData));
         dispatch({
           type: SET_PATHWAYS,
           payload: initialData,
         });
-        console.log("INIT Pathways")
       } catch (error) {
         console.error("Failed to fetch initial data:", error);
       }

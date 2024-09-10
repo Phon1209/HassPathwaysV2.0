@@ -33,7 +33,7 @@ export const appReducer: (
       console.log("Updated Pathways: " + JSON.stringify(action.payload));
       return {
         ...state,
-        pathways: action.payload
+        pathwayData: action.payload
       }
     default:
       return state;

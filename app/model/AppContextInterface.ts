@@ -6,7 +6,8 @@ import {IPathwaySchema} from "@/public/data/dataInterface";
 
 export interface ApplicationContext {
   catalog_year: string;
-  courseState: any; 
+  courseState: any;
+  pathwayData: any;
   pathwaysCategories: any; 
   courses: CourseCardProps[];
   setCourses: (courses: CourseCardProps[]) => void;

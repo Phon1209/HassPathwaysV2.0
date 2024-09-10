@@ -48,7 +48,7 @@ const MyCourses = () => {
             <ModeRadioButton
               checked={filterState.status.length === statuses.length} 
               label={"All"}
-              tag={0}
+              tag={courses.filter((course) => course.status !== "No Selection").length}
               clickCallback={() => {
                 if (filterState.status.length === 3) return;
                 let clickPayload = {
@@ -63,7 +63,7 @@ const MyCourses = () => {
                 <ModeRadioButton
                   checked={state.display === filterState.status.join("")}
                   label={state.display}
-                  tag={0}
+                  tag={courses.filter((course) => course.status === state.display).length}
                   key={state.display}
                   clickCallback={() => {
                     let clickPayload = {

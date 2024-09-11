@@ -138,6 +138,9 @@ export const FilterSection = ({
   );
 };
 
+// TODO: Have Website fetch courses no matter what page is used, not just the search page.
+// Generates a list of courses based on the filter state and search string (which is empty in this case)
+
 export const MyCourseDesktopFilterSection = ({
   filterState,
   filterDispatch,

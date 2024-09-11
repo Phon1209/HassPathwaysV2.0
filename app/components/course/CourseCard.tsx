@@ -16,7 +16,6 @@ const CourseCard = ({
   const [state, setState] = useState(status);
   const {courses, updateCourseState} = useAppContext();
   status = courses.find(course => course.name === title)?.status || "No Selection";
-  console.log(title + " " + status);
   const offeredSemesters = [];
   if (offered.fall) offeredSemesters.push("Fall");
   if (offered.spring) offeredSemesters.push("Spring");

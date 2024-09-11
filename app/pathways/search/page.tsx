@@ -85,7 +85,6 @@ const SearchCourse = () => {
       .then((data) => data.json())
       .then((data) => {
         setResultPathways(data);
-        console.log("Fetched data:", data);
       })
       .catch((err) => {
         if (err.name === "AbortError") return;
@@ -99,7 +98,6 @@ const SearchCourse = () => {
   }, [deferFilterState, deferSearchString, catalog_year]);
 
   useEffect(() => {
-    console.log("Updated resultPathways:", resultPathways);
   }, [resultPathways]);
 
   return (

@@ -26,10 +26,6 @@ const MyCourses = () => {
 
   const [searchString, setSearchString] = useState<string>("");
   let statuses = courseState.map((state) => state.display);
-  useEffect(() => {
-    
-    console.log(courses);
-  }, []);
   
 
   return (

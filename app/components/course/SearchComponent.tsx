@@ -391,11 +391,10 @@ const CourseList = ({
 
     applyFilters();
   }, [deferredSearchString, deferredFilterState, courses]);
-
+  // TODO: Make it so that this css can be changed depending on where the course list is being used (clsx)
   return (
-    <section className="grid grid-cols-3 gap-4">
+    <section className="grid grid-cols-4 gap-4">
       {isLoading ? <Spinner /> : filteredCourses.map((course, i) => (
-        console.log(course.status),
         <CourseCard 
           title={course.name}
           courseCode={course.subj + '-' + course.ID}

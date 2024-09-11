@@ -39,13 +39,11 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   useEffect(() => {
     getBookmarks();
   }, [])
-  // Statuses: Completed, In Progress, Planned, No Selection
-  console.log(title);
-  //console.log(coursesIn);
+  // Statuses: Completed, In Progress, Planned, Interested, No Selection
   
-  console.log(courses);
   const inPathway = courses.filter((course) => coursesIn.includes(course.subj + "-" + course.ID));
-  console.log(inPathway);
+
+  // TODO: map status to display so that we don't need different variables for each status
   /*
   let items = [];
   const statuses = courseState.map((state) => state.display);

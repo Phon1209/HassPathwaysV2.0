@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CourseCardProps } from "@/app/model/CourseInterface";
 import { useAppContext } from "../../contexts/appContext/AppProvider";
-import { SingleCourse } from "@/app/model/CourseInterface";
 import { clsx } from 'clsx';
 
 const colorMap = {
@@ -17,15 +16,17 @@ const CourseCardDropDown = ({
   status = "No Selection"
 }: CourseCardProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { coursesSelected, updateCourseInContext } = useAppContext(); // TODO: Change to use ICourseProp
-  status = coursesSelected.find(course => course.courseID === courseCode)?.status || "No Selection";
+  const {courses, updateCourseState} = useAppContext();
+  //status = courses.find(course => course.name === title)?.status || "No Selection";
   const [dropDownText, setDropDownText] = useState<string>(status);
   const chipStyle = clsx("text-sm font-semibold px-2 py-2.5 border border-solid border-gray-300 rounded-lg cursor-pointer text-center", colorMap[dropDownText]);
-  
+  useEffect(() => {
+    setDropDownText(status);
+  }, [status]);
+
   const handleOption = (newStatus: string) => {
+    updateCourseState(title, newStatus);
     setDropDownText(newStatus);
-    let toAdd : SingleCourse = { courseID: courseCode, title: title, status: newStatus };
-    updateCourseInContext(toAdd);
     setIsOpen(false);
   };
   /*

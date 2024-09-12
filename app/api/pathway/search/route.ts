@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
     const data = v[1];
     return {
       title: data.name,
-      courses: data.courses,
+      coursesIn: data.courses,
       department: data.department,
     };
   });

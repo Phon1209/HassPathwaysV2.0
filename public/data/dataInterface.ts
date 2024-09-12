@@ -20,7 +20,7 @@ export interface ICourseSchema {
 
 export interface IPathwaySchema {
   title: string;
-  courses: string[];
+  coursesIn: string[];
   department: string;
 }
 

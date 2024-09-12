@@ -22,12 +22,6 @@ sections: {1: Object}
 subj: "ARTS"
 */
 
-export interface SingleCourse {
-  courseID: string;
-  title: string;
-  status: string;
-}
-
 export interface CourseCardProps {
   ID: string;                   // Course ID
   crosslisted: Array<string>;   // List of cross-listed courses
@@ -53,7 +47,7 @@ export interface IFilterState {
   status?: string;         
 }
 
-export type filterType = "filter" | "level" | "prefix" | "semester" | "prereq";
+export type filterType = "filter" | "level" | "prefix" | "semester" | "prereq" | "status";
 
 export interface IFilterDispatch {
   type: string;

@@ -21,35 +21,24 @@ export async function GET(request: NextRequest) {
 
   console.log(2);
   let blob = pathways;
-
-  const departmentString = params.get("department");
-  if (departmentString) {
-    const departments = departmentString.split(",");
-    blob = blob.filter((c) => departments.includes(c["department"]));
+  console.log(blob.Economics);
+  let flatten: any = {};
+  for (var [name, v] of Object.entries(blob)) {
+    let coursesIn = [];
+    for (var [k, c] of Object.entries(v)) {
+      console.log(c);
+      if (typeof c === "object" && k != "minor") {
+        for (var [title, code] of Object.entries(c)) {
+          coursesIn.push(code);
+        }
+      }
+    }
+    flatten[name] = {
+      name: name,
+      courses: coursesIn,
+      department: "",
+    };
   }
-  let flatten = blob.flatMap((dep) => {
-    return dep.pathways.map((path) => {
-      return {
-        name: path.name,
-        clusters: path.clusters,
-        department: dep.department,
-        required: path.required,
-      };
-    });
-  });
-  //   blob = blob.map((c) => c["pathways"]).flat();
-
-  console.log(3);
-  for (var [k, c] of Object.entries(flatten)) {
-    c["courses"] = c["clusters"]
-      .map((b) => b["courses"])
-      .flat()
-      .concat(c["required"] != null ? c["required"] : []);
-  }
-  flatten = Object.fromEntries(
-    Object.entries(flatten).filter(([k, v]) => k != "clusters")
-  );
-
   const searchString = params.get("searchString");
   if (searchString) {
     flatten = Object.fromEntries(
@@ -58,6 +47,7 @@ export async function GET(request: NextRequest) {
       )
     );
   }
+  console.log(flatten);
 
   console.log(8);
   // Convert Blob to array

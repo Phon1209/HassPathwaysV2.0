@@ -16,7 +16,7 @@ const pathwayList = [
   {
     name: "Graphic and Interactive Media Design",
     category: "Communication & Media",
-    courses: [
+    coursesIn: [
       {
         title: "abc",
         courseCode: "ARTS-1050",
@@ -37,7 +37,7 @@ const pathwayList = [
   {
     name: "Information Technology and Web Science",
     category: "Inter",
-    courses: [
+    coursesIn: [
       {
         title: "abc",
         courseCode: "ARTS-1050",
@@ -63,7 +63,7 @@ const MyPathways = () => {
   const { pathwaysCategories } = useAppContext();
   // Determine the mode of pathway card
   const [bookmarkedState, setbookmarkedState] = useState(true);
-  const [marked, setMarked] = useState([]);
+  const [marked, setMarked] = useState<IPathwaySchema[]>([]);
 
   const MAX_FILTER = (1 << pathwaysCategories.length) - 1;
   // Determine the filter

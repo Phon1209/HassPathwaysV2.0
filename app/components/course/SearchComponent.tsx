@@ -18,6 +18,7 @@ import CourseCard from "./CourseCard";
 import {
   FilterProps,
   FilterSectionProps,
+  IFilterDispatch,
   IFilterState,
   SearchInputProps,
 } from "@/app/model/CourseInterface";
@@ -25,13 +26,67 @@ import { ICourseSchema } from "@/public/data/dataInterface";
 import { flattenFilterParams } from "../utils/url";
 import dynamic from "next/dynamic";
 import { useAppContext, fetchCourses } from '@/app/contexts/appContext/AppProvider';
+import { filter } from "lodash";
 
 const Spinner = dynamic(() => import("@/app/components/utils/Spinner"));
+
+// Actions for Filter Reducer
 
 export const FilterAction = {
   ADD: "add",
   REM: "remove",
+  RESET: "reset",
+  SET: "set",
 };
+
+// Default Filter Values
+
+export const filterInitializers = {
+  filter: [],
+  level: [],
+  prefix: [],
+  semester: [],
+  prereq: [],
+  status: [],
+};
+
+// Reduces "IFilterState" to a new state based on the action dispatched
+
+export const filterReducer = (state: IFilterState, action: IFilterDispatch) => {
+  switch (action.type) {
+    case FilterAction.ADD:
+      return {
+        ...state,
+        [action.payload.group]: [
+          ...state[action.payload.group],
+          action.payload.value,
+        ],
+      };
+    case FilterAction.REM:
+      return {
+        ...state,
+        [action.payload.group]: state[action.payload.group].filter(
+          (e: string) => e !== action.payload.value
+        ),
+      };
+    case FilterAction.RESET:
+      return {
+        filter: [],
+        level: [],
+        prefix: [],
+        semester: [],
+        prereq: [],
+        status: [],
+      };
+    case FilterAction.SET:
+      return {
+        ...state,
+        [action.payload.group]: action.payload.value,
+      };
+    default:
+      return state;
+  }
+}
 
 export const DesktopFilterSection = ({
   filterState,
@@ -82,6 +137,39 @@ export const FilterSection = ({
     </>
   );
 };
+
+// TODO: Have Website fetch courses no matter what page is used, not just the search page.
+// Generates a list of courses based on the filter state and search string (which is empty in this case)
+
+export const MyCourseDesktopFilterSection = ({
+  filterState,
+  filterDispatch,
+  searchString,
+  setSearchString,
+}: FilterSectionProps) => {
+  return (
+    <>
+      <div className="filters flex justify-start items-start gap-8 mb-4 md:mb-8">
+        <div className="grow flex flex-col gap-4">
+          <CourseList searchString={searchString} filterState={filterState} />
+        </div>
+      </div>
+    </>
+  );
+}
+
+export const MyCourseFilterSection = ({
+  filterState,
+  filterDispatch,
+  setSearchString,
+  searchString,
+}: FilterSectionProps) => {
+  return (
+    <>
+      <CourseList searchString={searchString} filterState={filterState} />
+    </>
+  );
+}
 
 const SearchInput = ({ searchString, setSearchString }: SearchInputProps) => {
   return (
@@ -211,7 +299,7 @@ const CourseList = ({
   const deferredFilterState = useDeferredValue(filterState);
   const { catalog_year, courses, fetchCourses} = useAppContext();
 
-
+  
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -220,6 +308,8 @@ const CourseList = ({
     };
     fetchData();
   }, [catalog_year]);
+
+  
 
   useEffect(() => {
     const tags_short_to_long = courseFilters.reduce((acc, section) => {
@@ -262,6 +352,13 @@ const CourseList = ({
         });
       }
 
+      if (deferredFilterState.status.length) {
+        filtered = filtered.filter(course =>
+          deferredFilterState.status.includes(course.status)
+        );
+        
+      }
+
       // CI and HI Filtering
       if (deferredFilterState.filter.length && tags_short_to_long) {
         filtered = filtered.filter(course => {
@@ -294,11 +391,10 @@ const CourseList = ({
 
     applyFilters();
   }, [deferredSearchString, deferredFilterState, courses]);
-
+  // TODO: Make it so that this css can be changed depending on where the course list is being used (clsx)
   return (
-    <section className="grid grid-cols-3 gap-4">
+    <section className="grid grid-cols-4 gap-4">
       {isLoading ? <Spinner /> : filteredCourses.map((course, i) => (
-        
         <CourseCard 
           title={course.name}
           courseCode={course.subj + '-' + course.ID}

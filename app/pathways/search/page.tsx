@@ -86,7 +86,6 @@ const SearchCourse = () => {
       .then((data) => data.json())
       .then((data) => {
         setResultPathways(data);
-        console.log("Fetched data:", data);
       })
       .catch((err) => {
         if (err.name === "AbortError") return;
@@ -100,7 +99,6 @@ const SearchCourse = () => {
   }, [deferFilterState, deferSearchString, catalog_year]);
 
   useEffect(() => {
-    console.log("Updated resultPathways:", resultPathways);
   }, [resultPathways]);
 
   return (
@@ -131,7 +129,8 @@ const SearchCourse = () => {
                 label="All"
                 checked={filterState === MAX_FILTER}
               />
-              {pathwaysCategories.map((pathway, i) => (
+              {
+              pathwaysCategories.map((pathway, i) => (
                 <FilterCheckBox
                   checked={activeFilter(filterState, i)}
                   key={pathway.value}

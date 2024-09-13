@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
   let flatten: any = {};
   for (var [name, v] of Object.entries(blob)) {
     let coursesIn = [];
-    let department = "";
+    let department = "Depreciated";
     for (var [k, c] of Object.entries(v)) {
       console.log(c);
       if (typeof c === "object" && k != "minor") {
@@ -56,6 +56,16 @@ export async function GET(request: NextRequest) {
     );
   }
   console.log(flatten);
+
+  const departmentFilter = params.get("department");
+  if (departmentFilter) {
+    const departments = departmentFilter.split(",");
+    flatten = Object.fromEntries(
+      Object.entries(flatten).filter(([k, v]) =>
+        departments.includes(v["department"])
+      )
+    );
+  }
 
   console.log(8);
   // Convert Blob to array

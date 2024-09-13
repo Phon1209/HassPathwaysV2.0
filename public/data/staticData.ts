@@ -15,7 +15,7 @@ export const pathwaysCategories: Array<IpathwayData> = [
   { display: "Econ", value: "Economics" },
   { display: "STS", value: "STS" },
   { display: "Inter", value: "Interdisciplinary" },
-  { display: "GSAS", value: "Games & Simulation Arts & Sciences" },
+  { display: "GSAS", value: "GSAS" },
 ];
 
 export const courseState: Array<IcourseStatus> = [
@@ -202,7 +202,7 @@ export const pathwayDepartment: Array<PathwayDepartmentSchema> = [
   { pathway: "Economics", department: "Economics" },
   { pathway: "Ethics, Integrity, and Social Responsibility", department: "Interdisciplinary" },
   { pathway: "Extent and Limits of Rationality", department: "Interdisciplinary" },
-  { pathway: "Game Studies", department: "Games & Simulation Arts & Sciences" },
+  { pathway: "Game Studies", department: "GSAS" },
   { pathway: "Global Languages and Cultures", department: "Communication & Media"},
   { pathway: "Graphic and Interactive Media Design", department: "Communication & Media"},
   { pathway: "Narrative and Storytelling", department: "Communication & Media"},

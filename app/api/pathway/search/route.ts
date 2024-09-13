@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { IPathwaySchema } from "@/public/data/dataInterface";
+import { pathwayDepartment } from "@/public/data/staticData"; 
 import * as fs from "fs";
 import cors from "cors";
 import path from "path";
@@ -25,6 +26,7 @@ export async function GET(request: NextRequest) {
   let flatten: any = {};
   for (var [name, v] of Object.entries(blob)) {
     let coursesIn = [];
+    let department = "";
     for (var [k, c] of Object.entries(v)) {
       console.log(c);
       if (typeof c === "object" && k != "minor") {
@@ -33,10 +35,16 @@ export async function GET(request: NextRequest) {
         }
       }
     }
+    for (var [key, value] of Object.entries(pathwayDepartment)) {
+      if (value.pathway == name){
+        department = value.department;
+        break;
+      }
+    }
     flatten[name] = {
       name: name,
       courses: coursesIn,
-      department: "",
+      department: department,
     };
   }
   const searchString = params.get("searchString");

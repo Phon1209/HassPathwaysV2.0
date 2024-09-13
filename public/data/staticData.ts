@@ -3,6 +3,7 @@ import {
   IpathwayData,
   IcourseFilter,
   ICatalogList,
+  PathwayDepartmentSchema,
 } from "./staticInterface";
 
 export const APPLICATION_STATE_KEY = "application";
@@ -14,6 +15,7 @@ export const pathwaysCategories: Array<IpathwayData> = [
   { display: "Econ", value: "Economics" },
   { display: "STS", value: "STS" },
   { display: "Inter", value: "Interdisciplinary" },
+  { display: "GSAS", value: "Games & Simulation Arts & Sciences" },
 ];
 
 export const courseState: Array<IcourseStatus> = [
@@ -192,5 +194,34 @@ export const catalogList: ICatalogList = [
     //value: 2020,
   },
 ];
+
+// https://hass.rpi.edu/hass-pathways, Arts, Cognitive Science, Communication & Media, Economics, STS, Interdisciplinary, Games & Simulation Arts & Sciences
+export const pathwayDepartment: Array<PathwayDepartmentSchema> = [
+  { pathway: "Cognitive Science", department: "Cognitive Science" },
+  { pathway: "Design, Innovation, and Society", department: "STS" },
+  { pathway: "Economics", department: "Economics" },
+  { pathway: "Ethics, Integrity, and Social Responsibility", department: "Interdisciplinary" },
+  { pathway: "Extent and Limits of Rationality", department: "Interdisciplinary" },
+  { pathway: "Game Studies", department: "Games & Simulation Arts & Sciences" },
+  { pathway: "Global Languages and Cultures", department: "Communication & Media"},
+  { pathway: "Graphic and Interactive Media Design", department: "Communication & Media"},
+  { pathway: "Narrative and Storytelling", department: "Communication & Media"},
+  { pathway: "Strategic Writing", department: "Communication & Media"},
+  { pathway: "Media and Culture", department: "Communication & Media"},
+  { pathway: "Visual and Media Arts", department: "Arts"},
+  { pathway: "Music and Sound", department: "Arts"},
+  { pathway: "Psychological Science", department: "Cognitive Science"},
+  { pathway: "Philosophy and Logic", department: "Cognitive Science"},
+  { pathway: "Science, Technology, and Society", department: "STS"},
+  { pathway: "Sustainability Studies", department: "STS"},
+  { pathway: "Pre-Health", department: "Interdisciplinary"},
+  { pathway: "History", department: "Interdisciplinary"},
+  { pathway: "Public Health", department: "Interdisciplinary"},
+  { pathway: "Well-being: Body and Mind", department: "Interdisciplinary"},
+  { pathway: "Information Technology and Web Sciences", department: "Interdisciplinary"},
+  { pathway: "Transfer Student Social Science", department: "Interdisciplinary"},
+  { pathway: "Transfer Student Arts and Humanities", department: "Interdisciplinary"},
+];
+
 
 export const validCatalogYear: string[] = ["2022-2023", "2021-2022", "2020-2021", "2019-2020"];

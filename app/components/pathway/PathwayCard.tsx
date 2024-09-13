@@ -3,15 +3,16 @@ import { Bookmark, BookmarkChecked, HelpIcon } from "../utils/Icon";
 import { IPathwaySchema } from "@/public/data/dataInterface";
 import { useAppContext } from "@/app/contexts/appContext/AppProvider";
 import { HelpBox } from "./helpBox";
+import { courseState } from "@/public/data/staticData";
 
-const PathwayCard = ({ title, department, courses }: IPathwaySchema) => {
+const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   // TODO: use courses to determine the compatibility
   // TODO: change to bookmark state and update React Context
   // TODO: Compute tooltip
   
   const [bookmark, setBookmark] = useState(false);
   const [isShown, setIsShown] = useState(false);
-  const { coursesSelected, setCoursesSelected } = useAppContext();
+  const { courses } = useAppContext();
   const getBookmarks = () => {
     var bmks = localStorage.getItem("bookmarks")
     if (bmks == null) {
@@ -22,48 +23,69 @@ const PathwayCard = ({ title, department, courses }: IPathwaySchema) => {
     }
   }
 
+  
   const toggleBookmark = () => {
     let current: IPathwaySchema[] = JSON.parse(localStorage.getItem("bookmarks"));
     if (bookmark)
       current = current.filter(i => i.title != title);
     else if (current.find(x => x.title === title) == undefined) {
-      current.push({ title: title, department: department, courses: courses });
+      current.push({ title: title, department: department, coursesIn: coursesIn });
     }
     localStorage.setItem("bookmarks", JSON.stringify(current));
     setBookmark(!bookmark);
   }
+  
 
   useEffect(() => {
     getBookmarks();
   }, [])
-  console.log(courses);
-  // Statuses: Planned, In Progress, Interested, No Selection
-  console.log(coursesSelected);
-  const inPathway = coursesSelected.filter((course) => courses.includes(course.courseID));
+  // Statuses: Completed, In Progress, Planned, Interested, No Selection
+  
+  const inPathway = courses.filter((course) => coursesIn.includes(course.subj + "-" + course.ID));
+
+  // TODO: map status to display so that we don't need different variables for each status
+  /*
+  let items = [];
+  const statuses = courseState.map((state) => state.display);
+  for (let status of statuses) {
+    const statusCourses = inPathway.filter((course) => course.status === status);
+    const statusItems = statusCourses.map((course) => (
+      <div key={course.courseCode} className="flex gap-2 items-center">
+        <p className="text-sm text-green-500">✔</p>
+        <b className="text-sm">{course.courseCode}:</b>
+        <p className="text-sm">{course.title}</p>
+      </div>
+    ));
+    items.push(statusItems);
+    console.log(courses);
+  }
+  */
+  
   const completed = inPathway.filter((course) => course.status === "Completed");
   const completedItems = completed.map((course) => (
-    <div key={course.courseID} className="flex gap-2 items-center">
+    <div key={course.subj + "-" + course.ID} className="flex gap-2 items-center">
       <p className="text-sm text-green-500">✔</p>
-      <b className="text-sm">{course.courseID}:</b>
-      <p className="text-sm">{course.title}</p>
+      <b className="text-sm">{course.subj + "-" + course.ID}:</b>
+      <p className="text-sm">{course.name}</p>
     </div>
   ));
   const inProgress = inPathway.filter((course) => course.status === "In Progress");
   const inProgressItems = inProgress.map((course) => (
-    <div key={course.courseID} className="flex gap-2 items-center">
+    <div key={course.subj + "-" + course.ID} className="flex gap-2 items-center">
       <p className="text-sm text-yellow-500">⏺</p>
-      <b className="text-sm">{course.courseID}:</b>
-      <p className="text-sm">{course.title}</p>
+      <b className="text-sm">{course.subj + "-" + course.ID}:</b>
+      <p className="text-sm">{course.name}</p>
     </div>
   ));
   const planned = inPathway.filter((course) => course.status === "Planned");
   const plannedItems = planned.map((course) => (
-    <div key={course.courseID} className="flex gap-2 items-center">
+    <div key={course.subj + "-" + course.ID} className="flex gap-2 items-center">
       <p className="text-sm text-gray-500">⏺</p>
-      <b className="text-sm">{course.courseID}:</b>
-      <p className="text-sm">{course.title}</p>
+      <b className="text-sm">{course.subj + "-" + course.ID}:</b>
+      <p className="text-sm">{course.name}</p>
     </div>
   ));
+  
   return (
     <section className="pathway-card">
       <header className="flex justify-between w-full items-start">

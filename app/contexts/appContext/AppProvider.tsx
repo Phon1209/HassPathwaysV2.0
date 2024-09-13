@@ -16,7 +16,6 @@ import {
 } from "@/public/data/staticData";
 import { ApplicationContext } from "@/app/model/AppContextInterface";
 import { ICourseSchema } from "@/app/model/CourseInterface";
-import { SingleCourse } from "@/app/model/CourseInterface";
 
 const constantApplicationValue = { courseState, pathwaysCategories };
 
@@ -25,10 +24,9 @@ const defaultInitialState: ApplicationContext = {
   courses: [],
   coursesSelected: [],
   setCourses: () => {},
-  setCoursesSelected: () => {},
   setCatalog: () => {},
   fetchCourses: () => {},
-  updateCourseInContext: () => {},
+  updateCourseState: () => {},
   ...constantApplicationValue,
 };
 
@@ -62,29 +60,21 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: SET_CATALOG, payload: catalog_year });
   };
 
+  const updateCourseState = (name: string, status: string) => {
+    const courses = state.courses;
+    const updatedCourses = courses.map(course =>
+      course.name === name
+        ? { ...course, status: status }
+        : course);
+    setCourses(updatedCourses);
+  };
+
   const setCourses = (courses: ICourseSchema[]) => {
     console.log("SETTING COURSES");
     dispatch({ type: SET_COURSES, payload: courses });
+    localStorage.setItem("courses", JSON.stringify(courses));
+    fetchCourses();
   };
-
-  const updateCourseInContext = (toAdd: SingleCourse) => {
-    const newState = toAdd.status;
-    const coursesSelected = state.coursesSelected;
-    const updatedCourses = coursesSelected.map(course =>
-      course.courseID === toAdd.courseID
-        ? { ...course, status: newState }
-        : course);
-    let selectedIDS = updatedCourses.map(course => course.courseID);
-
-    if (!selectedIDS.includes(toAdd.courseID)) {
-      updatedCourses.push(toAdd);
-    }
-    setCoursesSelected(updatedCourses);
-  };
-
-  const setCoursesSelected = (courses: SingleCourse[]) => {
-    dispatch({ type: SET_COURSES_SELECTED, payload: courses });
-  }
 
   const fetchCourses = async () => {
     const localStorageCourses = localStorage.getItem("courses");
@@ -126,7 +116,7 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AppContext.Provider value={{ ...state, setCatalog, setCourses, setCoursesSelected, updateCourseInContext, fetchCourses }}>
+    <AppContext.Provider value={{ ...state, setCatalog, setCourses, updateCourseState, fetchCourses }}>
       {children}
     </AppContext.Provider>
   );

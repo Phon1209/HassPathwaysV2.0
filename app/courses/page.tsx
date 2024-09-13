@@ -1,6 +1,6 @@
 "use client";
 
-import { MouseEventHandler, useEffect, useState } from "react";
+import { MouseEventHandler, useEffect, useState, useReducer } from "react";
 import CourseCard from "../components/course/CourseCard";
 import Link from "next/link";
 import ChevronUp from "@/public/assets/svg/chevron-up.svg?svgr";
@@ -9,27 +9,24 @@ import ChevronRight from "@/public/assets/svg/chevron-right.svg?svgr";
 import { useAppContext } from "../contexts/appContext/AppProvider";
 import { ICourseSchema } from "../../public/data/dataInterface";
 import { CourseCardProps } from "@/app/model/CourseInterface";
+import { MyCourseFilterSection, MyCourseDesktopFilterSection, FilterAction, filterReducer, filterInitializers } from "@/app/components/course/SearchComponent";
+import { IFilterDispatch, IFilterState } from "@/app/model/CourseInterface";
+import { filter } from "lodash";
 
 const MyCourses = () => {
   const [courseFilter, setCourseFilter] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const { courses, fetchCourses, courseState } = useAppContext();
   const [filteredCourses, setFilteredCourses] = useState();
+  const allInitializer = {
+    ...filterInitializers,
+    status: courseState.map((state) => state.display),
+  }
+  const [filterState, filterDispatch] = useReducer(filterReducer, allInitializer);
 
-  useEffect(() => {
-    const newFilteredCourses = courses.filter(course =>
-      course.status !== "No Selection"
-    );
-    
-    setFilteredCourses(newFilteredCourses);
-    setIsLoading(false);
-  }, [courses]);
-
-  useEffect(() => {
-    
-    console.log(courses);
-
-  }, []);
+  const [searchString, setSearchString] = useState<string>("");
+  let statuses = courseState.map((state) => state.display);
+  
 
   return (
     <>
@@ -45,22 +42,31 @@ const MyCourses = () => {
         <section>
           <div className="course-button-group sm:flex flex-wrap gap-x-2 hidden">
             <ModeRadioButton
-              checked={0 === courseFilter}
+              checked={filterState.status.length === statuses.length} 
               label={"All"}
-              tag={0}
+              tag={courses.filter((course) => course.status !== "No Selection").length}
               clickCallback={() => {
-                setCourseFilter(0);
+                if (filterState.status.length === 3) return;
+                let clickPayload = {
+                  type: FilterAction.SET,
+                  payload: { group: "status", value: statuses },
+                }
+                filterDispatch(clickPayload);
               }}
             />
             {courseState.map((state) => {
               return (
                 <ModeRadioButton
-                  checked={state.value === courseFilter}
+                  checked={state.display === filterState.status.join("")}
                   label={state.display}
-                  tag={0}
+                  tag={courses.filter((course) => course.status === state.display).length}
                   key={state.display}
                   clickCallback={() => {
-                    setCourseFilter(state.value);
+                    let clickPayload = {
+                      type: FilterAction.SET,
+                      payload: { group: "status", value: [state.display] },
+                    }
+                    filterDispatch(clickPayload);
                   }}
                 />
               );
@@ -68,9 +74,22 @@ const MyCourses = () => {
           </div>
         </section>
       </header>
-      <section className="my-4 grid grid-flow-row gap-y-3">
-        <CourseCard tag={["T"]} courseCode="TEST-3000" title="Test1" />
-      </section>
+      <div className="hidden lg:block">
+        <MyCourseDesktopFilterSection
+          filterState={filterState}
+          filterDispatch={filterDispatch}
+          setSearchString={setSearchString}
+          searchString={searchString}
+        />
+      </div>
+      <div className="block lg:hidden">
+        <MyCourseFilterSection
+          filterState={filterState}
+          filterDispatch={filterDispatch}
+          setSearchString={setSearchString}
+          searchString={searchString}
+        />
+      </div>
     </>
   );
 };

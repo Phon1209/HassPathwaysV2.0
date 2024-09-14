@@ -89,7 +89,9 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     } else {
       console.log("Courses not fetched yet, fetching now...");
       const apiController = new AbortController();
-      const fetchUrl = `http://localhost:3000/api/course/search?`;
+      const fetchUrl = `http://localhost:3000/api/course/search?${new URLSearchParams({
+        catalogYear: state.catalog_year,
+      })}`;
       try {
         const response = await fetch(fetchUrl, {
           signal: apiController.signal,

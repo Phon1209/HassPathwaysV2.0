@@ -24,7 +24,8 @@ const emptyCourse: ICourseDescriptionSchema = {
   title: "course not found",
   description: "des not found",
   prereqs: undefined,
-  term: [{ year: "2023" }],
+  term: undefined,
+  attributes: undefined,
 };
 
 /**
@@ -48,6 +49,9 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
     fetch(`http://localhost:3000/api/course/${courseCode}`, {
       signal: apiController.signal,
       cache: "no-store",
+      next:{
+        revalidate: false
+      }
     })
       .then((response) => response.json())
       .then((data) => {
@@ -55,9 +59,9 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
         // Assuming the data structure is similar to your previous API
         setCourseDescription((prev) => ({
           ...prev,
-          title: data.name,
+          title: data.title,
           description: data.description,
-          prerequisite: data.prerequisites,
+          prerequisite: data.prereqs,
           attributes: data.attributes,
           semesterOffered: data.courseSemester,
         }));
@@ -117,7 +121,7 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
         <header>
           <h3>Semester Offered</h3>
         </header>
-        <SemesterTable term={term} />
+        {/*<SemesterTable term={term} />*/}
       </section>
     </Fragment>
   );

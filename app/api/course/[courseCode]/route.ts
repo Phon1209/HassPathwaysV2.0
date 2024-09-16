@@ -34,7 +34,6 @@ export async function GET(request: NextRequest) {
 
   for (let [k, v] of Object.entries(courseData)) {
     if (subjLooking === v.subj && idLooking === v.ID) {
-      console.log(v);
       let prereq_inserting: IPrereqSchema = {
         type: "and",
         nested: v.prerequisites.map((prereq) => {

@@ -8,9 +8,6 @@ export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
 
   const catalogYear = params.get("catalogYear");
-  console.log(params);
-
-  console.log(1);
 
   const pathways = JSON.parse(
     fs.readFileSync(
@@ -19,7 +16,6 @@ export async function GET(request: NextRequest) {
     )
   );
 
-  console.log(2);
   let blob = pathways;
 
   const departmentString = params.get("department");
@@ -39,7 +35,6 @@ export async function GET(request: NextRequest) {
   });
   //   blob = blob.map((c) => c["pathways"]).flat();
 
-  console.log(3);
   for (var [k, c] of Object.entries(flatten)) {
     c["courses"] = c["clusters"]
       .map((b) => b["courses"])
@@ -59,7 +54,6 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  console.log(8);
   // Convert Blob to array
   const output: Array<IPathwaySchema> = Object.entries(flatten).map((v) => {
     const data = v[1];
@@ -70,8 +64,7 @@ export async function GET(request: NextRequest) {
     };
   });
 
-  console.log("return");
-  console.log(output);
+ // console.log(output);
   
   return NextResponse.json(output);
 }

@@ -29,7 +29,6 @@ const defaultInitialState: ApplicationContext = {
   setCourses: () => {},
   setCatalog: () => {},
   fetchCourses: () => {},
-  updateCourseInContext: () => {},
   setPathways: () => {},
   updateCourseState: () => {},
   ...constantApplicationValue,
@@ -150,7 +149,7 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AppContext.Provider value={{ ...state, setCatalog, setCourses, updateCourseState, updateCourseInContext, fetchCourses, setPathways}}>
+    <AppContext.Provider value={{ ...state, setCatalog, setCourses, updateCourseState, fetchCourses, setPathways}}>
       {children}
     </AppContext.Provider>
   );

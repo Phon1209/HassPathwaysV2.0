@@ -30,7 +30,6 @@ export const appReducer: (
         coursesSelected: action.payload,
       };
     case SET_PATHWAYS:
-      console.log("Updated Pathways: " + JSON.stringify(action.payload));
       return {
         ...state,
         pathwayData: action.payload

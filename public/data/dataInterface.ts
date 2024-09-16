@@ -24,10 +24,26 @@ export interface IPathwaySchema {
   department: string;
 }
 
-interface IPrereqSchema {
+export interface IPrereqSchema {
   type: "course" | "and" | "or";
   nested?: Array<IPrereqSchema>;
   course?: string;
+}
+
+export interface IPropertiesSchema {
+  HI: boolean;
+  CI: boolean;
+  major_restricted: boolean;
+}
+
+export interface IOfferedSchema {
+  even: boolean;
+  odd: boolean;
+  fall: boolean;
+  spring: boolean;
+  summer: boolean;
+  uia: boolean;
+  text: string;
 }
 
 export interface ISemesterData {
@@ -46,7 +62,8 @@ export interface ICourseDescriptionSchema {
   title: string;
   description: string;
   prereqs?: IPrereqSchema;
-  term: Array<ITerm>;
+  term?: IOfferedSchema;
+  attributes?: IPropertiesSchema;
 }
 
 export interface ICourseClusterSchema {

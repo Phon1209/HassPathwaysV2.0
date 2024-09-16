@@ -1,59 +1,63 @@
 import { NextResponse, NextRequest } from "next/server";
-
-// Define interfaces for your data structures
-interface CourseData {
-  subj: string;
-  crse: string;
-  name: string;
-  description: string;
-  source: string;
-}
-
-interface CourseDatabase {
-  [key: string]: CourseData;
-}
-
-// Utility function to fetch and cast data from a given URL
-async function fetchDataFromURL<T>(url: string): Promise<T> {
-  const response = await fetch(url);
-  const data = (await response.json()) as T;
-  return data;
-}
-
-// Function to construct the combined course data
-function constructCombinedCourseData(courseDescriptions: CourseDatabase, courseAttributes: CourseDatabase, courseSemesterOffered: CourseDatabase, courseCode: string) {
-  const courseDescription = courseDescriptions[courseCode];
-  const courseAttribute = courseAttributes[courseCode];
-  const courseSemester = courseSemesterOffered[courseCode];
-
-  if (!courseDescription || !courseAttribute) {
-    return { error: "Course data not found" };
-  }
-
-  return {
-    ...courseDescription,
-    ...courseAttribute,
-    courseSemester,
-  };
-}
+import { ICourseDescriptionSchema, IPrereqSchema, IPropertiesSchema, IOfferedSchema } from "@/public/data/dataInterface";
+import path from "path";
+import * as fs from "fs";
 
 // Main GET function
 export async function GET(request: NextRequest) {
   const pathParts = request.nextUrl.pathname.split("/");
   const selectedCourseCode = pathParts[pathParts.length - 1].toUpperCase();
-
+  let subjLooking = selectedCourseCode.split("-")[0];
+  let idLooking = selectedCourseCode.split("-")[1];
+  const jsonCourse = path.join(process.cwd(), "json") + `/2023-2024` + "/courses.json"
+  const courseData: Object = JSON.parse(fs.readFileSync(jsonCourse, "utf8"));
   // Fetch data from external sources
-  const courseDescriptions = await fetchDataFromURL<CourseDatabase>("https://raw.githubusercontent.com/quatalog/data/master/catalog.json");
-  const courseAttributes = await fetchDataFromURL<CourseDatabase>("https://raw.githubusercontent.com/quatalog/data/master/prerequisites.json");
-  const courseSemesterOffered = await fetchDataFromURL<CourseDatabase>("https://raw.githubusercontent.com/quatalog/quatalog/main/src/terms_offered.json");
+  let response: ICourseDescriptionSchema = {
+    title : "Course not found",
+    description: "des not found",
+    prereqs: undefined,
+    attributes: undefined,
+    term: undefined,
+  };
+
+  for (let [k, v] of Object.entries(courseData)) {
+    if (subjLooking === v.subj && idLooking === v.ID) {
+      let prereq_inserting: IPrereqSchema = {
+        type: "and",
+        nested: v.prerequisites.map((prereq) => {
+            let t: IPrereqSchema = {
+              type: "course",
+              course: prereq,
+            };
+            return t;}),
+          };
+      let whenOffered = v.offered;
+      let properties: IPropertiesSchema = {
+        HI: v.properties.HI,
+        CI: v.properties.CI,
+        major_restricted: v.properties.major_restricted,
+      };
+      let courseSemester: IOfferedSchema = {
+        even: whenOffered.even,
+        odd: whenOffered.odd,
+        fall: whenOffered.fall,
+        spring: whenOffered.spring,
+        summer: whenOffered.summer,
+        uia: whenOffered.uia,
+        text: whenOffered.text,
+      };
+      response = {
+        title: v.name,
+        description: v.description,
+        prereqs: prereq_inserting,
+        attributes: properties,
+        term: courseSemester,
+      };
+      break;
+    }
+  }
 
   // Construct the combined course data
-  const combinedCourseData = constructCombinedCourseData(courseDescriptions, courseAttributes, courseSemesterOffered, selectedCourseCode);
-
   // Return the response
-  return new Response(JSON.stringify(combinedCourseData), {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  return NextResponse.json(response);
 }

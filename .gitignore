@@ -34,8 +34,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-#JetBrains Ignore
-*.idea
-
 #python
 .venv
+
+#JetBrains Ignore
+*.idea

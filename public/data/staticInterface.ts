@@ -23,3 +23,8 @@ export type ICatalogList = Array<{
   text: string;
   //value: number;
 }>;
+
+export interface PathwayDepartmentSchema {
+  pathway: string;
+  department: string;
+}

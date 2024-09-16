@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
 import { IPathwaySchema } from "@/public/data/dataInterface";
+import { pathwayDepartment } from "@/public/data/staticData"; 
 import * as fs from "fs";
 import cors from "cors";
 import path from "path";
@@ -17,39 +18,47 @@ export async function GET(request: NextRequest) {
   );
 
   let blob = pathways;
-
-  const departmentString = params.get("department");
-  if (departmentString) {
-    const departments = departmentString.split(",");
-    blob = blob.filter((c) => departments.includes(c["department"]));
+  console.log(blob.Economics);
+  let flatten: any = {};
+  for (var [name, v] of Object.entries(blob)) {
+    let coursesIn = [];
+    let department = "Depreciated";
+    for (var [k, c] of Object.entries(v)) {
+      console.log(c);
+      if (typeof c === "object" && k != "minor") {
+        for (var [title, code] of Object.entries(c)) {
+          coursesIn.push(code);
+        }
+      }
+    }
+    for (var [key, value] of Object.entries(pathwayDepartment)) {
+      if (value.pathway == name){
+        department = value.department;
+        break;
+      }
+    }
+    flatten[name] = {
+      name: name,
+      courses: coursesIn,
+      department: department,
+    };
   }
-  let flatten = blob.flatMap((dep) => {
-    return dep.pathways.map((path) => {
-      return {
-        name: path.name,
-        clusters: path.clusters,
-        department: dep.department,
-        required: path.required,
-      };
-    });
-  });
-  //   blob = blob.map((c) => c["pathways"]).flat();
-
-  for (var [k, c] of Object.entries(flatten)) {
-    c["courses"] = c["clusters"]
-      .map((b) => b["courses"])
-      .flat()
-      .concat(c["required"] != null ? c["required"] : []);
-  }
-  flatten = Object.fromEntries(
-    Object.entries(flatten).filter(([k, v]) => k != "clusters")
-  );
-
   const searchString = params.get("searchString");
   if (searchString) {
     flatten = Object.fromEntries(
       Object.entries(flatten).filter(([k, v]) =>
         v["name"].toLowerCase().includes(searchString.toLowerCase())
+      )
+    );
+  }
+  console.log(flatten);
+
+  const departmentFilter = params.get("department");
+  if (departmentFilter) {
+    const departments = departmentFilter.split(",");
+    flatten = Object.fromEntries(
+      Object.entries(flatten).filter(([k, v]) =>
+        departments.includes(v["department"])
       )
     );
   }

@@ -30,7 +30,6 @@ export async function GET(request: NextRequest) {
   // Fetch local course JSON
   const catalogYear = params.get("catalogYear");
   const courseData = path.join(process.cwd(), "json") + `/${catalogYear}` + "/courses.json"
-  console.log("Hello");
   const courses = JSON.parse(fs.readFileSync(courseData, "utf8"));
 
   return NextResponse.json(courses);

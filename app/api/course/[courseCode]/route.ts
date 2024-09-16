@@ -3,18 +3,6 @@ import { ICourseDescriptionSchema, IPrereqSchema, IPropertiesSchema, IOfferedSch
 import path from "path";
 import * as fs from "fs";
 
-// Define interfaces for your data structures
-
-interface WhenOffered {
-  even: boolean;
-  odd: boolean;
-  fall: boolean;
-  spring: boolean;
-  summer: boolean;
-  uia: boolean;
-  text: string;
-}
-
 // Main GET function
 export async function GET(request: NextRequest) {
   const pathParts = request.nextUrl.pathname.split("/");
@@ -70,7 +58,6 @@ export async function GET(request: NextRequest) {
   }
 
   // Construct the combined course data
-  console.log(response);
   // Return the response
   return NextResponse.json(response);
 }

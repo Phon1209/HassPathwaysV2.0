@@ -7,14 +7,17 @@ import {APPLICATION_STATE_KEY, courseState, pathwaysCategories,} from "@/public/
 import {ApplicationContext} from "@/app/model/AppContextInterface";
 import {ICourseSchema} from "@/app/model/CourseInterface";
 
+
 const constantApplicationValue = { courseState, pathwaysCategories };
 
 const defaultInitialState: ApplicationContext = {
   catalog_year: "2022-2023",
   courses: [],
+  pathwayData: "",
   setCourses: () => {},
   setCatalog: () => {},
   fetchCourses: () => {},
+  setPathways: () => {},
   updateCourseState: () => {},
   ...constantApplicationValue,
 };
@@ -122,8 +125,37 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     } 
   };
 
+  //Associated logic with pathway data
+
+  //Initialization for pathway data.
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const response = await     fetch(
+            `http://localhost:3000/api/pathway/search?${new URLSearchParams({
+              searchString: "",
+              department: "",
+              catalogYear: "2022-2023",
+            })}`);
+        const initialData = await response.json();
+        dispatch({
+          type: SET_PATHWAYS,
+          payload: initialData,
+        });
+      } catch (error) {
+        console.error("Failed to fetch initial data:", error);
+      }
+    };
+
+    fetchInitialData();
+  }, []);
+
+  const setPathways = (pathwayData: IPathwaySchema) => {
+    dispatch({type: SET_PATHWAYS, payload: pathwayData})
+  };
+
   return (
-    <AppContext.Provider value={{ ...state, setCatalog, setCourses, updateCourseState, fetchCourses }}>
+    <AppContext.Provider value={{ ...state, setCatalog, setCourses, updateCourseState, fetchCourses, setPathways}}>
       {children}
     </AppContext.Provider>
   );

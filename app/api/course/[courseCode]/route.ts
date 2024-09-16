@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import { ICourseDescriptionSchema, IPrereqSchema, IPropertiesSchema, IOfferedSchema } from "@/public/data/dataInterface";
+import { ICourseDescriptionSchema, IPrereqSchema, IPropertiesSchema, IOfferedSchema, ISingleYearOfferedSchema } from "@/public/data/dataInterface";
 import path from "path";
 import * as fs from "fs";
 
@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
     attributes: undefined,
     term: undefined,
   };
+  let year = "2023-2024";
 
   for (let [k, v] of Object.entries(courseData)) {
     if (subjLooking === v.subj && idLooking === v.ID) {
@@ -37,12 +38,14 @@ export async function GET(request: NextRequest) {
         CI: v.properties.CI,
         major_restricted: v.properties.major_restricted,
       };
-      let courseSemester: IOfferedSchema = {
-        even: whenOffered.even,
-        odd: whenOffered.odd,
+      let offered_year: ISingleYearOfferedSchema = {
+        year: year,
         fall: whenOffered.fall,
         spring: whenOffered.spring,
         summer: whenOffered.summer,
+      };
+      let courseSemester: IOfferedSchema = {
+        years: [offered_year],
         uia: whenOffered.uia,
         text: whenOffered.text,
       };
@@ -56,7 +59,6 @@ export async function GET(request: NextRequest) {
       break;
     }
   }
-
   // Construct the combined course data
   // Return the response
   return NextResponse.json(response);

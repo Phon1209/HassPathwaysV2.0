@@ -13,7 +13,11 @@ export const appReducer: (
 ) => {
   switch (action.type) {
     case INITIAL_LOAD_DATA:
-      return action.payload;
+      return {
+        ...state,
+        catalog_year: action.payload.catalog_year,
+        courses: action.payload.courses,
+      };
     case SET_CATALOG:
       return {
         ...state,
@@ -23,11 +27,6 @@ export const appReducer: (
       return {
         ...state,
         courses: action.payload,
-      };
-    case SET_COURSES_SELECTED:
-      return {
-        ...state,
-        coursesSelected: action.payload,
       };
     case SET_PATHWAYS:
       return {

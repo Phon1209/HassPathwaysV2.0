@@ -1,30 +1,18 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useReducer,
-  useEffect,
-  ReactNode,
-} from "react";
-import { appReducer } from "./AppReducer";
-import {INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES, SET_COURSES_SELECTED, SET_PATHWAYS} from "../actions";
-import {
-  courseState,
-  pathwaysCategories,
-  APPLICATION_STATE_KEY,
-} from "@/public/data/staticData";
-import { ApplicationContext } from "@/app/model/AppContextInterface";
-import { ICourseSchema } from "@/app/model/CourseInterface";
-import { SingleCourse } from "@/app/model/CourseInterface";
-import {IPathwaySchema} from "@/public/data/dataInterface";
+import {createContext, ReactNode, useContext, useEffect, useReducer,} from "react";
+import {appReducer} from "./AppReducer";
+import {INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES} from "../actions";
+import {APPLICATION_STATE_KEY, courseState, pathwaysCategories,} from "@/public/data/staticData";
+import {ApplicationContext} from "@/app/model/AppContextInterface";
+import {ICourseSchema} from "@/app/model/CourseInterface";
+
 
 const constantApplicationValue = { courseState, pathwaysCategories };
 
 const defaultInitialState: ApplicationContext = {
   catalog_year: "2022-2023",
   courses: [],
-  coursesSelected: [],
   pathwayData: "",
   setCourses: () => {},
   setCatalog: () => {},
@@ -41,27 +29,33 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const localStorageString = localStorage.getItem(APPLICATION_STATE_KEY);
-    const stateWithoutLocalStorage = {
-      ...defaultInitialState,
-      catalog_year: "2022-2023",
-    };
-
     const initialState = localStorageString
       ? JSON.parse(localStorageString)
-      : stateWithoutLocalStorage;
+      : defaultInitialState;
 
     dispatch({
       type: INITIAL_LOAD_DATA,
       payload: initialState,
     });
+
+    //Set the localStorage with the new initial state
+    localStorage.setItem(APPLICATION_STATE_KEY,JSON.stringify(initialState));
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem(APPLICATION_STATE_KEY, JSON.stringify(state));
-  }, [state]);
 
   const setCatalog = (catalog_year: string) => {
     dispatch({ type: SET_CATALOG, payload: catalog_year });
+
+    //Check if local stoarage value exists and if it does update with the new catalog year
+    const storedStateString = localStorage.getItem(APPLICATION_STATE_KEY);
+    if (storedStateString) {
+      const storedState = JSON.parse(storedStateString);
+      const updatedState = {
+        ...storedState,
+        catalog_year: catalog_year
+      };
+      localStorage.setItem(APPLICATION_STATE_KEY, JSON.stringify(updatedState));
+    }
   };
 
   const updateCourseState = (name: string, status: string) => {
@@ -76,8 +70,20 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
   const setCourses = (courses: ICourseSchema[]) => {
     console.log("SETTING COURSES");
     dispatch({ type: SET_COURSES, payload: courses });
+
+    //Get the localStorage value and if it exists update the course
+    const storedStateString = localStorage.getItem(APPLICATION_STATE_KEY);
+    if (storedStateString) {
+      const storedState = JSON.parse(storedStateString);
+      const updatedState = {
+        ...storedState,
+        courses: courses
+      };
+      localStorage.setItem(APPLICATION_STATE_KEY, JSON.stringify(updatedState));
+    }
+    //Currently have two different values in local storage being used for courses
+    //TODO Refactor to one single value for localStorage
     localStorage.setItem("courses", JSON.stringify(courses));
-    fetchCourses();
   };
 
   const fetchCourses = async () => {

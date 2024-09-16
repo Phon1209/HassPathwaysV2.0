@@ -31,7 +31,7 @@ if __name__ == "__main__":
     number_browsers = 6
     dir_path = os.path.dirname(os.path.realpath(__file__))
     parent_path = os.path.dirname(dir_path)
-    json_path = os.path.join(parent_path, "json", "new")
+    json_path = os.path.join(parent_path, "json")
     path = os.path.join(json_path, str(year))
     new_year = True
     try:

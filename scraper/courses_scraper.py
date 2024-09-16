@@ -218,7 +218,7 @@ Checks our pathway json to gather all courses that we need to scrape. See pathwa
 def check_to_scrape(year: int) -> list[str]:
     dir_path = os.path.dirname(os.path.realpath(__file__))
     parent_path = os.path.dirname(dir_path)
-    jsons_path = os.path.join(parent_path, "json", "new")
+    jsons_path = os.path.join(parent_path, "json")
     folder_title = "{}-{}".format(year - 1, year)
     json_checking_path = os.path.join(jsons_path, folder_title, "pathways.json")
     to_check = list()

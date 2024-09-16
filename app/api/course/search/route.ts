@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from "next/server";
-import CourseData01 from "../../../../json/2019-2020/courses.json";
+import path from "path";
+import fs from "fs";
 
 export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
@@ -27,7 +28,9 @@ export async function GET(request: NextRequest) {
   // return NextResponse.json(combinedData);
 
   // Fetch local course JSON
-  const courseData = CourseData01;
+  const catalogYear = params.get("catalogYear");
+  const courseData = path.join(process.cwd(), "json") + `/${catalogYear}` + "/courses.json"
+  const courses = JSON.parse(fs.readFileSync(courseData, "utf8"));
 
-  return NextResponse.json(courseData);
+  return NextResponse.json(courses);
 }

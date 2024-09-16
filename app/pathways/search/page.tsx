@@ -59,6 +59,7 @@ const SearchCourse = () => {
   const deferSearchString = useDeferredValue(searchString);
   const deferFilterState = useDeferredValue(filterState);
 
+  //TODO Refactor to utilize pathwayData
   useEffect(() => {
     const apiController = new AbortController();
     const validYear = validCatalogYear.includes(catalog_year);

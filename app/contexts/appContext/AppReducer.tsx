@@ -2,7 +2,7 @@ import {
   ApplicationContext,
   ApplicationDispatch,
 } from "@/app/model/AppContextInterface";
-import { INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES, SET_COURSES_SELECTED } from "../actions";
+import { INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES, SET_COURSES_SELECTED, SET_PATHWAYS } from "../actions";
 
 export const appReducer: (
   state: ApplicationContext,
@@ -13,7 +13,11 @@ export const appReducer: (
 ) => {
   switch (action.type) {
     case INITIAL_LOAD_DATA:
-      return action.payload;
+      return {
+        ...state,
+        catalog_year: action.payload.catalog_year,
+        courses: action.payload.courses,
+      };
     case SET_CATALOG:
       return {
         ...state,
@@ -24,11 +28,11 @@ export const appReducer: (
         ...state,
         courses: action.payload,
       };
-    case SET_COURSES_SELECTED:
+    case SET_PATHWAYS:
       return {
         ...state,
-        coursesSelected: action.payload,
-      };
+        pathwayData: action.payload
+      }
     default:
       return state;
   }

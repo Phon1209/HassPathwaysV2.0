@@ -36,3 +36,6 @@ next-env.d.ts
 
 #python
 .venv
+
+#JetBrains Ignore
+*.idea

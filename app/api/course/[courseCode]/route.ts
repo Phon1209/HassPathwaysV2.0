@@ -1,7 +1,9 @@
 import { NextResponse, NextRequest } from "next/server";
-import { ICourseDescriptionSchema, IPrereqSchema, IPropertiesSchema, IOfferedSchema } from "@/public/data/dataInterface";
+import { ICourseDescriptionSchema, IPrereqSchema, IPropertiesSchema, IOfferedSchema, ISingleYearOfferedSchema } from "@/public/data/dataInterface";
+import { catalogList } from "@/public/data/staticData";
 import path from "path";
 import * as fs from "fs";
+import { template } from "lodash";
 
 // Main GET function
 export async function GET(request: NextRequest) {
@@ -9,9 +11,13 @@ export async function GET(request: NextRequest) {
   const selectedCourseCode = pathParts[pathParts.length - 1].toUpperCase();
   let subjLooking = selectedCourseCode.split("-")[0];
   let idLooking = selectedCourseCode.split("-")[1];
-  const jsonCourse = path.join(process.cwd(), "json") + `/2023-2024` + "/courses.json"
-  const courseData: Object = JSON.parse(fs.readFileSync(jsonCourse, "utf8"));
-  // Fetch data from external sources
+  const allData: Object[] = [];
+  for (let year of catalogList) {
+    const jsonYear = path.join(process.cwd(), "json") + `/${year.text}` + "/courses.json";
+    let yearData = JSON.parse(fs.readFileSync(jsonYear, "utf8"));
+    yearData.year = year.text;
+    allData.push(yearData);
+  }
   let response: ICourseDescriptionSchema = {
     title : "Course not found",
     description: "des not found",
@@ -19,6 +25,7 @@ export async function GET(request: NextRequest) {
     attributes: undefined,
     term: undefined,
   };
+  let courseData = allData[allData.length - 1];
 
   for (let [k, v] of Object.entries(courseData)) {
     if (subjLooking === v.subj && idLooking === v.ID) {
@@ -37,12 +44,21 @@ export async function GET(request: NextRequest) {
         CI: v.properties.CI,
         major_restricted: v.properties.major_restricted,
       };
+      let offered_years: ISingleYearOfferedSchema[] = [];
+      for (let yearData of allData) {
+        for (let [i, j] of Object.entries(yearData)) {
+          if (j.subj === v.subj && j.ID === v.ID) {
+            offered_years.push({
+              year: yearData.year,
+              fall: j.offered.fall,
+              spring: j.offered.spring,
+              summer: j.offered.summer,
+            });
+          }
+        }
+      }
       let courseSemester: IOfferedSchema = {
-        even: whenOffered.even,
-        odd: whenOffered.odd,
-        fall: whenOffered.fall,
-        spring: whenOffered.spring,
-        summer: whenOffered.summer,
+        years: offered_years,
         uia: whenOffered.uia,
         text: whenOffered.text,
       };
@@ -56,8 +72,6 @@ export async function GET(request: NextRequest) {
       break;
     }
   }
-
-  // Construct the combined course data
   // Return the response
   return NextResponse.json(response);
 }

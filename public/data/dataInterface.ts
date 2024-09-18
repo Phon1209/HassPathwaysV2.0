@@ -36,12 +36,15 @@ export interface IPropertiesSchema {
   major_restricted: boolean;
 }
 
-export interface IOfferedSchema {
-  even: boolean;
-  odd: boolean;
+export interface ISingleYearOfferedSchema {
+  year: string;
   fall: boolean;
   spring: boolean;
   summer: boolean;
+}
+
+export interface IOfferedSchema {
+  years: Array<ISingleYearOfferedSchema>;
   uia: boolean;
   text: string;
 }

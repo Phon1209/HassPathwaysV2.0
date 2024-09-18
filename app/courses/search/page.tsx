@@ -21,7 +21,7 @@ const SearchCourse = () => {
     <>
       <header>
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-8">
-          <h1 className="title mb-3">Find Courses</h1>
+          <h1 className="title mb-3">Search Courses</h1>
           <Link href={"/courses"}>
             <span className="flex text-primary-700 gap-2 text-sm font-semibold">
               My Courses <ChevronRight />

@@ -49,7 +49,6 @@ export const SemesterTable: FC<IOfferedSchema> = ({years}) => {
 
 const MobileTable: FC<Array<ISingleYearOfferedSchema>> = (years) => {
   const [yearIndex, setYearIndex] = useState(0);
-  console.log(typeof years);
   const t: ISingleYearOfferedSchema | undefined = years.at(yearIndex);
   if (!t) return <></>;
   return (

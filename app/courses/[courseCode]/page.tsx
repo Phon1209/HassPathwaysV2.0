@@ -61,10 +61,6 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
       .catch((error) => {
         console.error("Error fetching data: ", error);
       });
-    console.log(courseDescription);
-    return () => {
-      apiController.abort();
-    };
   }, []);
 
   // TODO: Still need the semester offered data being updated.

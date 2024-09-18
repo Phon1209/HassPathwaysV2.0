@@ -19,7 +19,7 @@ const Footer = () => {
                 <Link href="/courses">My Courses</Link>
                 <Link href="/courses/search">Search Courses</Link>
                 <Link href="/pathways">My Pathways</Link>
-                <Link href="/pathways/search">Search Pathways</Link>
+                <Link href="/pathways/search">Explore Pathways</Link>
             </div>
         </footer>
     );

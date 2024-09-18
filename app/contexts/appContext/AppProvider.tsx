@@ -2,7 +2,7 @@
 
 import {createContext, ReactNode, useContext, useEffect, useReducer,} from "react";
 import {appReducer} from "./AppReducer";
-import {INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES} from "../actions";
+import {INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES, SET_PATHWAYS} from "../actions";
 import {APPLICATION_STATE_KEY, courseState, pathwaysCategories,} from "@/public/data/staticData";
 import {ApplicationContext} from "@/app/model/AppContextInterface";
 import {ICourseSchema} from "@/app/model/CourseInterface";

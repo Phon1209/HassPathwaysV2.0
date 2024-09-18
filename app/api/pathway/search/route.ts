@@ -18,16 +18,17 @@ export async function GET(request: NextRequest) {
   );
 
   let blob = pathways;
-  console.log(blob.Economics);
   let flatten: any = {};
   for (var [name, v] of Object.entries(blob)) {
     let coursesIn = [];
     let department = "Depreciated";
     for (var [k, c] of Object.entries(v)) {
-      console.log(c);
       if (typeof c === "object" && k != "minor") {
         for (var [title, code] of Object.entries(c)) {
-          coursesIn.push(code);
+          if (code.length == 8){
+            code = [code.slice(0, 4), "-", code.slice(4)].join('');
+          }
+          coursesIn.push(code.replace(" ", "-"));
         }
       }
     }
@@ -51,7 +52,6 @@ export async function GET(request: NextRequest) {
       )
     );
   }
-  console.log(flatten);
 
   const departmentFilter = params.get("department");
   if (departmentFilter) {
@@ -72,8 +72,8 @@ export async function GET(request: NextRequest) {
       department: data.department,
     };
   });
-
- // console.log(output);
+  
+  //console.log(output);
   
   return NextResponse.json(output);
 }

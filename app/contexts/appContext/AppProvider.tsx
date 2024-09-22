@@ -11,7 +11,7 @@ import {ICourseSchema} from "@/app/model/CourseInterface";
 const constantApplicationValue = { courseState, pathwaysCategories };
 
 const defaultInitialState: ApplicationContext = {
-  catalog_year: "2022-2023",
+  catalog_year: "2024-2025",
   courses: [],
   pathwayData: "",
   setCourses: () => {},

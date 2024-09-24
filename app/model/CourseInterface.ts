@@ -41,10 +41,12 @@ export interface CourseCardProps {
 }
 
 export interface IFilterState {
-  title: string;           
-  courseCode: string;      
-  tag: Array<string>;      
-  status?: string;         
+  filter: string[];
+  level: string[];
+  prefix: string[];
+  prereq: string[];
+  semester: string[];
+  status: string[]; 
 }
 
 export type filterType = "filter" | "level" | "prefix" | "semester" | "prereq" | "status";

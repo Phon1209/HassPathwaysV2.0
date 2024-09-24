@@ -15,7 +15,7 @@ export interface ICourseSchema {
   description: string;
   subject: string;
   tag: Array<string>;
-  status?: courseState;
+  status: string;
   prereqs?: IPrereqSchema;
   term?: IOfferedSchema;
   attributes?: IPropertiesSchema;

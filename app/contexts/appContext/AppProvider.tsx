@@ -139,33 +139,6 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
           type: SET_PATHWAYS,
           payload: initialData,
         });
-        /*
-        const localStorageCourses = localStorage.getItem("courses");
-        if (localStorageCourses) {
-          console.log("Courses already fetched, returning existing courses...");
-          console.log("Courses fetched from local storage...");
-          const courses: ICourseSchema = JSON.parse(localStorageCourses);
-    
-          dispatch({ type: SET_COURSES, payload: courses });
-          return courses;
-    
-        }else{
-          const apiController = new AbortController();
-          const fetchUrl = `http://localhost:3000/api/course/search?${new URLSearchParams({
-            catalogYear: "2023-2024",
-          })}`;
-  
-          const responseCourses = await fetch(fetchUrl, {
-            signal: apiController.signal,
-          });
-          
-          if (!responseCourses.ok) throw new Error("Network response was not ok");
-          const replaceCourses = await responseCourses.json();
-          setCourses(replaceCourses);
-        }*/
-
-        
-
       } catch (error) {
         console.error("Failed to fetch initial data:", error);
       }

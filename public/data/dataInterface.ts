@@ -1,12 +1,3 @@
-export type courseState = "Planned" | "In Progress" | "Interested" | "No Selection";
-
-
-export interface ICourseSchemaSaved {
-  title: string;
-  courseCode: string;
-  tag: Array<string>;
-  state: courseState;
-}
 
 export interface ICourseSchema {
   title: string;
@@ -14,11 +5,10 @@ export interface ICourseSchema {
   filter: string;
   description: string;
   subject: string;
-  tag: Array<string>;
   status: string;
   prereqs?: IPrereqSchema;
   term?: IOfferedSchema;
-  attributes?: IPropertiesSchema;
+  attributes: IPropertiesSchema;
 }
 
 export interface IPathwaySchema {
@@ -61,14 +51,6 @@ export interface ITerm {
   spring?: ISemesterData;
   fall?: ISemesterData;
   summer?: ISemesterData;
-}
-
-export interface ICourseDescriptionSchema {
-  title: string;
-  description: string;
-  prereqs?: IPrereqSchema;
-  term?: IOfferedSchema;
-  attributes?: IPropertiesSchema;
 }
 
 export interface ICourseClusterSchema {

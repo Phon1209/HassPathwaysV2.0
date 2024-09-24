@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { CourseCardProps } from "@/app/model/CourseInterface";
+import { ICourseSchema } from '@/public/data/dataInterface';
 import { useAppContext } from "../../contexts/appContext/AppProvider";
 import { clsx } from 'clsx';
 
@@ -14,7 +14,7 @@ const CourseCardDropDown = ({
   title,
   courseCode,
   status = "No Selection"
-}: CourseCardProps) => {
+}: ICourseSchema) => {
   const [isOpen, setIsOpen] = useState(false);
   const {courses, updateCourseState} = useAppContext();
   //status = courses.find(course => course.name === title)?.status || "No Selection";

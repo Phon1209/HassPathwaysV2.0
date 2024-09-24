@@ -48,6 +48,7 @@ export async function GET(request: NextRequest, data: PathwayRequest) {
                     subject: split_code[0],
                     filter: "",
                     description: "",
+                    status: "No Selection"
                 };
                 temp_courses.push(courseSchema);
             }

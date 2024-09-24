@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { CourseCardProps } from "@/app/model/CourseInterface";
 import { useAppContext } from "../../contexts/appContext/AppProvider";
 import Link from "next/link";
 import CourseCardDropDown from "./CourseDropDownButton";
@@ -8,9 +7,12 @@ import { ICourseSchema } from "@/public/data/dataInterface";
 const CourseCard = ({
   title,
   courseCode,
-  tag = [],
   subject,
-  attributes = undefined,
+  attributes = {
+    CI: false,
+    HI: false,
+    major_restricted: false
+  },
   term = undefined,
   prereqs = undefined,
   status = "No Selection"
@@ -73,7 +75,7 @@ const CourseCard = ({
             </div>
           )}
         </div>
-        <CourseCardDropDown title={title} courseCode={courseCode} tag={tag} status={status} />
+        <CourseCardDropDown title={title} courseCode={courseCode} status={status} />
       </div>
     </section>
   );

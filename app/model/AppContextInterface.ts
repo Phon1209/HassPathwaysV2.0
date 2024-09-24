@@ -1,6 +1,5 @@
 import { IcourseStatus, IpathwayData } from "@/public/data/staticInterface";
 
-import { CourseCardProps } from "@/app/model/CourseInterface";
 import { fetchCourses } from '@/app/contexts/appContext/AppProvider';
 import {ICourseSchema, IPathwaySchema} from "@/public/data/dataInterface";
 

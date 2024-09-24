@@ -22,7 +22,7 @@ import {
   IFilterState,
   SearchInputProps,
 } from "@/app/model/CourseInterface";
-import { ICourseSchema } from "@/public/data/dataInterface";
+import { ICourseSchema, IPropertiesSchema } from "@/public/data/dataInterface";
 import { flattenFilterParams } from "../utils/url";
 import dynamic from "next/dynamic";
 import { useAppContext, fetchCourses } from '@/app/contexts/appContext/AppProvider';
@@ -358,12 +358,10 @@ const CourseList = ({
       // CI and HI Filtering
       if (deferredFilterState.filter.length && tags_short_to_long) {
         filtered = filtered.filter(course => {
-          const courseTags = course.tag;
-          
-          return deferredFilterState.filter.some(tag => {
-            const tagDisplayName = tags_short_to_long[tag];
-            return courseTags[tag] && tagDisplayName;
-          });
+          const courseTags: IPropertiesSchema = course.attributes;
+          if (deferredFilterState.filter.includes("CI") && courseTags.CI) return true;
+          if (deferredFilterState.filter.includes("HI") && courseTags.HI) return true;
+          if (deferredFilterState.filter.includes("Major Restricted") && courseTags.major_restricted) return true;
         });
       }
       // Prerequisite Filtering
@@ -398,7 +396,6 @@ const CourseList = ({
           filter={course.filter}
           description={course.description}
           subject={course.subject}
-          tag={course.tag}
           key={i} />
       ))}
     </section>

@@ -1,5 +1,5 @@
 import { NextResponse, NextRequest } from "next/server";
-import { ICourseDescriptionSchema, IPrereqSchema, IPropertiesSchema, IOfferedSchema, ISingleYearOfferedSchema } from "@/public/data/dataInterface";
+import { ICourseSchema, IPrereqSchema, IPropertiesSchema, IOfferedSchema, ISingleYearOfferedSchema } from "@/public/data/dataInterface";
 import { catalogList } from "@/public/data/staticData";
 import path from "path";
 import * as fs from "fs";
@@ -18,9 +18,13 @@ export async function GET(request: NextRequest) {
     yearData.year = year.text;
     allData.push(yearData);
   }
-  let response: ICourseDescriptionSchema = {
+  let response: ICourseSchema = {
     title : "Course not found",
     description: "des not found",
+    filter: "",
+    tag: [],
+    subject: subjLooking,
+    courseCode: idLooking,
     prereqs: undefined,
     attributes: undefined,
     term: undefined,
@@ -64,6 +68,10 @@ export async function GET(request: NextRequest) {
       };
       response = {
         title: v.name,
+        courseCode: v.ID,
+        filter: "",
+        tag: [],
+        subject: v.subj,
         description: v.description,
         prereqs: prereq_inserting,
         attributes: properties,

@@ -13,9 +13,12 @@ export interface ICourseSchema {
   courseCode: string;
   filter: string;
   description: string;
-  prereqs: any;
+  subject: string;
   tag: Array<string>;
-  state?: courseState;
+  status?: courseState;
+  prereqs?: IPrereqSchema;
+  term?: IOfferedSchema;
+  attributes?: IPropertiesSchema;
 }
 
 export interface IPathwaySchema {
@@ -25,9 +28,8 @@ export interface IPathwaySchema {
 }
 
 export interface IPrereqSchema {
-  type: "course" | "and" | "or";
-  nested?: Array<IPrereqSchema>;
-  course?: string;
+  raw_precoreqs: string;
+  courses: Array<string>;
 }
 
 export interface IPropertiesSchema {

@@ -107,9 +107,6 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
           signal: apiController.signal});
         if (!response.ok) throw new Error("Network response was not ok");
         const transformedData = await response.json();
-        console.log("FETCHED DATA");
-
-        console.log(transformedData);
 
         setCourses(transformedData);
 

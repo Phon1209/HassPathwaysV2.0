@@ -44,8 +44,12 @@ export async function GET(request: NextRequest, data: PathwayRequest) {
                 let courseSchema: ICourseSchema = {
                     title: course_name,
                     courseCode: split_code[1],
-                    tag: [],
                     subject: split_code[0],
+                    attributes: {
+                        HI: false,
+                        CI: false,
+                        major_restricted: false
+                    },
                     filter: "",
                     description: "",
                     status: "No Selection"

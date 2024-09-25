@@ -63,7 +63,7 @@ if __name__ == "__main__":
     pdf_path = os.path.join(dir_path, 'pdfs', 'fall2024-ci.pdf')
     courses_loc = os.path.join(path, "courses.json")
     print("Starting course scraper, opening {} browsers".format(number_browsers))
-    course_scraper.multi_process_scrape(int(year.split("-", 1)[1]), pdf_path, courses_loc, number_browsers)
+    course_scraper.multi_process_scrape(int(year.split("-", 1)[1]), pdf_path, courses_loc, number_browsers, year)
     print("Scrape ended, check data folder.")
     
 

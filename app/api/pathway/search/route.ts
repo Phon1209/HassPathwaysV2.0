@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
   let flatten: any = {};
   for (var [name, v] of Object.entries(blob)) {
     let coursesIn = [];
-    let department = "Depreciated";
+    let department = "No Data";
     for (var [k, c] of Object.entries(v)) {
       if (typeof c === "object" && k != "minor") {
         for (var [title, code] of Object.entries(c)) {

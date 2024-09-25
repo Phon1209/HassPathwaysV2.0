@@ -266,4 +266,4 @@ export const pathwayDepartment: Array<PathwayDepartmentSchema> = [
 ];
 
 
-export const validCatalogYear: string[] = ["2022-2023", "2021-2022", "2020-2021", "2019-2020"];
+export const validCatalogYear: string[] = ["2024-2025","2023-2024","2022-2023", "2021-2022", "2020-2021", "2019-2020"];

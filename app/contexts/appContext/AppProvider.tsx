@@ -11,7 +11,7 @@ import {ICourseSchema, IPathwaySchema} from "@/public/data/dataInterface";
 const constantApplicationValue = { courseState, pathwaysCategories };
 
 const defaultInitialState: ApplicationContext = {
-  catalog_year: "2023-2024",
+  catalog_year: "2024-2025",
   courses: [],
   pathwayData: "",
   setCourses: () => {},

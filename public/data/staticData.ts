@@ -16,6 +16,8 @@ export const pathwaysCategories: Array<IpathwayData> = [
   { display: "STS", value: "STS" },
   { display: "Inter", value: "Interdisciplinary" },
   { display: "GSAS", value: "GSAS" },
+  { display: "Lang", value: "Language and Literature" },
+  { display: "Restricted", value: "Major Restricted" },
 ];
 
 export const courseState: Array<IcourseStatus> = [
@@ -178,6 +180,10 @@ export const noMatchedText: string =
 
 export const catalogList: ICatalogList = [
   {
+    text: "2024-2025",
+    // value: 2025,
+  },
+  {
     text: "2023-2024",
     // value: 2024,
   },
@@ -225,7 +231,43 @@ export const pathwayDepartment: Array<PathwayDepartmentSchema> = [
   { pathway: "Information Technology and Web Sciences", department: "Interdisciplinary"},
   { pathway: "Transfer Student Social Science", department: "Interdisciplinary"},
   { pathway: "Transfer Student Arts and Humanities", department: "Interdisciplinary"},
+  // Old Pathways
+  { pathway: "Art History, Theory, and Criticism", department: "Arts"},
+  { pathway: "Artificial Intelligence", department: "Cognitive Science"},
+  { pathway: "Behavioral and Cognitive Neuroscience", department: "Cognitive Science"},
+  { pathway: "Chinese Language", department: "Language and Literature"},
+  { pathway: "Creative Design and Innovation", department: "Interdisciplinary"},
+  { pathway: "Design, Innovation, and Society Pathway", department: "Major Restricted"},
+  { pathway: "Economics of Banking and Finance", department: "Economics"},
+  { pathway: "Economics of Decision-Making", department: "Economics"},
+  { pathway: "Economics of Healthcare Markets", department: "Economics"},
+  { pathway: "Economics of Policy and Regulations", department: "Economics"},
+  { pathway: "Economics of Quantitative Modeling", department: "Economics"},
+  { pathway: "Economics of Technology and Innovation", department: "Economics"},
+  { pathway: "Electronic Arts", department: "Arts"},
+  { pathway: "Environmental Futures", department: "Interdisciplinary"},
+  { pathway: "Fact and Fiction", department: "Interdisciplinary"},
+  { pathway: "Gender, Race, Sexuality, Ethnicity, and Social Change", department: "Interdisciplinary"},
+  { pathway: "Graphic Design", department: "Communication & Media"},
+  { pathway: "Interactive Media/Data Design", department: "Communication & Media"},
+  { pathway: "Language", department: "Language and Literature"},
+  { pathway: "Law and Policy", department: "STS"},
+  { pathway: "Linguistics", department: "Language and Literature"},
+  { pathway: "Literature and Creative Writing", department: "Language and Literature"},
+  { pathway: "Living in a World of Data", department: "Interdisciplinary"},
+  { pathway: "Logical Thinking", department: "Cognitive Science"},
+  { pathway: "Mind, Brain, and Intelligence", department: "Cognitive Science"},
+  { pathway: "Music Composition and Production", department: "Arts"},
+  { pathway: "Music Performance", department: "Arts"},
+  { pathway: "Music and Culture", department: "Arts"},
+  { pathway: "Philosophy", department: "Cognitive Science"},
+  { pathway: "Strategic Communication", department: "Interdisciplinary"},
+  { pathway: "Studio Arts", department: "Arts"},
+  { pathway: "Sustainability", department: "STS"},
+  { pathway: "Thinking with Science", department: "Interdisciplinary"},
+  { pathway: "Understanding Human Behavior", department: "Cognitive Science"},
+  { pathway: "Video, Performance, and Social Practice", department: "Arts"},
 ];
 
 
-export const validCatalogYear: string[] = ["2022-2023", "2021-2022", "2020-2021", "2019-2020"];
+export const validCatalogYear: string[] = ["2024-2025","2023-2024","2022-2023", "2021-2022", "2020-2021", "2019-2020"];

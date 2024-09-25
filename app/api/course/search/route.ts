@@ -50,7 +50,6 @@ export async function GET(request: NextRequest) {
       filter: "",
       description: courses[course]["description"],
       subject: courses[course]["subj"],
-      tag: [],
       status: "No Selection",
       prereqs: {
         courses: courses[course]["prerequisites"],

@@ -59,16 +59,10 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
         setCourseDescription(data);
       })
       .catch((error) => {
-        console.error("Error fetching data: ", error);
+        console.error("WARNING: ", error);
       });
+      return () => apiController.abort();
   }, []);
-
-  // TODO: Still need the semester offered data being updated.
-  // braket slising
-  // TODO: Need to Parse Prereqs for better display (nested, and, or)
-  // Test the new route, see if it can fetch the new code:
-  useEffect(() => {
-  }, [courseCode]);
 
   const term = courseDescription?.term ?? "Unfound Course Semester Offered";  
   

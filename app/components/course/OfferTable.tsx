@@ -1,32 +1,24 @@
 "use client";
 
-import { ISemesterData, ITerm } from "@/public/data/dataInterface";
+import { ISemesterData, ISingleYearOfferedSchema, IOfferedSchema } from "@/public/data/dataInterface";
 import { FC, Fragment, useState } from "react";
 import { isMobileOnly } from "react-device-detect";
 import ArrowLeft from "@/public/assets/svg/arrow-left.svg?svgr";
 import ArrowRight from "@/public/assets/svg/arrow-right.svg?svgr";
 
-const TableData = async ({ data }: { data?: ISemesterData }) => {
-  if (!data) return <div className="!text-gray-600">No Class</div>;
+const TableData = ({ data }) => {
+  if (!data) return <div className="!text-gray-600">Unavailable</div>;
 
-  const { instructor, seats } = data;
   return (
     <div>
       <div>
-        {instructor.reduce((acc, inst) => {
-          if (acc === "") return inst;
-          return acc + ", " + inst;
-        }, "")}
+        Available
       </div>
-      <div className="!text-gray-600">{seats}</div>
     </div>
   );
 };
 
-type ISemesterTableData = {
-  term: Array<ITerm>;
-};
-export const SemesterTable: FC<ISemesterTableData> = async ({ term }) => {
+export const SemesterTable: FC<IOfferedSchema> = ({years}) => {
   return (
     <Fragment>
       {!isMobileOnly && (
@@ -35,26 +27,29 @@ export const SemesterTable: FC<ISemesterTableData> = async ({ term }) => {
           <div className="table-header">Spring</div>
           <div className="table-header">Summer</div>
           <div className="table-header">Fall</div>
-          {term.map((t) => {
+          {
+          years.map((year) => {
             return (
-              <Fragment key={t.year}>
-                <header className="font-medium">{t.year}</header>
-                <TableData data={t.spring} />
-                <TableData data={t.summer} />
-                <TableData data={t.fall} />
+              <Fragment key={year.year}>
+                <header className="font-medium">{year.year}</header>
+                <TableData data={year.spring} />
+                <TableData data={year.summer} />
+                <TableData data={year.fall} />
               </Fragment>
             );
           })}
         </section>
       )}
-      <MobileTable term={term} />
+      
     </Fragment>
   );
 };
 
-const MobileTable: FC<ISemesterTableData> = async ({ term }) => {
+//<MobileTable years={years} /> TODO: Fix mobile table
+
+const MobileTable: FC<Array<ISingleYearOfferedSchema>> = (years) => {
   const [yearIndex, setYearIndex] = useState(0);
-  const t: ITerm | undefined = term.at(yearIndex);
+  const t: ISingleYearOfferedSchema | undefined = years.at(yearIndex);
   if (!t) return <></>;
   return (
     <section className="block sm:hidden w-52">

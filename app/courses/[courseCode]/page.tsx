@@ -72,12 +72,13 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
           description: data.description,
           prereqs: data.prereqs,
           attributes: data.attributes,
-          term: data.courseSemester,
+          term: data.term,
         }));
       })
       .catch((error) => {
         console.error("WARNING: ", error);
       });
+      console.log(courseDescription)
       return () => apiController.abort();
   }, []);
 
@@ -89,7 +90,6 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
     : "No Description Found";
   const prereqs = courseDescription?.prereqs ?? "Unfound Prereqs";
   // const thsemesterOffered = courseDescription?.semesterOffered ?? "Unfound Course SemesterOfferend"
-
   return (
     <Fragment>
       <header className="description-header">
@@ -120,7 +120,7 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
           <h3>Semester Offered</h3>
         </header>
         {
-          term == "Unfound Course Semester Offered" ? <p>No Semester Data</p> : <SemesterTable years={term.years} />
+          term == "Unfound Course Semester Offered" ? <p>No Semester Data</p> : <SemesterTable {...term} />
         }
       </section>
     </Fragment>

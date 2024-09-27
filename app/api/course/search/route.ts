@@ -44,6 +44,8 @@ export async function GET(request: NextRequest) {
       spring: courses[course]["offered"]["spring"],
       summer: courses[course]["offered"]["summer"],
     };
+    let prereq_set = new Set<string>(courses[course]["prerequisites"]);
+    let prereq_array = Array.from(prereq_set);
     transformedData.push({
       title: course,
       courseCode: courses[course]["ID"],
@@ -52,7 +54,7 @@ export async function GET(request: NextRequest) {
       subject: courses[course]["subj"],
       status: "No Selection",
       prereqs: {
-        courses: courses[course]["prerequisites"],
+        courses: prereq_array,
         raw_precoreqs: courses[course]["rawprecoreqs"] || "No Prerequisites",
       },
       term: {

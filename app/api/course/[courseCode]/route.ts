@@ -22,26 +22,25 @@ export async function GET(request: NextRequest) {
     title : "Course not found",
     description: "des not found",
     filter: "",
-    tag: [],
     subject: subjLooking,
     courseCode: idLooking,
     prereqs: undefined,
-    attributes: undefined,
+    attributes: {
+      CI: false,
+      HI: false,
+      major_restricted: false,
+    },
     term: undefined,
+    status: "No Selection",
   };
   let courseData = allData[allData.length - 1];
 
   for (let [k, v] of Object.entries(courseData)) {
     if (subjLooking === v.subj && idLooking === v.ID) {
       let prereq_inserting: IPrereqSchema = {
-        type: "and",
-        nested: v.prerequisites.map((prereq) => {
-            let t: IPrereqSchema = {
-              type: "course",
-              course: prereq,
-            };
-            return t;}),
-          };
+        raw_precoreqs: v.rawprecoreqs,
+        courses: v.prerequisites,
+      };
       let whenOffered = v.offered;
       let properties: IPropertiesSchema = {
         HI: v.properties.HI,
@@ -70,12 +69,12 @@ export async function GET(request: NextRequest) {
         title: v.name,
         courseCode: v.ID,
         filter: "",
-        tag: [],
         subject: v.subj,
         description: v.description,
         prereqs: prereq_inserting,
         attributes: properties,
         term: courseSemester,
+        status: "No Selection",
       };
       break;
     }

@@ -33,24 +33,24 @@ export async function GET(request: NextRequest) {
     term: undefined,
     status: "No Selection",
   };
-  let courseData = allData[allData.length - 1];
+  let courseData = allData[0];
 
-  for (let [k, v] of Object.entries(courseData)) {
-    if (subjLooking === v.subj && idLooking === v.ID) {
+  for (let course of Object.keys(courseData)) {
+    if (subjLooking === courseData[course]["subj"] && idLooking === courseData[course]["ID"]) {
       let prereq_inserting: IPrereqSchema = {
-        raw_precoreqs: v.rawprecoreqs,
-        courses: v.prerequisites,
+        raw_precoreqs: courseData[course]["rawprecoreq"],
+        courses: courseData[course]["prerequisites"],
       };
-      let whenOffered = v.offered;
+      let whenOffered = courseData[course]["offered"];
       let properties: IPropertiesSchema = {
-        HI: v.properties.HI,
-        CI: v.properties.CI,
-        major_restricted: v.properties.major_restricted,
+        HI: courseData[course]["properties"]["HI"],
+        CI: courseData[course]["properties"]["CI"],
+        major_restricted: courseData[course]["properties"]["major_restricted"],
       };
       let offered_years: ISingleYearOfferedSchema[] = [];
       for (let yearData of allData) {
         for (let [i, j] of Object.entries(yearData)) {
-          if (j.subj === v.subj && j.ID === v.ID) {
+          if (j.subj === courseData[course]["subj"] && j.ID === courseData[course]["ID"]) {
             offered_years.push({
               year: yearData.year,
               fall: j.offered.fall,
@@ -66,11 +66,11 @@ export async function GET(request: NextRequest) {
         text: whenOffered.text,
       };
       response = {
-        title: v.name,
-        courseCode: v.ID,
+        title: courseData[course]["name"],
+        courseCode: courseData[course]["ID"],
         filter: "",
-        subject: v.subj,
-        description: v.description,
+        subject: courseData[course]["subj"],
+        description: courseData[course]["description"],
         prereqs: prereq_inserting,
         attributes: properties,
         term: courseSemester,

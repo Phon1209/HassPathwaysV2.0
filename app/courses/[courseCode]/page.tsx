@@ -88,7 +88,7 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
   const description = courseDescription?.description
     ? courseDescription.description
     : "No Description Found";
-  const prereqs = courseDescription?.prereqs ?? "Unfound Prereqs";
+  const prereqs = courseDescription.prereqs?.raw_precoreqs ? courseDescription.prereqs?.raw_precoreqs : "None";
   // const thsemesterOffered = courseDescription?.semesterOffered ?? "Unfound Course SemesterOfferend"
   return (
     <Fragment>
@@ -113,7 +113,7 @@ const CoursePage: React.FC<ICourseCode> = (data) => {
         <header>
           <h3>Prerequisites</h3>
         </header>
-        {!courseDescription.prereqs && <p>None</p>}
+        {prereqs}
       </section>
       <section className="description-section">
         <header>

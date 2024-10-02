@@ -4,6 +4,7 @@ import { IPathwaySchema } from "@/public/data/dataInterface";
 import { useAppContext } from "@/app/contexts/appContext/AppProvider";
 import { HelpBox } from "./helpBox";
 import { courseState } from "@/public/data/staticData";
+import Link from "next/link";
 
 const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   // TODO: use courses to determine the compatibility
@@ -91,7 +92,7 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
       <header className="flex justify-between w-full items-start">
         <div className="w-[367px] mb-2">
           <div className="flex flex-col md:flex-row gap-2 items-start py-1">
-            <h3 className="pathway-title flex-1">{title}</h3>
+            <Link className="pathway-title flex-1" href={'/pathways/'+title}>{title}</Link>
             <p className="tag">{department}</p>
           </div>
           <div className="progress-bar">

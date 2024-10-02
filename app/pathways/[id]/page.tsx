@@ -1,7 +1,8 @@
 "use client";
 import CourseCard from "@/app/components/course/CourseCard";
 import BreadCrumb from "@/app/components/navigation/Breadcrumb";
-import React, { FC, MouseEventHandler, useState } from "react";
+import React, { FC, MouseEventHandler, useContext, useEffect, useState } from "react";
+import { useAppContext } from "@/app/contexts/appContext/AppProvider";
 import {
   ICourseClusterSchema,
   ICourseSchema,
@@ -76,20 +77,49 @@ const pathwayTempData: IPathwayDescriptionSchema = {
 //   ],
 // };
 
+const emptyPathway: IPathwayDescriptionSchema = {
+  description: "",
+  compatibleMinor: [],
+  courses: [],
+  clusters: [],
+};
+
 type IPathwayID = {
   params: {
     id: string;
+    year: string;
   };
 };
 
 const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
   // Convert pathname to pathwayName
   const pathwayName: string = data.params.id.replaceAll("%20", " ");
+  const {catalog_year} = useAppContext()
 
-  const pathwayData: IPathwayDescriptionSchema = pathwayTempData;
+  const [pathwayData, setPathwayData] =
+  useState<IPathwayDescriptionSchema>(emptyPathway);
 
   // TODO: check if pathway exists, or return something empty
+  useEffect(() => {
+    const apiController = new AbortController();
 
+    let ret = fetch(`http://localhost:3000/api/pathway/${pathwayName}`, {
+      signal: apiController.signal,
+      next:{
+        revalidate: false
+      }
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Assuming the data structure is similar to your previous API
+        console.log(data);
+        setPathwayData(data);
+      })
+      .catch((error) => {
+        console.error("WARNING: ", error);
+      });
+      return () => apiController.abort();
+  }, []);
   return (
     <>
       <header className="mb-4 md:mb-8">

@@ -3,6 +3,39 @@ import { ICourseSchema, IPrereqSchema, ISingleYearOfferedSchema } from "@/public
 import path from "path";
 import fs from "fs";
 
+function courseConstructor (courses: any, course: string, catalogYear: string): ICourseSchema {
+  let yearToInsert: ISingleYearOfferedSchema = {
+    year: catalogYear,
+    fall: courses[course]["offered"]["fall"],
+    spring: courses[course]["offered"]["spring"],
+    summer: courses[course]["offered"]["summer"],
+  };
+  let prereq_set = new Set<string>(courses[course]["prerequisites"]);
+  let prereq_array = Array.from(prereq_set);
+  return {
+    title: course,
+    courseCode: courses[course]["ID"],
+    filter: "",
+    description: courses[course]["description"],
+    subject: courses[course]["subj"],
+    status: "No Selection",
+    prereqs: {
+      courses: prereq_array,
+      raw_precoreqs: courses[course]["rawprecoreq"],
+    },
+    term: {
+      years: [yearToInsert],
+      uia: courses[course]["offered"]["uia"],
+      text: courses[course]["offered"]["text"],
+    },
+    attributes: {
+      HI: courses[course]["properties"]["HI"],
+      CI: courses[course]["properties"]["CI"],
+      major_restricted: courses[course]["properties"]["major_restricted"],
+    },
+  }
+}
+
 export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams;
   // Fetch the course description and prerequisites data
@@ -38,36 +71,7 @@ export async function GET(request: NextRequest) {
   const courses = JSON.parse(fs.readFileSync(courseData, "utf8"));
   const transformedData: ICourseSchema[] = [];
   for (let course of Object.keys(courses)) {
-    let yearToInsert: ISingleYearOfferedSchema = {
-      year: catalogYear,
-      fall: courses[course]["offered"]["fall"],
-      spring: courses[course]["offered"]["spring"],
-      summer: courses[course]["offered"]["summer"],
-    };
-    let prereq_set = new Set<string>(courses[course]["prerequisites"]);
-    let prereq_array = Array.from(prereq_set);
-    transformedData.push({
-      title: course,
-      courseCode: courses[course]["ID"],
-      filter: "",
-      description: courses[course]["description"],
-      subject: courses[course]["subj"],
-      status: "No Selection",
-      prereqs: {
-        courses: prereq_array,
-        raw_precoreqs: courses[course]["rawprecoreqs"] || "No Prerequisites",
-      },
-      term: {
-        years: [yearToInsert],
-        uia: courses[course]["offered"]["uia"],
-        text: courses[course]["offered"]["text"],
-      },
-      attributes: {
-        HI: courses[course]["properties"]["HI"],
-        CI: courses[course]["properties"]["CI"],
-        major_restricted: courses[course]["properties"]["major_restricted"],
-      },
-    });
+    transformedData.push(courseConstructor(courses, course, catalogYear));
   }
 
   return NextResponse.json(transformedData);

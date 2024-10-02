@@ -1,25 +1,29 @@
 import React, { useState } from "react";
-import { CourseCardProps } from "@/app/model/CourseInterface";
 import { useAppContext } from "../../contexts/appContext/AppProvider";
 import Link from "next/link";
 import CourseCardDropDown from "./CourseDropDownButton";
+import { ICourseSchema } from "@/public/data/dataInterface";
 
 const CourseCard = ({
   title,
   courseCode,
-  tag = [],
-  properties = {},
-  offered = {},
-  prerequsits = [],
+  subject,
+  attributes = {
+    CI: false,
+    HI: false,
+    major_restricted: false
+  },
+  term = undefined,
+  prereqs = undefined,
   status = "No Selection"
-}: CourseCardProps) => {
+}: ICourseSchema) => {
   const [state, setState] = useState(status);
   const {courses, updateCourseState} = useAppContext();
-  status = courses.find(course => course.name === title)?.status || "No Selection";
+  status = courses.find(course => course.title === title)?.status || "No Selection";
   const offeredSemesters = [];
-  if (offered.fall) offeredSemesters.push("Fall");
-  if (offered.spring) offeredSemesters.push("Spring");
-  if (offered.summer) offeredSemesters.push("Summer");
+  if (term && term.years[term.years.length - 1].fall) offeredSemesters.push("Fall");
+  if (term && term.years[term.years.length - 1].spring) offeredSemesters.push("Spring");
+  if (term && term.years[term.years.length - 1].summer) offeredSemesters.push("Summer");
 
   return (
     <section className="course-card">
@@ -27,20 +31,20 @@ const CourseCard = ({
         <div className="flex flex-col">
           <header className="course-title">
             <Link
-              href={`/courses/${courseCode}`}
+              href={`/courses/${subject + '-' + courseCode}`}
               className="text-md font-semibold break-normal"
             >
               {title}
             </Link>
-            <p className="text-sm text-gray-600">{courseCode}</p>
+            <p className="text-sm text-gray-600">{subject + '-' + courseCode}</p>
           </header>
           <div className="flex gap-x-1 flex-wrap mt-2">
-            {properties.CI && (
+            {attributes && attributes.CI && (
               <p className="tag tag-primary">
                 Communication Intensive
               </p>
             )}
-            {properties.HI && (
+            {attributes && attributes.HI && (
               <p className="tag tag-primary">
                 Hass Inquiry
               </p>
@@ -58,11 +62,11 @@ const CourseCard = ({
               </ul>
             </div>
           )}
-          {prerequsits.length > 0 && (
+          {prereqs && prereqs.courses.length > 0 && (
             <div className="mt-2">
               <h4 className="text-sm font-semibold">Prerequisites:</h4>
               <ul className="list-disc ml-4">
-                {prerequsits.map((prereq) => (
+                {prereqs.courses.map((prereq) => (
                   <li key={prereq} className="text-sm text-gray-600">
                     {prereq}
                   </li>
@@ -71,7 +75,7 @@ const CourseCard = ({
             </div>
           )}
         </div>
-        <CourseCardDropDown title={title} courseCode={courseCode} tag={tag} status={status} />
+        <CourseCardDropDown title={title} courseCode={courseCode} status={status} />
       </div>
     </section>
   );

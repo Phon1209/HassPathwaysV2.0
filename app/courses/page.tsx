@@ -8,7 +8,6 @@ import ChevronDown from "@/public/assets/svg/chevron-down.svg?svgr";
 import ChevronRight from "@/public/assets/svg/chevron-right.svg?svgr";
 import { useAppContext } from "../contexts/appContext/AppProvider";
 import { ICourseSchema } from "../../public/data/dataInterface";
-import { CourseCardProps } from "@/app/model/CourseInterface";
 import { MyCourseFilterSection, MyCourseDesktopFilterSection, FilterAction, filterReducer, filterInitializers } from "@/app/components/course/SearchComponent";
 import { IFilterDispatch, IFilterState } from "@/app/model/CourseInterface";
 import { filter } from "lodash";

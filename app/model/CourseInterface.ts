@@ -22,29 +22,13 @@ sections: {1: Object}
 subj: "ARTS"
 */
 
-export interface CourseCardProps {
-  ID: string;                   // Course ID
-  crosslisted: Array<string>;   // List of cross-listed courses
-  description: string;          // Course description
-  name: string;                 // Course name
-  offered: {                    // Offerings across different terms
-    even: boolean;
-    fall: boolean;
-    odd: boolean;
-    spring: boolean;
-    summer: boolean;
-  };
-  title: string;                // Course title (same as name in this context)
-  courseCode: string;           // Combined subject and ID, e.g., "ARTS-4070"
-  tag: Array<string>;           // Array of tags associated with the course
-  status?: string;              // Optional course status, e.g., "No Selection"
-}
-
 export interface IFilterState {
-  title: string;           
-  courseCode: string;      
-  tag: Array<string>;      
-  status?: string;         
+  filter: string[];
+  level: string[];
+  prefix: string[];
+  prereq: string[];
+  semester: string[];
+  status: string[]; 
 }
 
 export type filterType = "filter" | "level" | "prefix" | "semester" | "prereq" | "status";

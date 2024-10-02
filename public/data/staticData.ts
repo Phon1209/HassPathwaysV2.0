@@ -40,6 +40,10 @@ export const courseFilters: Array<IcourseFilter> = [
         displayName: "Hass Inquiry",
         value: "HI",
       },
+      {
+        displayName: "Major Restricted",
+        value: "major_restricted",
+      },
     ],
   },
   {

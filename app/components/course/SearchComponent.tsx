@@ -22,7 +22,7 @@ import {
   IFilterState,
   SearchInputProps,
 } from "@/app/model/CourseInterface";
-import { ICourseSchema } from "@/public/data/dataInterface";
+import { ICourseSchema, IPropertiesSchema } from "@/public/data/dataInterface";
 import { flattenFilterParams } from "../utils/url";
 import dynamic from "next/dynamic";
 import { useAppContext, fetchCourses } from '@/app/contexts/appContext/AppProvider';
@@ -320,72 +320,63 @@ const CourseList = ({
       });
       return acc;
     }, {} as Record<string, string>);
-
+    
     const applyFilters = () => {
       let filtered = courses;
-
       // Prefix Filtering
       if (deferredFilterState.prefix.length) {
         filtered = filtered.filter(course =>
           deferredFilterState.prefix.some(prefix =>
-            course.subj.startsWith(prefix)
+            course.subject.startsWith(prefix)
           )
         );
       }
-      
       // Level Filtering
       if (deferredFilterState.level.length) {
         filtered = filtered.filter(course =>
           deferredFilterState.level.some(level =>
-            course.ID.substring(0, 1) === level
+            course.courseCode.substring(0, 1) === level
           )
         );
       }
       // Semester Filtering
       if (deferredFilterState.semester.length) {
         filtered = filtered.filter(course => {
-          const offeredSemesters = [];
-          if (course.offered.fall) offeredSemesters.push("F");
-          if (course.offered.spring) offeredSemesters.push("S");
-          if (course.offered.summer) offeredSemesters.push("U");
+          const offeredSemesters: string[] = [];
+          if (course.term && course.term.years[course.term.years.length - 1].fall) offeredSemesters.push("F");
+          if (course.term && course.term.years[course.term.years.length - 1].spring) offeredSemesters.push("S");
+          if (course.term && course.term.years[course.term.years.length - 1].summer) offeredSemesters.push("U");
           return deferredFilterState.semester.some(sem => offeredSemesters.includes(sem));
         });
       }
-
       if (deferredFilterState.status.length) {
         filtered = filtered.filter(course =>
           deferredFilterState.status.includes(course.status)
         );
         
       }
-
       // CI and HI Filtering
       if (deferredFilterState.filter.length && tags_short_to_long) {
         filtered = filtered.filter(course => {
-          const courseTags = course.properties;
-          
-          return deferredFilterState.filter.some(tag => {
-            const tagDisplayName = tags_short_to_long[tag];
-            return courseTags[tag] && tagDisplayName;
-          });
+          const courseTags: IPropertiesSchema = course.attributes;
+          if (deferredFilterState.filter.includes("CI") && courseTags.CI) return true;
+          if (deferredFilterState.filter.includes("HI") && courseTags.HI) return true;
+          if (deferredFilterState.filter.includes("Major Restricted") && courseTags.major_restricted) return true;
         });
       }
-
       // Prerequisite Filtering
       if (deferredFilterState.prereq.includes("Noreq")) {
         filtered = filtered.filter(course =>
-          course.prerequisites.length === 0
+          !course.prereqs || course.prereqs.courses.length === 0
         );
       }
-      
       // Search String Filtering
       if (deferredSearchString) {
         filtered = filtered.filter(course =>
-          course.name.toLowerCase().includes(deferredSearchString.toLowerCase()) ||
-          course.ID.toLowerCase().includes(deferredSearchString.toLowerCase())
+          course.title.toLowerCase().includes(deferredSearchString.toLowerCase()) ||
+          course.courseCode.toLowerCase().includes(deferredSearchString.toLowerCase())
         );
       }
-
       setFilteredCourses(filtered);
     };
 
@@ -396,12 +387,15 @@ const CourseList = ({
     <section className="grid grid-cols-4 gap-4">
       {isLoading ? <Spinner /> : filteredCourses.map((course, i) => (
         <CourseCard 
-          title={course.name}
-          courseCode={course.subj + '-' + course.ID}
-          properties={course.properties}
-          prerequsits={course.prerequisites}
-          offered={course.offered}
+          title={course.title}
+          courseCode={course.courseCode}
+          attributes={course.attributes}
+          prereqs={course.prereqs}
+          term={course.term}
           status={course.status}
+          filter={course.filter}
+          description={course.description}
+          subject={course.subject}
           key={i} />
       ))}
     </section>

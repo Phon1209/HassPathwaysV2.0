@@ -1,5 +1,6 @@
 import { IPathwayDescriptionSchema } from "@/public/data/dataInterface";
 import { NextRequest, NextResponse } from "next/server";
+import { ICourseClusterSchema, ICourseSchema } from "@/public/data/dataInterface";
 import * as fs from "fs";
 import path from "path";
 
@@ -43,7 +44,15 @@ export async function GET(request: NextRequest, data: PathwayRequest) {
                 let courseSchema: ICourseSchema = {
                     title: course_name,
                     courseCode: split_code[1],
-                    tag: split_code[0]
+                    subject: split_code[0],
+                    attributes: {
+                        HI: false,
+                        CI: false,
+                        major_restricted: false
+                    },
+                    filter: "",
+                    description: "",
+                    status: "No Selection"
                 };
                 temp_courses.push(courseSchema);
             }

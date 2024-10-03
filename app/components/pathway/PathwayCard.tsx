@@ -92,7 +92,7 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
       <header className="flex justify-between w-full items-start">
         <div className="w-[367px] mb-2">
           <div className="flex flex-col md:flex-row gap-2 items-start py-1">
-            <Link className="pathway-title flex-1" href={'/pathways/'+title}>{title}</Link>
+            <Link className="pathway-title flex-1" href={'/pathways/'+title.replace("/", "+")}>{title}</Link>
             <p className="tag">{department}</p>
           </div>
           <div className="progress-bar">

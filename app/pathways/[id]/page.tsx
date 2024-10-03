@@ -95,12 +95,19 @@ type IPathwayID = {
 
 const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
   // Convert pathname to pathwayName
-  const pathwayName: string = data.params.id.replaceAll("%20", " ").replaceAll("%2C", ",");
+  const [pathwayName, setPathwayName] = useState(data.params.id.replaceAll("%20", " ").replaceAll("%2C", ",").replaceAll("%2B", "/"));
   const {catalog_year} = useAppContext()
   const [state, setState] = useState("state");
 
   const [pathwayData, setPathwayData] =
   useState<IPathwayDescriptionSchema>(emptyPathway);
+
+  useEffect(() => {
+    if (data.params.id) {
+      const name = data.params.id.replaceAll("%20", " ").replaceAll("%2C", ",").replaceAll("%2B", "/");
+      setPathwayName(name);
+    }
+  }, [data.params.id]);
 
   const loadDataOnlyOnce = useCallback(async () => {
     const apiController = new AbortController();
@@ -137,6 +144,7 @@ const PathwayDescriptionPage: FC<IPathwayID> = (data: IPathwayID) => {
       setPathwayData(res);
     };
     fetchData();
+    setState("");
   }, [loadDataOnlyOnce]);
 
   if (pathwayData === emptyPathway) {

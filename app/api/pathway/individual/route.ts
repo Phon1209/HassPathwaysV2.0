@@ -2,6 +2,7 @@ import { IPathwayDescriptionSchema, ICourseClusterSchema } from "@/public/data/d
 import { NextRequest, NextResponse } from "next/server";
 import * as fs from "fs";
 import path from "path";
+import { error } from "console";
 
 type PathwayRequest = {
   params: {
@@ -14,6 +15,11 @@ export async function GET(request: NextRequest) {
     const pathwayName =  searchParams.get("pathwayName");
     const catalogYear = searchParams.get("catalogYear");
     if (!pathwayName) {
+        console.log("error: no pathway name");
+        return NextResponse.error();
+    }
+    if (!catalogYear) {
+        console.log("error: no catalog year");
         return NextResponse.error();
     }
     const pathways = JSON.parse(
@@ -28,6 +34,11 @@ export async function GET(request: NextRequest) {
 
     let description: string = "";
     let remainingHeader: string = "";
+
+    if (!pathways[pathwayName]) {
+        console.log("error: no pathway found");
+        return NextResponse.error();
+    }
 
     for (let key of Object.keys(pathways[pathwayName])) {
         if (key == "description"){
@@ -97,6 +108,5 @@ export async function GET(request: NextRequest) {
         courses: allCourses,
         clusters: schema
     };
-
     return NextResponse.json(res);
 }

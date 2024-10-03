@@ -57,13 +57,13 @@ export interface ICourseClusterSchema {
   name: string;
   description: string;
   numCourses: number;
-  courses: Array<ICourseSchema>;
+  courses: Array<string>;
 }
 
 export interface IPathwayDescriptionSchema {
   description: string;
   compatibleMinor: Array<string>;
-  courses: Array<ICourseSchema>
+  courses: Array<string>
   clusters: Array<ICourseClusterSchema>;
 }
 

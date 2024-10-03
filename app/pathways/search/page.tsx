@@ -65,7 +65,7 @@ const SearchCourse = () => {
     const validYear = validCatalogYear.includes(catalog_year);
     const searchStr = deferSearchString;
     const searchDepart = getFilterList(pathwaysCategories, deferFilterState);
-    const searchYear = validYear ? "2022-2023" : catalog_year;
+    const searchYear = validYear ? catalog_year : "2024-2025";
 
     setIsLoading(true);
 

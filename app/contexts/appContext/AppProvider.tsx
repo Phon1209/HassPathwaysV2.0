@@ -99,7 +99,7 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
       console.log("Courses not fetched yet, fetching now...");
       const apiController = new AbortController();
       const fetchUrl = `http://localhost:3000/api/course/search?${new URLSearchParams({
-        catalogYear: "2023-2024",
+        catalogYear: "2024-2025",
       })}`;
       console.log(fetchUrl);
       try {
@@ -129,7 +129,7 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
             `http://localhost:3000/api/pathway/search?${new URLSearchParams({
               searchString: "",
               department: "",
-              catalogYear: "2023-2024",
+              catalogYear: "2024-2025",
             })}`);
         const initialData = await response.json();
         dispatch({

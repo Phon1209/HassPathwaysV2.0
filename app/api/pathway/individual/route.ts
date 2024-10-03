@@ -1,7 +1,5 @@
-import { IPathwayDescriptionSchema, ICourseClusterSchema, ICourseSchema } from "@/public/data/dataInterface";
+import { IPathwayDescriptionSchema, ICourseClusterSchema } from "@/public/data/dataInterface";
 import { NextRequest, NextResponse } from "next/server";
-import { ICourseClusterSchema, ICourseSchema } from "@/public/data/dataInterface";
-import { useAppContext } from "@/app/contexts/appContext/AppProvider";
 import * as fs from "fs";
 import path from "path";
 
@@ -11,22 +9,22 @@ type PathwayRequest = {
   };
 };
 
-export async function GET(request: NextRequest, data: PathwayRequest) {
-    const searchParams  = request.nextUrl.searchParams;
+export async function GET(request: NextRequest) {
+    const searchParams = request.nextUrl.searchParams;
     const pathwayName =  searchParams.get("pathwayName");
-    const { courses, catalog_year } = useAppContext();
+    const catalogYear = searchParams.get("catalogYear");
     if (!pathwayName) {
         return NextResponse.error();
     }
     const pathways = JSON.parse(
         fs.readFileSync(
-          path.join(process.cwd(), "json") + `/${catalog_year}` + "/pathways.json",
+          path.join(process.cwd(), "json") + `/${catalogYear}` + "/pathways.json",
           "utf8"
         )
     );
 
     let schema: Array<ICourseClusterSchema> = [];
-    let allCourses: Array<ICourseSchema> = [];
+    let allCourses: Array<string> = [];
 
     let description: string = "";
     let remainingHeader: string = "";
@@ -42,26 +40,30 @@ export async function GET(request: NextRequest, data: PathwayRequest) {
             continue;
         }
         else{
-            let temp_courses: Array<ICourseSchema> = [];
+            let temp_courses: Array<string> = [];
             for (let course_name of Object.keys(pathways[pathwayName][key])){
                 let full_code: string = pathways[pathwayName][key][course_name];
-
                 let formatted_code: string = full_code.replace(" ", "-");
-                for (let course of courses){
-                    if (course.courseCode == formatted_code){
-                        temp_courses.push(course);
-                        allCourses.push(course);
-                    }
+                if (full_code.length == 8){
+                    formatted_code = full_code.substring(0, 4) + "-" + full_code.substring(4);
                 }
+                temp_courses.push(formatted_code);
+                allCourses.push(formatted_code);
             }
             let temp_description: string = "";
-            if (key == "Remaining"){
-                temp_description = pathways[pathwayName]["remaining_header"];
+            let temp_name: string = key;
+            if (key == 'Remaining'){
+                temp_description = pathways[pathwayName]["remaining_header"] ? pathways[pathwayName]["remaining_header"] : "Take your remaining courses from this list:";
             } else{
                 if (key == "Required"){
-                    temp_description = "Take all of the following courses:";
+                    if (temp_courses.length == 1){
+                        temp_description = "You must take the following course:";
+                    } else {
+                        temp_description = "Take all of the following courses:";
+                    }
                 } else {
-                    temp_description = "Choose one of the following courses:";
+                    temp_description = "You must take one of the following courses:";
+                    temp_name = "One Of";
                 }
             }
             let num = 3;
@@ -72,7 +74,7 @@ export async function GET(request: NextRequest, data: PathwayRequest) {
                 num = temp_courses.length;
             }
             let cluster: ICourseClusterSchema = {
-                name: key,
+                name: temp_name,
                 numCourses: num,
                 description: temp_description,
                 courses: temp_courses
@@ -81,12 +83,20 @@ export async function GET(request: NextRequest, data: PathwayRequest) {
         }
     }
 
+    for (let cluster of schema){
+        if (cluster.name == "Remaining"){
+            schema.splice(schema.indexOf(cluster), 1);
+            schema.push(cluster);
+            break;
+        }
+    }
+
     let res: IPathwayDescriptionSchema = {
         description: description,
-        compatibleMinor: pathways[pathwayName]["minor"],
+        compatibleMinor: pathways[pathwayName]["minor"] ? pathways[pathwayName]["minor"] : [],
         courses: allCourses,
         clusters: schema
     };
-    console.log(res);
+
     return NextResponse.json(res);
 }

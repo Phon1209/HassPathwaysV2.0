@@ -6,7 +6,6 @@ import {INITIAL_LOAD_DATA, SET_CATALOG, SET_COURSES, SET_PATHWAYS} from "../acti
 import {APPLICATION_STATE_KEY, courseState, pathwaysCategories,} from "@/public/data/staticData";
 import {ApplicationContext} from "@/app/model/AppContextInterface";
 import {ICourseSchema, IPathwaySchema} from "@/public/data/dataInterface";
-import {ICourseSchema, IPathwaySchema} from "@/public/data/dataInterface";
 
 
 const constantApplicationValue = { courseState, pathwaysCategories };
@@ -64,9 +63,6 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
     const updatedCourses: ICourseSchema[] = courses.map(course =>
       course.title === name
         ? { ...course, status: status}
-    const updatedCourses: ICourseSchema[] = courses.map(course =>
-      course.title === name
-        ? { ...course, status: status}
         : course);
     setCourses(updatedCourses);
   };
@@ -95,7 +91,6 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
       console.log("Courses already fetched, returning existing courses...");
       console.log("Courses fetched from local storage...");
       const courses: ICourseSchema = JSON.parse(localStorageCourses);
-      const courses: ICourseSchema = JSON.parse(localStorageCourses);
 
       dispatch({ type: SET_COURSES, payload: courses });
       return courses;
@@ -106,13 +101,10 @@ const AppContextProvider = ({ children }: { children: ReactNode }) => {
       const fetchUrl = `http://localhost:3000/api/course/search?${new URLSearchParams({
         catalogYear: "2024-2025",
       })}`;
-      console.log(fetchUrl);
       try {
         const response = await fetch(fetchUrl, {
           signal: apiController.signal});
-          signal: apiController.signal});
         if (!response.ok) throw new Error("Network response was not ok");
-        const transformedData = await response.json();
         const transformedData = await response.json();
 
         setCourses(transformedData);

@@ -5,6 +5,7 @@ import { useAppContext } from "@/app/contexts/appContext/AppProvider";
 import { HelpBox } from "./helpBox";
 import { courseState } from "@/public/data/staticData";
 import Link from "next/link";
+import Link from "next/link";
 
 const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   // TODO: use courses to determine the compatibility
@@ -43,6 +44,7 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   // Statuses: Completed, In Progress, Planned, Interested, No Selection
   
   const inPathway = courses.filter((course) => coursesIn.includes(course.subject + "-" + course.courseCode));
+  const inPathway = courses.filter((course) => coursesIn.includes(course.subject + "-" + course.courseCode));
 
   // TODO: map status to display so that we don't need different variables for each status
   /*
@@ -65,7 +67,10 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   const completed = inPathway.filter((course) => course.status === "Completed");
   const completedItems = completed.map((course) => (
     <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
+    <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
       <p className="text-sm text-green-500">✔</p>
+      <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
+      <p className="text-sm">{course.title}</p>
       <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
       <p className="text-sm">{course.title}</p>
     </div>
@@ -73,7 +78,10 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   const inProgress = inPathway.filter((course) => course.status === "In Progress");
   const inProgressItems = inProgress.map((course) => (
     <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
+    <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
       <p className="text-sm text-yellow-500">⏺</p>
+      <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
+      <p className="text-sm">{course.title}</p>
       <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
       <p className="text-sm">{course.title}</p>
     </div>
@@ -81,7 +89,10 @@ const PathwayCard = ({ title, department, coursesIn }: IPathwaySchema) => {
   const planned = inPathway.filter((course) => course.status === "Planned");
   const plannedItems = planned.map((course) => (
     <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
+    <div key={course.subject + "-" + course.courseCode} className="flex gap-2 items-center">
       <p className="text-sm text-gray-500">⏺</p>
+      <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
+      <p className="text-sm">{course.title}</p>
       <b className="text-sm">{course.subject + "-" + course.courseCode}:</b>
       <p className="text-sm">{course.title}</p>
     </div>

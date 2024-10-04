@@ -37,7 +37,13 @@ export async function GET(request: NextRequest) {
 
     if (!pathways[pathwayName]) {
         console.log("error: no pathway found");
-        return NextResponse.error();
+        let res = {
+            description: "no pathway found",
+            compatibleMinor: ["no pathway found"],
+            courses: ["no pathway found"],
+            clusters: []
+        }
+        return NextResponse.json(res);
     }
 
     for (let key of Object.keys(pathways[pathwayName])) {

@@ -212,19 +212,21 @@ const CourseSection: FC<CourseSectionProps> = ({ clusters }) => {
       {clusters.length !== 0 && (
         <>
             {clusters.map((cluster) => (
-              <>
+              <div key={cluster.name + cluster.courses.map((course) => (
+                course
+              ))}>
                 <header>
                   <h3>{cluster.name}</h3>
                 </header>
                 <ul>
                   <li>{cluster.description}</li>
                 </ul>
-                <div className="my-3 grid grid-flow-row gap-y-3" key={cluster.name}>
+                <div className="my-3 grid grid-flow-row gap-y-3">
                   <CourseList courses={
                     courses.filter((course) => cluster.courses.includes(course.subject + "-" + course.courseCode)
                   )} />
                 </div>
-              </>
+              </div>
             ))}
         </>
       )}
